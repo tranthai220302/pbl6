@@ -25,7 +25,6 @@ const User = (sequelize) => sequelize.define('User', {
     },
     address: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     avatar:{
       type: DataTypes.STRING
