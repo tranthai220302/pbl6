@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken'
-import createError from '../ultis/createError';
+import createError from '../ultis/createError.js';
 import dotenv from 'dotenv'
 dotenv.config()
-const verifyjson = (req, res, next) =>{
+export const verifyjson = (req, res, next) =>{
     try {
         const token = req.cookies.accessToken;
         if(!token) return next(createError(400, 'Bạn cần phải đăng nhập!'))

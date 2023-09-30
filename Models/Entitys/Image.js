@@ -9,9 +9,6 @@ const Image = (sequelize) => sequelize.define('Image', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    desc: {
-        type: DataTypes.STRING
-    }
 })
 
 

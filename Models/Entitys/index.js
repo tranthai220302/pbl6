@@ -138,8 +138,8 @@ db.book.belongsTo(db.author,{
 })
 
 /*Book vs Category*/
-db.category.belongsToMany(db.book, {through: 'Category_Book'})
-db.book.belongsToMany(db.category, {through: 'Category_Book'})
+db.category.belongsToMany(db.book, {through: 'Category_Book', as: 'Instruments'})
+db.book.belongsToMany(db.category, {through: 'Category_Book', as: 'Instruments'})
 
 /*Shipment*/
 //OrderItemId//
