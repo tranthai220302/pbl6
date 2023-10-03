@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import dotenv from 'dotenv'
 import cookieParser from "cookie-parser";
 import cors from 'cors'
+import routerUser from "./Routes/UserRoute.js";
 dotenv.config()
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -30,10 +31,11 @@ try {
 //api
 app.use('/api/auth', routerAuth)
 app.use('/api/book', routerBook)
+app.use('/api/user', routerUser)
 app.use((err, req, res, next)=>{
   const errorStatus = err.status || 500;
   const errorMessage = err.message || "Something went wrong!";
-  console.log(err)
+  console.log
   return res.status(errorStatus).send(errorMessage);
 })
 app.listen(port, ()=>{

@@ -68,8 +68,8 @@ db.order.belongsTo(db.user,{
 
 /*__OrderItem__*/
 //orderId
-db.order.hasMany(db.orderItem)
-db.orderItem.belongsTo(db.order)
+db.order.hasMany(db.orderItem, { foreignKey: 'order_id' })
+db.orderItem.belongsTo(db.order, { foreignKey: 'order_id' })
 //bookid
 db.orderItem.belongsTo(db.book)
 db.book.hasOne(db.orderItem)

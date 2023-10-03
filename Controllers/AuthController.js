@@ -18,8 +18,18 @@ export const registerController = async (req, res, next) =>{
     try {
         const data = req.body;
         const user = await registerService(data.username, data.email, data.password, data.confirmPassword);
-        if (token instanceof Error) return next(token)
+        if (user instanceof Error) return next(user)
         return res.status(200).send(user)
+    } catch (error) {
+        next(error)
+    }
+}
+export const logoutController = async(req, res, next) =>{
+    try {
+        return res.clearCookie( 'accessToken', {
+            sameSite: "none",
+            secure: true,
+        }).status(200).send("Đăng xuất thành công!")
     } catch (error) {
         next(error)
     }
