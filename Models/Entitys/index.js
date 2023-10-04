@@ -6,12 +6,10 @@ import Role from "./role.js";
 import Order from "./Order.js";
 import Author from "./Author.js";
 import Cart from "./Cart.js";
-import CarItem from "./CartItem.js";
 import Category from "./Category.js";
 import Chat from "./Chat.js";
 import Image from "./Image.js";
 import Message from "./Message.js";
-import OrderItem from "./OrderItem.js";
 import Payment from "./Payment.js";
 import Rating from "./Rating.js";
 import Shippemt from "./Shippement.js";
@@ -46,12 +44,10 @@ db.role = Role(sequelize)
 db.order = Order(sequelize)
 db.author = Author(sequelize)
 db.cart = Cart(sequelize)
-db.cartItem = CarItem(sequelize)
 db.category = Category(sequelize)
 db.chat = Chat(sequelize)
 db.image = Image(sequelize)
 db.message = Message(sequelize)
-db.orderItem = OrderItem(sequelize)
 db.payment = Payment(sequelize)
 db.rating = Rating(sequelize)
 db.shippemt = Shippemt(sequelize)
@@ -66,13 +62,8 @@ db.order.belongsTo(db.user,{
   foreignKey: 'customer_id'
 })
 
-/*__OrderItem__*/
-//orderId
-db.order.hasMany(db.orderItem, { foreignKey: 'order_id' })
-db.orderItem.belongsTo(db.order, { foreignKey: 'order_id' })
-//bookid
-db.orderItem.belongsTo(db.book)
-db.book.hasOne(db.orderItem)
+db.order.belongsTo(db.book)
+db.book.hasMany(db.order)
 
 /*__Payment__*/
 //orderId
@@ -81,19 +72,14 @@ db.payment.belongsTo(db.order)
 
 /*__Cart__*/
 //customerId
-db.user.hasOne(db.cart,{
+db.user.hasMany(db.cart,{
   foreignKey: 'customerId'
 })
 db.cart.belongsTo(db.user, {
   foreignKey: 'customerId'
 })
-/*__CartItem__*/
-//CartId
-db.cart.hasMany(db.cartItem)
-db.cartItem.belongsTo(db.cart)
-//BookId
-db.cartItem.belongsTo(db.book)
-db.book.hasOne(db.cartItem)
+db.cart.belongsTo(db.book)
+db.book.hasMany(db.cart)
 
 /*__Chat__*/
 db.chat.belongsTo(db.user, { as: 'Participant1', foreignKey: 'customer_id' });
@@ -143,10 +129,10 @@ db.book.belongsToMany(db.category, {through: 'Category_Book', as: 'Instruments'}
 
 /*Shipment*/
 //OrderItemId//
-db.shippemt.belongsTo(db.orderItem)
-db.orderItem.hasOne(db.shippemt)
+db.shippemt.belongsTo(db.order)
+db.order.hasOne(db.shippemt)
 //ShipperId
-db.user.hasOne(db.shippemt,{
+db.user.hasMany(db.shippemt,{
   foreignKey: 'shipperId'
 })
 db.shippemt.belongsTo(db.user,{
@@ -157,8 +143,8 @@ db.voucher.belongsTo(db.user, { as: 'Voucher1', foreignKey: 'customer_id' });
 db.voucher.belongsTo(db.user, { as: 'Voucher2', foreignKey: 'store_id' });
 
 /*State*/
-db.orderItem.hasMany(db.state)
-db.state.belongsTo(db.orderItem)
+db.order.hasMany(db.state)
+db.state.belongsTo(db.order)
 
 /*Review*/
 db.review.belongsTo(db.user, { as: 'review1', foreignKey: 'customer_id' });

@@ -5,7 +5,7 @@ const Cart = (sequelize) => sequelize.define('Cart', {
         primaryKey: true,
         autoIncrement: true
     },
-    total_quantity: {
+    quantity: {
         type: DataTypes.INTEGER
     }
 
