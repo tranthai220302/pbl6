@@ -7,6 +7,10 @@ const Order = (sequelize) => sequelize.define('Order', {
     },
     total_price: {
         type: DataTypes.INTEGER
+    },
+    isPayment : {
+        type: DataTypes.BLOB,
+        default: false,
     }
 
 

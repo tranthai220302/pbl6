@@ -55,12 +55,10 @@ db.state = State(sequelize)
 db.review = Review(sequelize)
 db.voucher = Voucher(sequelize)
 /* __Order__*/
-db.user.hasMany(db.order,{
-  foreignKey: 'customer_id'
-})
-db.order.belongsTo(db.user,{
-  foreignKey: 'customer_id'
-})
+db.order.belongsTo(db.user, { foreignKey: 'customer_id', as: 'customer' });
+db.order.belongsTo(db.user, { foreignKey: 'store_id', as: 'store' });
+db.user.hasMany(db.order, { foreignKey: 'customer_id', as: 'ordersCustomer' });
+db.user.hasMany(db.order, { foreignKey: 'store_id', as: 'ordersStore' });
 
 db.order.belongsTo(db.book)
 db.book.hasMany(db.order)
@@ -84,7 +82,8 @@ db.book.hasMany(db.cart)
 /*__Chat__*/
 db.chat.belongsTo(db.user, { as: 'Participant1', foreignKey: 'customer_id' });
 db.chat.belongsTo(db.user, { as: 'Participant2', foreignKey: 'store_id' });
-
+db.user.hasMany(db.chat, { foreignKey: 'customer_id', as: 'chatCustomer' });
+db.user.hasMany(db.chat, { foreignKey: 'store_id', as: 'chatStore' });
 /*__Message__ */
 //UserId
 db.user.hasMany(db.message)

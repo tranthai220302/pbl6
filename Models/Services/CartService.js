@@ -62,3 +62,16 @@ export const getCartByIdService = async(id) =>{
         return error;
     }
 }
+export const getCartsService = async(customer_id) =>{
+    try {
+        const carts = await db.cart.findAll({
+            where:{
+                customerId : customer_id
+            }
+        })
+        if(carts.length == 0) return createError(400, 'Không có sản phẩm !')
+        return carts;
+    } catch (error) {
+        return error;   
+    }
+}

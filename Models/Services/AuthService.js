@@ -19,7 +19,7 @@ export const loginService = async (username, password) => {
         }, process.env.JWT_KEY)
         return token;
     } catch (error) {
-        return createError(error.status, error.message)
+        return error;
     }
 } 
 export const registerService = async (username, email, password, confirmPassword) =>{
@@ -49,7 +49,7 @@ export const registerService = async (username, email, password, confirmPassword
         })
         return UserLogin;
     } catch (error) {
-        return createError(error.status, error.message)  
+        return error;
     }
 }
 
