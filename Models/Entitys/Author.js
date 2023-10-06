@@ -9,13 +9,18 @@ const Author = (sequelize) => sequelize.define('Author', {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    age:{
-      type: DataTypes.INTEGER,
-      allowNull: false,  
-    },
     address:{
       type: DataTypes.STRING,
+    },
+    date_birth:{
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    date_death:{
+      type: DataTypes.DATE,
+      allowNull: false
     }
+    
 });
 
 export default Author;

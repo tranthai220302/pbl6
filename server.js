@@ -9,6 +9,7 @@ import routerCart from "./Routes/CartRoute.js";
 import routerOrder from "./Routes/OrderRoute.js";
 import routerAuth from "./Routes/AuthRoute.js";
 import routerBook from "./Routes/BookRoute.js";
+import routerAuhtor from "./Routes/AuthorRoute.js";
 dotenv.config()
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -36,6 +37,7 @@ app.use('/api/book', routerBook)
 app.use('/api/user', routerUser)
 app.use('/api/cart', routerCart)
 app.use('/api/order', routerOrder)
+app.use('/api/author', routerAuhtor)
 app.use((err, req, res, next)=>{
   const errorStatus = err.status || 500;
   const errorMessage = err.message || "Something went wrong!";
