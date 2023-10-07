@@ -9,7 +9,7 @@ const Order = (sequelize) => sequelize.define('Order', {
         type: DataTypes.INTEGER
     },
     isPayment : {
-        type: DataTypes.BLOB,
+        type: DataTypes.BOOLEAN,
         default: false,
     }
 

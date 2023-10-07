@@ -11,7 +11,6 @@ import Chat from "./Chat.js";
 import Image from "./Image.js";
 import Message from "./Message.js";
 import Payment from "./Payment.js";
-import Rating from "./Rating.js";
 import Shippemt from "./Shippement.js";
 import Voucher from "./Voucher.js";
 import Review from "./Review.js";
@@ -49,7 +48,6 @@ db.chat = Chat(sequelize)
 db.image = Image(sequelize)
 db.message = Message(sequelize)
 db.payment = Payment(sequelize)
-db.rating = Rating(sequelize)
 db.shippemt = Shippemt(sequelize)
 db.state = State(sequelize)
 db.review = Review(sequelize)
@@ -102,9 +100,6 @@ db.user.belongsTo(db.role)
 db.book.hasMany(db.image)
 db.image.belongsTo(db.book)
 
-/*Rating*/
-db.rating.belongsTo(db.user, { as: 'Rating1', foreignKey: 'customer_id' });
-db.rating.belongsTo(db.user, { as: 'Rating2', foreignKey: 'store_id' });
 
 /*Book*/
 //storeId
@@ -147,5 +142,8 @@ db.state.belongsTo(db.order)
 
 /*Review*/
 db.review.belongsTo(db.user, { as: 'review1', foreignKey: 'customer_id' });
-db.review.belongsTo(db.user, { as: 'review2', foreignKey: 'store_id' });
+db.review.belongsTo(db.book, { as: 'review2', foreignKey: 'book_id' });
+db.user.hasMany(db.review, { as: 'review_customer', foreignKey: 'customer_id' })
+db.book.hasMany(db.review, { as: 'review_book', foreignKey: 'book_id' })
+
 export default db;
