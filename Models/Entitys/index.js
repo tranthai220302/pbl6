@@ -10,11 +10,11 @@ import Category from "./Category.js";
 import Chat from "./Chat.js";
 import Image from "./Image.js";
 import Message from "./Message.js";
-import Payment from "./Payment.js";
 import Shippemt from "./Shippement.js";
 import Voucher from "./Voucher.js";
 import Review from "./Review.js";
 import State from "./State.js";
+import Admin from "./Admin.js";
 const sequelize = new Sequelize(
     configdb.DB,
     configdb.USER,
@@ -33,10 +33,10 @@ const sequelize = new Sequelize(
       logging: false
     }
 );
-
 const db = {}
 db.sequelize = sequelize
 db.Sequelize = Sequelize
+db.admin = Admin(sequelize)
 db.book = Book(sequelize)
 db.user = User(sequelize)
 db.role = Role(sequelize)
@@ -47,24 +47,20 @@ db.category = Category(sequelize)
 db.chat = Chat(sequelize)
 db.image = Image(sequelize)
 db.message = Message(sequelize)
-db.payment = Payment(sequelize)
 db.shippemt = Shippemt(sequelize)
 db.state = State(sequelize)
 db.review = Review(sequelize)
 db.voucher = Voucher(sequelize)
 /* __Order__*/
+//order vs Customer
 db.order.belongsTo(db.user, { foreignKey: 'customer_id', as: 'customer' });
-db.order.belongsTo(db.user, { foreignKey: 'store_id', as: 'store' });
 db.user.hasMany(db.order, { foreignKey: 'customer_id', as: 'ordersCustomer' });
+//order vs Store
+db.order.belongsTo(db.user, { foreignKey: 'store_id', as: 'store' });
 db.user.hasMany(db.order, { foreignKey: 'store_id', as: 'ordersStore' });
-
+//order vs book
 db.order.belongsTo(db.book)
 db.book.hasMany(db.order)
-
-/*__Payment__*/
-//orderId
-db.order.hasOne(db.payment)
-db.payment.belongsTo(db.order)
 
 /*__Cart__*/
 //customerId
@@ -75,17 +71,20 @@ db.cart.belongsTo(db.user, {
   foreignKey: 'customerId'
 })
 db.cart.belongsTo(db.book)
-db.book.hasMany(db.cart)
+db.book.hasOne(db.cart)
 
 /*__Chat__*/
+//chat vs customer
 db.chat.belongsTo(db.user, { as: 'Participant1', foreignKey: 'customer_id' });
-db.chat.belongsTo(db.user, { as: 'Participant2', foreignKey: 'store_id' });
 db.user.hasMany(db.chat, { foreignKey: 'customer_id', as: 'chatCustomer' });
+//chat vs store
+db.chat.belongsTo(db.user, { as: 'Participant2', foreignKey: 'store_id' });
 db.user.hasMany(db.chat, { foreignKey: 'store_id', as: 'chatStore' });
+
 /*__Message__ */
 //UserId
 db.user.hasMany(db.message)
-db.message.belongsTo(db.user  )
+db.message.belongsTo(db.user)
 //ChatId
 db.chat.hasMany(db.message)
 db.message.belongsTo(db.chat)
@@ -133,8 +132,10 @@ db.shippemt.belongsTo(db.user,{
   foreignKey: 'shipperId'
 })
 /*Voucher*/
-db.voucher.belongsTo(db.user, { as: 'Voucher1', foreignKey: 'customer_id' });
-db.voucher.belongsTo(db.user, { as: 'Voucher2', foreignKey: 'store_id' });
+db.user.hasMany(db.voucher, {foreignKey: 'store_id' })
+db.voucher.belongsTo(db.user, {foreignKey: 'store_id'})
+db.user.belongsToMany(db.voucher, { through: 'UserVoucher', foreignKey: 'user_id' });
+db.voucher.belongsToMany(db.user, { through: 'UserVoucher', foreignKey: 'voucher_id' });
 
 /*State*/
 db.order.hasMany(db.state)
