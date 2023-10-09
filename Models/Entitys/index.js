@@ -2,7 +2,7 @@ import configdb from "../../dbConfig/database.js";
 import { Sequelize } from "sequelize";
 import User from "./User.js";
 import Book from "./Book.js";
-import Role from "./role.js";
+import Role from "./Role.js";
 import Order from "./Order.js";
 import Author from "./Author.js";
 import Cart from "./Cart.js";
