@@ -10,7 +10,7 @@ const Order = (sequelize) => sequelize.define('Order', {
     },
     isPayment : {
         type: DataTypes.BOOLEAN,
-        default: false,
+        defaultValue: false
     }
 
 

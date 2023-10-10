@@ -11,7 +11,7 @@ const Review = (sequelize) => sequelize.define('Review', {
     },
     num_star : {
         type: DataTypes.INTEGER,
-        default: 5
+        defaultValue: 5
     }
 })
 

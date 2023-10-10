@@ -11,6 +11,8 @@ import routerAuth from "./Routes/AuthRoute.js";
 import routerBook from "./Routes/BookRoute.js";
 import routerAuhtor from "./Routes/AuthorRoute.js";
 import routerReview from "./Routes/ReviewRoute.js";
+import routerVoucher from "./Routes/VoucherRoute.js";
+import routerVoucherItem from "./Routes/VoucherItemRoute.js";
 dotenv.config()
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -40,6 +42,8 @@ app.use('/api/cart', routerCart)
 app.use('/api/order', routerOrder)
 app.use('/api/author', routerAuhtor)
 app.use('/api/review', routerReview)
+app.use('/api/voucher', routerVoucher)
+app.use('/api/voucherItem', routerVoucherItem)
 app.use((err, req, res, next)=>{
   const errorStatus = err.status || 500;
   const errorMessage = err.message || "Something went wrong!";

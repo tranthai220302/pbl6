@@ -5,22 +5,10 @@ const Voucher = (sequelize) => sequelize.define('Voucher', {
         primaryKey: true,
         autoIncrement: true
     },
-    name:{
+    type:{
         type: DataTypes.STRING,
         allowNull: false
     },
-    discount:{
-        type: DataTypes.FLOAT,
-        allowNull: false,
-    },
-    expiry_date: {
-        type: DataTypes.DATE,
-        allowNull: false
-    },
-    is_Expired:{
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-    }
 })
 
 
