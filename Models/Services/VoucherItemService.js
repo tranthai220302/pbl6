@@ -1,6 +1,6 @@
 import createError from "../../ultis/createError.js";
 import db from "../Entitys/index.js";
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 export const createVoucherItemService = async (data) =>{
     try {
         const checkVoucher = await db.voucherItem.findOne({
@@ -68,6 +68,13 @@ export const deleteVoucherItemService = async(id, store_id) =>{
 }
 export const BookVoucherItemService = async(voucheritem_id, user_id) =>{
     try {
+        const checkUserBookVoucher = await db.customer_voucherItem.findOne({
+            where :{
+                user_id,
+                voucherItem_id: voucheritem_id
+            }
+        });
+        if(checkUserBookVoucher) return createError(400, 'Bạn đã sưu tầm Voucher này!')
         const user = await db.user.findOne({
             where : {id: user_id}
         },);
@@ -84,6 +91,62 @@ export const BookVoucherItemService = async(voucheritem_id, user_id) =>{
         return {
             status: true,
             message: 'Sưu tầm thành công!'
+        };
+    } catch (error) {
+        return error;
+    }
+}
+export const getVoucherItemByCustomer = async(customer_id, voucher_id, store_id, currentTotal) =>{
+    try {
+        const currentDate = new Date();
+        const list_voucher = await db.voucherItem.findAll({
+            include: [
+              {
+                model: db.user,
+                attributes: ['id'],
+                where: { id: customer_id },
+              },
+              {
+                model: db.voucher,
+                attributes: ['type'],
+                where: { id: voucher_id },
+              },
+            ],
+            where: {
+              [Op.and]: [
+                { store_id },
+                { expiryDate: { [Op.gte]: currentDate } },
+                { codition: { [Op.lte]: currentTotal } },
+              ],
+            },
+        });
+        if(list_voucher.length === 0) return createError(400, 'Không có voucher!')
+        const maxVoucher = list_voucher.reduce((max, voucher) => (voucher.codition > max.codition ? voucher : max), list_voucher[0]);
+        return maxVoucher;
+    } catch (error) {
+        return error;
+    }
+}
+export const priceVoucherStoreByCustomer = async(customer_id, voucher_id, store_id, currentTotal) =>{
+    try {
+        const voucher = await getVoucherItemByCustomer(customer_id, voucher_id, store_id, currentTotal)
+        if(voucher instanceof Error) return {
+            price_free :0
+        };
+        var price_free = 0;
+        var total_first = currentTotal;
+        if(voucher_id == 1){
+            if (voucher.discountType === 'amount') {
+                price_free += voucher.discountValue;
+            }else if (voucher.discountType === 'percent') {
+                price_free += (total_first * voucher.discountValue) / 100
+            }
+        }else if(voucher_id == 2){
+            price_free += voucher.discountValue;
+        }
+        return {
+            voucher: voucher,
+            price_free
         };
     } catch (error) {
         return error;

@@ -28,6 +28,9 @@ const User = (sequelize) => sequelize.define('User', {
     },
     avatar:{
       type: DataTypes.STRING
+    },
+    phone: {
+      type: DataTypes.INTEGER
     }
 });
 

@@ -16,6 +16,7 @@ import Review from "./Review.js";
 import State from "./State.js";
 import Admin from "./Admin.js";
 import VoucherItem from "./VoucherItem.js";
+import Customer_VoucherItem from "./Customer_VoucherItem.js";
 const sequelize = new Sequelize(
     configdb.DB,
     configdb.USER,
@@ -37,6 +38,7 @@ const sequelize = new Sequelize(
 const db = {}
 db.sequelize = sequelize
 db.Sequelize = Sequelize
+db.customer_voucherItem = Customer_VoucherItem(sequelize)
 db.admin = Admin(sequelize)
 db.book = Book(sequelize)
 db.user = User(sequelize)
@@ -138,13 +140,13 @@ db.shippemt.belongsTo(db.user,{
 db.voucherItem.belongsTo(db.voucher);
 db.voucher.hasMany(db.voucherItem)
 /*VoucherItem vs User*/
-db.user.belongsToMany(db.voucherItem, { through: 'User_VoucherItem', foreignKey: 'user_id' });
-db.voucherItem.belongsToMany(db.user, { through: 'User_VoucherItem', foreignKey: 'voucherItem_id' });
+db.user.belongsToMany(db.voucherItem, { through: db.customer_voucherItem, foreignKey: 'user_id' });
+db.voucherItem.belongsToMany(db.user, { through: db.customer_voucherItem, foreignKey: 'voucherItem_id' });
 db.user.hasMany(db.voucherItem, {foreignKey: 'store_id' })
 db.voucherItem.belongsTo(db.user, {foreignKey: 'store_id'})
 /*State*/
-db.order.hasMany(db.state)
-db.state.belongsTo(db.order)
+db.order.belongsTo(db.state)
+db.state.hasMany(db.order)
 /*Review*/
 db.review.belongsTo(db.user, { as: 'review1', foreignKey: 'customer_id' });
 db.review.belongsTo(db.book, { as: 'review2', foreignKey: 'book_id' });

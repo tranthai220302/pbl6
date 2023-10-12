@@ -11,6 +11,9 @@ const Order = (sequelize) => sequelize.define('Order', {
     isPayment : {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+    },
+    quantity: {
+        type: DataTypes.INTEGER,
     }
 
 

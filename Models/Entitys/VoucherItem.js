@@ -10,7 +10,7 @@ const VoucherItem = (sequelize) => sequelize.define('VoucherItem', {
         allowNull: false
     },
     discountValue: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     discountType: {

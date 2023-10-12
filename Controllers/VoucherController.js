@@ -37,15 +37,3 @@ export const deleteVoucher = async(req, res, next) =>{
         next(error)
     }
 }
-export const BookVoucherItem = async(req, res, next) =>{
-    try {
-        if(req.idRole !== 1) return next(createError(400, 'Bạn không có quyền này!'));
-        const voucheritem_id = req.params.id;
-        const user_id = req.id;
-        const book_voucherItem = await  BookVoucherItemService(voucheritem_id, user_id);
-        if(book_voucherItem instanceof Error) return next(book_voucherItem)
-        res.status(200).send(book_voucherItem)
-    } catch (error) {
-        
-    }
-}
