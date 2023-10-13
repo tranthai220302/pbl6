@@ -35,9 +35,6 @@ try {
 //     console.log('Update database success')
 // })
 //api
-app.use('/', (req, res)=>{
-  res.send("Lịch ngu")
-})
 app.use('/api/auth', routerAuth)
 app.use('/api/book', routerBook)
 app.use('/api/user', routerUser)
