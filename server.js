@@ -28,12 +28,12 @@ try {
   } catch (error) {
     console.error('Unable to connect to the database:', error);
 }
-await db.sequelize.sync({
-    alter: true,
-    logging : ()=>{}
-}).then(()=>{
-    console.log('Update database success')
-})
+// await db.sequelize.sync({
+//     alter: true,
+//     logging : ()=>{}
+// }).then(()=>{
+//     console.log('Update database success')
+// })
 //api
 app.use('/api/auth', routerAuth)
 app.use('/api/book', routerBook)
