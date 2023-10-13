@@ -14,10 +14,10 @@ export const createBookService = async (store_id, name, desc, price, sales_numbe
         })
         if(!book) return createError(400, 'Thêm sách không thành công!')
           for (const image of images) {
-            await db.image.create({
+            const newImage = await db.image.create({
               filename: image,
-              BookId: book.id,
             });
+            await book.addImage(newImage)
           }
         await book.addCategory(categorys);
         await book.save()
