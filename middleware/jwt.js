@@ -6,7 +6,7 @@ export const verifyjson = (req, res, next) =>{
     try {
         const token = req.cookies.accessToken;
         if(!token) return next(createError(400, 'Bạn cần phải đăng nhập!'))
-        jwt.verify(token, process.env.JWT_Key, (err, payload) => {
+        jwt.verify(token, process.env.JWT_KEY, (err, payload) => {
             if(err){
                 return next(err)
             }
