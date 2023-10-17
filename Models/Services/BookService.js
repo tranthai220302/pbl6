@@ -3,6 +3,12 @@ import db from "../Entitys/index.js";
 import { Op, where } from 'sequelize';
 export const createBookService = async (store_id, name, desc, price, sales_number, publication_date, author_id, categorys, images) =>{
     try {
+        const checkBook = await db.book.findOne({
+            where : {
+                name,
+            }
+        })
+        if(checkBook) return createError(400, 'Sách này đã tồn tại!')
         const book = await db.book.create({
             name,
             desc,
@@ -33,7 +39,10 @@ export const deleteBookService = async (id) =>{
             where : {id}
         })
         if(!deleteBook) return createError(400, 'Xoá sách không thành công!')
-        return true;
+        return {
+            status: true,
+            message: 'Xoá sách thành công!'
+        };
     } catch (error) {
         return error;
     }
@@ -41,7 +50,7 @@ export const deleteBookService = async (id) =>{
 export const updateBookService = async(id, name, desc, price, sales_number, publication_date, author_id, categorys) =>{
     try {
         if(!id) return createError(400, 'Không tìm thấy sách!')
-        await db.book.update({
+        const update_book = await db.book.update({
             name,
             desc,
             price,
@@ -51,9 +60,12 @@ export const updateBookService = async(id, name, desc, price, sales_number, publ
         },{ where : {id}})
         const book = await db.book.findByPk(id)
         await book.setCategories(categorys);
-        await book.save();  
-        const boo1 = await db.book.findByPk(id);
-        return boo1;
+        await book.save();
+        if(update_book[0] == 0) return createError(400, 'Update không thành công!')
+        return {
+            status: true,
+            message: 'update thành công !'
+        }
     } catch (error) {
         return error;
     }
@@ -72,7 +84,6 @@ export const getBookByQueryService = async(filter, category, author) =>{
         const booksByQuery = await db.book.findAll({
             include :[{
                 model : db.category,
-                as: 'Instruments',
                 where : category
                 
             },{
