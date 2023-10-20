@@ -9,7 +9,6 @@ export const loginController = async(req, res, next) =>{
         if (token instanceof Error) return next(token)
         return res.cookie('accessToken', token, {
             httpOnly: true,
-            secure: true
         }).status(200).send('Đăng nhập thành công!')
     } catch (error) {
         next(error)
