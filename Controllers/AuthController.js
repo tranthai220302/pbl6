@@ -9,6 +9,9 @@ export const loginController = async(req, res, next) =>{
         if (token instanceof Error) return next(token)
         return res.cookie('accessToken', token, {
             httpOnly: true,
+            secure: true,
+            sameSite: 'None',
+            domain: '.harumi.store',
         }).status(200).send('Đăng nhập thành công!')
     } catch (error) {
         next(error)
