@@ -22,7 +22,7 @@ export const createAuthor = async(req, res, next) =>{
 export const getAuthors = async(req, res, next) =>{
     try {
         if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'));
-        const authors = await getAuthorsService();
+        const authors = await getAuthorsService(req.id);
         if(authors instanceof Error) return next(authors);
         res.status(200).send(authors);
     } catch (error) {

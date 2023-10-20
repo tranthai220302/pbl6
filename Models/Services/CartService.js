@@ -4,6 +4,8 @@ import createError from "../../ultis/createError.js";
 import Op from "sequelize";
 export const createCartService = async(quantity, BookId, customerId) =>{
     try {
+        const book = await db.book.findByPk(BookId)
+        if(!book) return createError(400, 'Không tìm thấy sach!')
         const checkCart = await db.cart.findOne({
             where :{
                 BookId : BookId,
@@ -39,10 +41,18 @@ export const createCartService = async(quantity, BookId, customerId) =>{
     }
 }
 
-export const deleteCartService = async(id) =>{
+export const deleteCartService = async(id, customerId) =>{
     try {
+        console.log(id)
+        const cart = await db.cart.findByPk(id);
+        if(!cart) return createError(400, 'Không tìm thấy giỏ hàng!')
         const delete_cart = await db.cart.destroy({
-            where : {id}
+            where : {
+                [Op.and] : [
+                    {id: id}, 
+                    {customerId: customerId}
+                ]
+            }
         })
         if(delete_cart == 0) return createError(400, 'Xoá giỏ hàng không thành công!')
         return true;

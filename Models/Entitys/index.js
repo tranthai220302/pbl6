@@ -55,6 +55,9 @@ db.state = State(sequelize)
 db.review = Review(sequelize)
 db.voucher = Voucher(sequelize)
 db.voucherItem = VoucherItem(sequelize)
+/*Author vs store*/
+db.author.belongsTo(db.user, {foreignKey: 'store_id'});
+db.user.hasMany(db.author, {foreignKey: 'store_id'})
 /* __Order__*/
 //order vs Customer
 db.order.belongsTo(db.user, { foreignKey: 'customer_id', as: 'customer' });

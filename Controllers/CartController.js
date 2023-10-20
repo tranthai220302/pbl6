@@ -22,7 +22,7 @@ export const deleteCart = async(req, res, next) =>{
     try {
         if(req.idRole == 3 || req.idRole == 4) return next(createError(400, 'Bạn không có quyền này!'))
         const idCart = req.params.idCart;
-        const delete_cart = await deleteCartService(idCart);
+        const delete_cart = await deleteCartService(idCart, req.id);
         if(delete_cart instanceof Error) return next(delete_cart)
         res.status(200).send({
             status: delete_cart,

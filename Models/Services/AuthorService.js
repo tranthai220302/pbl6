@@ -2,7 +2,7 @@ import e from "express";
 import db from "../Entitys/index.js"
 import createError from "../../ultis/createError.js";
 
-export const createAuthorService = async(name, address, date_birth, date_death) =>{
+export const createAuthorService = async(name, address, date_birth, date_death, store_id) =>{
     try {
         const checkName = await db.author.findOne({
             where : {name}
@@ -12,7 +12,8 @@ export const createAuthorService = async(name, address, date_birth, date_death) 
             name,
             address, 
             date_birth, 
-            date_death
+            date_death,
+            store_id
         })
         if(!author) return createError(400, 'Thêm tác giả không thành công!')
         return author;
@@ -23,6 +24,8 @@ export const createAuthorService = async(name, address, date_birth, date_death) 
 
 export const deleteAuthorService = async(id)=>{
     try {
+        const author = await db.author.findByPk(id)
+        if(!author) return createError(400, 'Tác giả không tồn tại!')
         const delete_author = await db.author.destroy({
             where : {id}
         })
@@ -35,9 +38,9 @@ export const deleteAuthorService = async(id)=>{
     }
 }
 
-export const getAuthorsService = async()=>{
+export const getAuthorsService = async(id)=>{
     try {
-        const authors = await db.author.findAll();
+        const authors = await db.author.findAll({where : {store_id : id}});
         if(authors.length == 0) return createError(400, 'Không có tác giả!')
         return authors;
     } catch (error) {
