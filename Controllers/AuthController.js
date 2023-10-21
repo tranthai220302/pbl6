@@ -2,16 +2,19 @@ import {
     loginService, 
     registerService 
 } from "../Models/Services/AuthService.js"
+
 export const loginController = async(req, res, next) =>{
     try {
         const data = req.body;
         const token = await loginService(data.username, data.password)
         if (token instanceof Error) return next(token)
         return res.cookie('accessToken', token, {
+            maxAge: 900000,
             httpOnly: true,
             secure: true,
             sameSite: 'None',
-            domain: '.harumi.store',
+            domain: 'bookstore-gi4a.onrender.com',
+            path: "/",
         }).status(200).send('Đăng nhập thành công!')
     } catch (error) {
         next(error)
