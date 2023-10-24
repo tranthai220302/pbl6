@@ -1,7 +1,8 @@
 import { 
     deleteUserService,
     updateUserService,
-    getUsersByQueryService
+    getUsersByQueryService,
+    getUserByIdService
 } from "../Models/Services/UserService.js";
 import { Op } from "sequelize";
 import createError from "../ultis/createError.js";
@@ -61,7 +62,7 @@ export const getUsersByQuery = async(req, res, next) =>{
 }
 export const getUserById = async(req, res, next) =>{
     try {
-        const user = await getUserById(req.params.id);
+        const user = await getUserByIdService(req.params.id);
         if(user instanceof Error) return next(user)
         return res.status(200).send(user)
     } catch (error) {

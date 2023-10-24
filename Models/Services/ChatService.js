@@ -11,9 +11,9 @@ export const createChatService = async(filter)=>{
                 ]
             }
         })
-        if(checkChat) return createError(200, 'Đã tồn tại trò chuyện này!')
+        if(checkChat) return createError(400, 'Đã tồn tại trò chuyện này!')
          const chat = await db.chat.create(filter);
-        if(!chat) return createError(200, 'Tạo cuộc trò chuyện không thành công!')
+        if(!chat) return createError(400, 'Tạo cuộc trò chuyện không thành công!')
         return chat;
     } catch (error) {
         return error;
@@ -36,7 +36,7 @@ export const deleteChatService = async(id)=>{
         const delete_chat = await db.chat.destroy({
             where : {id}
         })
-        if(delete_chat === 0) return createError(200, 'Xoá cuộc trò chuyện không thành công!')
+        if(delete_chat === 0) return createError(400, 'Xoá cuộc trò chuyện không thành công!')
         return {
             status: true,
             message: 'Xoá cuộc trò chuyện thành công!'
@@ -48,7 +48,7 @@ export const deleteChatService = async(id)=>{
 export const getChatByIdService = async(id)=>{
     try {
         const chat = await db.chat.findByPk(id);
-        if(!chat) return createError(200, 'Không tìm thấy cuộc trò chuyện!')
+        if(!chat) return createError(400, 'Không tìm thấy cuộc trò chuyện!')
         return chat;
     } catch (error) {
         return error;
