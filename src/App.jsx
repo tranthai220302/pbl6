@@ -14,6 +14,7 @@ import Footer from './compoments/Footer/Footer';
 import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
+import Chat from './pages/Chat/Chat';
 const queryClient = new QueryClient()
 const App = () => {
   const Layout = () =>{
@@ -43,6 +44,10 @@ const App = () => {
         {
           path: '/register',
           element: <Register/>
+        },
+        {
+          path: '/chat',
+          element: <Chat/>
         },
       ]
     },

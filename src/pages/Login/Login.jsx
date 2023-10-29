@@ -8,12 +8,12 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const mutation = useMutation({
-    mutationFn: (newTodo) => axios.post('https://www.harumi.store/api/auth/login', newTodo, {
+    mutationFn: (newTodo) => axios.post('http://localhost:8080/api/auth/login', newTodo, {
       withCredentials: true
     }),
     onSuccess: (data, variables, context) => {
-      localStorage.setItem('currentUser', JSON.stringify(data));
-      navigate('/');
+      localStorage.setItem('currentUser', JSON.stringify(data.data));
+      navigate('/chat');
     },
   });
   const handleLogin = () => {

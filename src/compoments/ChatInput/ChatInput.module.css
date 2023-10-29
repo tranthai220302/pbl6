@@ -1,0 +1,20 @@
+.container{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 45px;
+    padding-left: 10px;
+}
+.send_img{
+    height: 30px;
+    cursor: pointer;
+}
+
+.input{
+    height: 26px;
+    outline: none;
+    border-radius: 10px;
+    width: 80%;
+    border: 1px solid gray;
+    padding: 3px 7px;
+}
