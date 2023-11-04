@@ -2,10 +2,17 @@ import createError from "../../ultis/createError.js"
 import db from "../Entitys/index.js"
 export const createVoucherService = async(type) =>{
     try {
+        const checkVoucher = await db.voucher.findOne({
+            where : {
+                type
+            }
+        })
+        if(checkVoucher) return createError(400, 'Voucher này đã được tạo!')
         const voucher = await db.voucher.create({
             type,
         })
         if(!voucher) createError(400, 'Thêm loại giảm giá không thành công!')
+        return voucher;
     } catch (error) {
         return error;
     }
