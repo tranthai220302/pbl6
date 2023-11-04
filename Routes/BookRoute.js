@@ -4,6 +4,7 @@ import {
     deleteBook, 
     getBookById, 
     getBookByQuery, 
+    getBookByStore, 
     getBooks, 
     updateBook 
 } from '../Controllers/BookController.js';
@@ -16,4 +17,5 @@ routerBook.delete('/delete/:id', verifyjson, deleteBook)
 routerBook.get('/', getBooks)
 routerBook.get('/search', getBookByQuery)
 routerBook.get('/:id', getBookById)
+routerBook.get('/store/:id', verifyjson, getBookByStore)
 export default routerBook;

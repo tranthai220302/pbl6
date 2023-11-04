@@ -6,6 +6,7 @@ import {
     getBooksService,
     updateBookService ,
     getBookByIdService,
+    getBookByStoreService,
 } 
 from "../Models/Services/BookService.js"
 import createError from "../ultis/createError.js"
@@ -89,6 +90,15 @@ export const getBookById  = async(req, res, next) =>{
         const book = await getBookByIdService(req.params.id)
         if(book instanceof Error) return next(book)
         return res.status(200).send(book);
+    } catch (error) {
+        next(error)
+    }
+}
+export const getBookByStore = async(req, res, next) =>{
+    try {
+        const books = await getBookByStoreService(req.params.id)
+        if(books instanceof Error) return next(books)
+        return res.status(200).send(books)    
     } catch (error) {
         next(error)
     }

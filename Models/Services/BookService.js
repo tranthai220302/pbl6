@@ -115,3 +115,14 @@ export const getBookByIdService = async(id) =>{
         return error;
     }
 }
+export const getBookByStoreService = async(id)=>{
+    try {
+        const book = await db.book.findAll({
+            where:{store_id : id}
+        })
+        if(book.length == 0) return createError(400, 'Không có sách!')
+        return book;
+    } catch (error) {
+        return error;
+    }
+}
