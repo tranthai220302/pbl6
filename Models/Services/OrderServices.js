@@ -35,11 +35,13 @@ export const createOrderService = async(BookId, customer_id, quantity, isPayment
         order.total_price = currentTotal + priceShip - (priceVS.price_free + priceFS.price_free);
         await order.save();   
         await sendEmail(customer, order, book, priceVS.price_free, priceShip, priceFS.price_free).catch(console.error);
+        console.log(priceShip)
         return {
             message: 'Order thành công!',
             order,
             vouchersStore: priceVS.voucher,
-            FreeShip: priceFS.voucher
+            FreeShip: priceFS.voucher,
+            priceShip: priceShip
         }
     } catch (error) {
         return error;

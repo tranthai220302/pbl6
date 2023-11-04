@@ -15,6 +15,7 @@ import routerVoucher from "./Routes/VoucherRoute.js";
 import routerVoucherItem from "./Routes/VoucherItemRoute.js";
 import routerMessages from "./Routes/MessageRoute.js";
 import routerChat from "./Routes/ChatRoute.js";
+import routerCategory from "./Routes/CategoryRoute.js";
 import { Server } from "socket.io";
 dotenv.config()
 const app = express();
@@ -49,6 +50,7 @@ app.use('/api/voucher', routerVoucher)
 app.use('/api/voucherItem', routerVoucherItem)
 app.use('/api/message', routerMessages)
 app.use('/api/chat', routerChat)
+app.use('/api/category', routerCategory)
 app.use((err, req, res, next)=>{
   const errorStatus = err.status || 500;
   const errorMessage = err.message || "Something went wrong!";

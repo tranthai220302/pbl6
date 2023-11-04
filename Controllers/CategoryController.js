@@ -1,10 +1,11 @@
 import createError from "../ultis/createError.js"
 import { 
     createCategoryService, deleteCategoryService, getCategorysService 
-} from "../Models/Services/CategoryService";
+} from "../Models/Services/CategoryService.js";
 export const createCategory = async(req, res, next)=>{
     try {
-        if(req.idRole !==2 || req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'))
+        console.log(req.idRole)
+        if(req.idRole !==2 && req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'))
         const name = req.body.name;
         const category = await createCategoryService(name);
         if(category instanceof Error) return next(category);

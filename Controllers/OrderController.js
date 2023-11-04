@@ -3,11 +3,10 @@ import {
     getOrdersByCustomerService 
 } 
 from "../Models/Services/OrderServices.js";
-import geolib from 'geolib'
-import axios from "axios";
+import createError from "../ultis/createError.js";
 export const createOrder = async (req, res, next) =>{
     try {
-        if(req.idRole !== 1) return next(createOrder(400, 'Bạn không có quyền này!'))
+        if(req.idRole !== 1) return next(createError(400, 'Bạn không có quyền này!'))
         const quantity = req.body.quantity;
         const isPayment = req.body.isPayment
         const order = await createOrderService(req.params.idBook, req.id, quantity, isPayment);

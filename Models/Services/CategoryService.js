@@ -3,8 +3,11 @@ import db from "../Entitys/index.js"
 export const createCategoryService = async(name)=>{
     try {
         const checkName = await db.category.findOne({
-            name
+            where : {
+                name
+            }
         })
+        console.log(checkName)
         if(checkName) return createError(400, 'Danh mục này đã tồn tại!')
         const category = await db.category.create({name})
         if(!category) return createError(400, 'Thêm danh mục khong thành công!')

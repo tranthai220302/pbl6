@@ -21,7 +21,7 @@ export const createCart = async(req, res, next) =>{
 export const deleteCart = async(req, res, next) =>{
     try {
         if(req.idRole == 3 || req.idRole == 4) return next(createError(400, 'Bạn không có quyền này!'))
-        const idCart = req.params.idCart;
+        const idCart = parseInt(req.params.idCart);
         const delete_cart = await deleteCartService(idCart, req.id);
         if(delete_cart instanceof Error) return next(delete_cart)
         res.status(200).send({
@@ -36,7 +36,7 @@ export const deleteCart = async(req, res, next) =>{
 export const getCartById = async(req, res, next) =>{
     try {
         const idCart = req.params.idCart;
-        const Cart = await getCartByIdService(idCart);
+        const Cart = await getCartByIdService(idCart ,req.id);
         if(Cart instanceof Error) return next(Cart)
         return res.status(200).send(Cart)
     } catch (error) {
