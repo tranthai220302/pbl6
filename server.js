@@ -53,7 +53,7 @@ app.use((err, req, res, next)=>{
   const errorStatus = err.status || 500;
   const errorMessage = err.message || "Something went wrong!";
   console.log(err)
-  return res.status(errorStatus).send(errorMessage);
+  return res.status(500).send(errorMessage);
 })
 const server = app.listen(port, ()=>{
   console.log(`Server is listening ${port}`)
@@ -64,17 +64,21 @@ const io = new Server(server, {
     credentials: true,
   },
 });
-global.OnlinerUser = new Map();
-io.on("connection", (socket) =>{
-  console.log(`${socket.id} kết nối tới server`)
+global.onlineUsers = new Map();
+io.on("connection", (socket) => {
+  console.log(`ketnoi ser ver ${socket.id}`)
   global.chatSocket = socket;
-  socket.on('add-user', (userId)=>{
-    OnlinerUser.set(userId, socket.id)
+  socket.on("add-user", (userId) => {
+    onlineUsers.set(userId, socket.id);
+    console.log(onlineUsers)
   });
-  socket.on('send-mes', (data)=>{
-    const sendUserSocket = OnlinerUser.get(data.to);
-    if(sendUserSocket){
-      socket.to(sendUserSocket).emit('mes-receive', data.message)
+
+  socket.on("send-mes", (data) => {
+    const sendUserSocket = onlineUsers.get(data.to);
+    if (sendUserSocket) {
+      console.log(data.message)
+      console.log(sendUserSocket)
+      socket.to(sendUserSocket).emit("mes-receive", data.message);
     }
-  })
-})
+  });
+});

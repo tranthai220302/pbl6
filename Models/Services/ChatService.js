@@ -19,12 +19,19 @@ export const createChatService = async(filter)=>{
         return error;
     }
 }
-export const getChatsByIdService = async(idCustomer)=>{
+export const getChatsByIdService = async(filter)=>{
     try {
         const chats = await db.chat.findAll({
-            where : {
-                customer_id : idCustomer
-            }
+            where : filter,
+            include : [{
+                model: db.user,
+                as: 'Participant1',
+                attributes: { exclude: ['password'] },
+            }, {
+                model: db.user,
+                as: 'Participant2',
+                attributes: { exclude: ['password'] },
+            }]
         })
         return chats;
     } catch (error) {

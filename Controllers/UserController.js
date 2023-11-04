@@ -2,10 +2,13 @@ import {
     deleteUserService,
     updateUserService,
     getUsersByQueryService,
-    getUserByIdService
+    getUserByIdService,
+    getPrecentCustomerNewService,
+    getPrecentCustomerByAgeService
 } from "../Models/Services/UserService.js";
 import { Op } from "sequelize";
 import createError from "../ultis/createError.js";
+import { nextDay } from "date-fns";
 
 export const updateUser = async(req, res, next) =>{
     try {
@@ -67,5 +70,25 @@ export const getUserById = async(req, res, next) =>{
         return res.status(200).send(user)
     } catch (error) {
         next(error)
+    }
+}
+export const getPrecentCustomerNew = async (req, res, next)=>{
+    try {
+        if(req.idRole !== 4) return createError(400, 'Bạn không có quyền này!')
+        const userByDate = await getPrecentCustomerNewService();
+        if(userByDate instanceof Error) next(userByDate);
+        return res.status(200).send(userByDate)
+    } catch (error) {
+        next(error);
+    }
+}
+export const getPrecentCustomerByAge = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return createError(400, 'Bạn không có quyền này!')
+        const userByAge = await getPrecentCustomerByAgeService();
+        if(userByAge instanceof Error) next(userByAge);
+        return res.status(200).send(userByAge)
+    } catch (error) {
+        next(error);
     }
 }

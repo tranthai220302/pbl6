@@ -8,14 +8,13 @@ export const loginController = async(req, res, next) =>{
         const data = req.body;
         const token = await loginService(data.username, data.password)
         if (token instanceof Error) return next(token)
-        return res.cookie('accessToken', token, {
-            maxAge: 900000,
+        return res.cookie('accessToken', token.token, {
             httpOnly: true,
             secure: true,
             sameSite: 'None',
             // domain: 'www.harumi.store',
             path: "/",
-        }).status(200).send('Đăng nhập thành công!')
+        }).status(200).send(token.user)
     } catch (error) {
         next(error)
     }

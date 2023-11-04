@@ -27,7 +27,7 @@ export const getMessageService = () =>{
 export const getMessageByIdChatService = async(idChat) =>{
     try {
         const chat = await db.chat.findByPk(idChat)
-        if(!chat) return createError(400, 'Không tìm thấy đoạn chat!')
+        if(!chat) return createError(404, 'Khong tim thay chat!')
         const messages = await db.message.findAll({
             where : {
                 ChatId: idChat

@@ -32,8 +32,15 @@ export const getChatById = async(req, res, next)=>{
 }
 export const getChatsByIdUser = async(req, res, next)=>{
     try {
-        const idUser = req.id;
-        const chats = await getChatsByIdService(idUser)
+        const filter = {
+            ...(req.idRole == 2 &&{
+                store_id : req.id
+            }),
+            ...(req.idRole == 1 &&{
+                customer_id : req.id
+            })
+        }
+        const chats = await getChatsByIdService(filter)
         if(chats instanceof Error) return(chats);
         res.status(200).send(chats);
     } catch (error) {
