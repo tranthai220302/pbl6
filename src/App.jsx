@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   createBrowserRouter,
   RouterProvider,
-  Outlet
+  Outlet,
+  useLocation
 } from "react-router-dom";
 import {
   QueryClient,
@@ -15,15 +16,24 @@ import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Chat from './pages/Chat/Chat';
+import LoginAdmin from './pages/Admin/Login/LoginAdmin';
+import HomeAdmin from './pages/Admin/Home/HomeAdmin';
+import Customer from './pages/Admin/Customer/Customer';
+import Store from './pages/Admin/Store/Store';
 const queryClient = new QueryClient()
 const App = () => {
+  const [openChat, setOpenChat] = useState(false)
+  
   const Layout = () =>{
+    const isAdminPage = useLocation().pathname.includes('/admin');
+    console.log(isAdminPage)
     return (
       <QueryClientProvider client={queryClient}>
         <div className="app">
-          <Navbar/>
+          {!isAdminPage && (<Navbar setOpenChat={setOpenChat} />)}
+          {openChat && (<Chat setOpenChat={setOpenChat} />)}
           <Outlet/>
-          <Footer/>
+          {!isAdminPage && (<Footer />)}
         </div>
       </QueryClientProvider>
     )
@@ -46,12 +56,25 @@ const App = () => {
           element: <Register/>
         },
         {
-          path: '/chat',
-          element: <Chat/>
+          path: '/admin/login',
+          element: <LoginAdmin />
         },
+        {
+          path: '/admin/home',
+          element: <HomeAdmin />
+        },
+        {
+          path: '/admin/customer',
+          element: <Customer />
+        },
+        {
+          path: '/admin/store',
+          element: <Store />
+        }
       ]
     },
   ]);
+
   return (
     <div>
       <RouterProvider router={router} />

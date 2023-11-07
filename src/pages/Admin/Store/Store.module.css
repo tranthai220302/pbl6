@@ -1,0 +1,153 @@
+.container{
+    display: flex;
+    background-color: rgb(232, 230, 230);
+    height: 100vh;
+}
+.customer{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.navbar{
+    height: 55px;
+    background-color: #bedddd;
+    width: 100%;
+    box-shadow: 0px 5px 5px 5px #999999;
+}
+.content{
+    display: flex;
+    padding: 20px 10px;
+    height: 91.5%;
+    gap: 20px;
+}
+.title{
+    font-size: 10px;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-style: italic;
+    font-weight: 500;
+    margin: auto;
+}
+.list{
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.table1 {
+    max-height: 100%; 
+    overflow: auto;  
+    position: relative; 
+    width: 100%;
+}
+
+.table1 table {
+    width: 100%;
+}
+
+.table1 thead {
+    position: sticky;
+    top: -2px;
+    background-color: gray;
+    box-shadow: 0px 3px 8px 2px black;    
+}
+.table1 tbody{
+    background-color: white;
+}
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+td{
+    text-align: center;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+.navbar{
+    height: 55px;
+    background-color: #bedddd;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0px 5px 5px 5px #999999;
+    align-items: center;
+    padding: 0 10px;
+}
+.search{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    position: relative;
+}
+.search_icon{
+    position: absolute;
+    right: 0px;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.search_icon:hover{
+    background-color: #999999;
+}
+.search_input{
+    height: 33px;
+    width: 300px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+.avatar{
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.user{
+    display: flex;
+    gap: 50px;
+    align-items: center;
+}
+.notify_icon{
+    height: 20px;
+    color: black;
+    padding: 5px 8px;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+}
+.img_loading{
+    height: 50px;
+    display: flex;
+    margin: auto;
+    margin-top: 200px;
+}
+.error{
+    background-color: rgb(232, 230, 230);
+    color: red;
+    display: flex;
+    margin-top: 40px;
+}
+.book_icon{
+    color: white;
+}

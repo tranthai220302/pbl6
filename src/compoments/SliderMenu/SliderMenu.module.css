@@ -1,0 +1,117 @@
+.sidebar_menu {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    width: 20%;
+    align-items: center;
+    box-shadow: 0px 5px 5px 5px #999999;
+    background: white;
+    background-image: url("https://enews.agu.edu.vn/images/assets/2021/05/PSA/American-Book/16.jpg");
+    color: white;
+}
+.sidebar_header{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid black;
+    border: 3px solid #ffcccc;
+    box-shadow: 0px 3px 5px 0px gray;
+    z-index: 99;
+    background-color: white;
+}
+.logo{
+    display: flex;
+    margin: auto;
+}
+.img_logo{
+    height: 50px;
+}
+.sbar_collapsed .sidebar-menu {
+    left: -280px;
+}
+.main_menu {
+    width: 100%;
+    overflow-y: auto;
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+}
+.item{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding: 0px 20px;
+}
+.require{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    list-style: none;
+    border-left: 1px solid black;
+    padding-left: 20px;
+    margin-left: 30px;
+    cursor: pointer;
+    animation: fadeInUp 2s forwards;
+}
+@keyframes fadeInUp {
+    from {
+      top: 0px; 
+      opacity: 0; 
+    }
+    to {
+      top: 100px;
+      opacity: 1; 
+    }
+}
+
+.user_icon {
+    color: white;
+    font-size: 22px;
+}
+
+.name{
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    margin-top: 10px;
+}
+.name_select{
+    background-color: blue;
+}
+.store_icon{
+    color: white;
+    font-size: 22px;
+}
+.ship_icon{
+    color: white;
+    font-size: 22px;
+}
+.voucher_icon{
+    color: white;
+    font-size: 22px;
+}
+.name_item{
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: black;
+    text-decoration: none;
+    margin-left: 20px;
+}
+.name_item:hover{
+    color:  rgb(170, 62, 62);
+}
+.item_require:hover{
+    /* color:  rgb(230, 99, 99);
+    border-bottom: 2px solid rgb(230, 99, 99); */
+}
+/* .item_require_name:hover{
+    color:  rgb(230, 99, 99);
+    border-bottom: 2px solid rgb(230, 99, 99);
+} */
+.item_require_select{
+    color:  rgb(230, 99, 99);
+    border-bottom: 2px solid rgb(230, 99, 99);
+}
+

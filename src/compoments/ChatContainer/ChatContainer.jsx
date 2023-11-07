@@ -6,7 +6,7 @@ import ChatInput from '../ChatInput/ChatInput';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 
-export default function ChatContainer({ currentChat, userChat, setOpen }) {
+export default function ChatContainer({ currentChat, userChat, setOpenChat }) {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -100,7 +100,7 @@ export default function ChatContainer({ currentChat, userChat, setOpen }) {
         )}
         <div className={styles.home_h}>
           <img
-            onClick={() => { setOpen(false) }}
+            onClick={() => { setOpenChat(false) }}
             className={styles.home}
             src="https://cdn.pixabay.com/photo/2013/07/12/15/37/close-150192_640.png"
             alt=""

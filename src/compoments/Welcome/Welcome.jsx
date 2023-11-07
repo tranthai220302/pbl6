@@ -1,6 +1,5 @@
 import React from 'react'
 import styles from './Welcome.module.css'
-import Robot from '../../assets/img/robot.gif'
 export default function Welcome() {
   return (
     <div className={styles.continer}>
