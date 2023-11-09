@@ -26,11 +26,12 @@ const App = () => {
   
   const Layout = () =>{
     const isAdminPage = useLocation().pathname.includes('/admin');
-    console.log(isAdminPage)
+    const isLoginPage = useLocation().pathname.includes('/login');
+    console.log(isLoginPage)
     return (
       <QueryClientProvider client={queryClient}>
         <div className="app">
-          {!isAdminPage && (<Navbar setOpenChat={setOpenChat} />)}
+          {!isAdminPage && !isLoginPage  && (<Navbar setOpenChat={setOpenChat} />)}
           {openChat && (<Chat setOpenChat={setOpenChat} />)}
           <Outlet/>
           {!isAdminPage && (<Footer />)}

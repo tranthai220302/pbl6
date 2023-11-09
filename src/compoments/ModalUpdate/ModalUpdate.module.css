@@ -65,3 +65,9 @@
 .desc_book{
     flex: 4;
 }
+.img_loading{
+    height: 20px;
+    display: flex;
+    margin: auto;
+    width: 100%;
+}

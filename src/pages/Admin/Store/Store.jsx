@@ -16,6 +16,7 @@ export default function Customer() {
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(true);
   const [data, setData] = useState(null);
+  const [selectOrder, setSelectOrder] = useState(null);
   const getData = (name)=>{
     setIsPending(true);
     newRequest.get(`/user/search/2?name=${name}`, {
@@ -101,7 +102,10 @@ export default function Customer() {
                         <ModalCustomer customer={selectedCustomer} show={true} handleClose={() => setSelectedCustomer(null)} />
                       )}
                       {selectedProduct && (
-                        <Example showExmaple={true} showCloseExample={()=>setSelectedProduct(null)} id = {selectedProduct.id}/>
+                        <Example showExmaple={true} showCloseExample={()=>setSelectedProduct(null)} id = {selectedProduct.id} isOrder={false}/>
+                      )}
+                      {selectOrder && (
+                        <Example showExmaple={true} showCloseExample={()=>setSelectOrder(null)} id = {selectOrder.id} isOrder={true}/>
                       )}
                       <td>
                         <img src="https://saigonpavillon.com.vn/wp-content/uploads/2022/10/avatar-cute-nam-6.jpg" alt="Avatar" width="50" height="50" />
@@ -136,9 +140,9 @@ export default function Customer() {
                       </td>
                       <td>
                         <button><FontAwesomeIcon icon={faTruckFast} className={styles.user_icon} 
-                        //   onClick={()=>{
-                        //     setSelectedCustomerUpdate(customer)
-                        //   }}
+                          onClick={()=>{
+                            setSelectOrder(customer)
+                          }}
                         /></button>
                       </td>
                     </tr>

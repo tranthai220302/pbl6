@@ -8,31 +8,37 @@ import { useState } from 'react';
 import newRequest from '../../ults/NewRequest';
 import { useEffect } from 'react';
 import { useBootstrapBreakpoints } from 'react-bootstrap/esm/ThemeProvider';
-export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, getData, product}) {
+export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, getData, product, getDataProduct}) {
   const [filter, setFilter] = useState({
     email : customer?.email,
     address : customer?.address,
     phone : customer?.phone,
+  })
+  const [filterBoook, setFilterBook] = useState({
+    price : product?.price,
+    author : product?.Author.id,
+    name : product?.name,
+    sales_number : product?.sales_number,
+    desc: product?.desc
   })
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   const [category, setCategory] = useState(null);
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(null);
-  const [checked, setChecked] = useState(null);
+  const [isPendingUpdate, setIsPendingUpdate] = useState(null)
   const handleCategoryChange = (event) => {
-    const categoryValue = event.target.value;
+    const categoryId = parseInt(event.target.value);
     const isChecked = event.target.checked;
   
     if (isChecked) {
-      setSelectedCategories([...selectedCategories, categoryValue]);
+      setSelectedCategories([...selectedCategories, categoryId]);
     } else {
-      const updatedCategories = selectedCategories.filter(
-        (category) => category !== categoryValue
-      );
+      const updatedCategories = selectedCategories.filter((id) => id !== categoryId);
       setSelectedCategories(updatedCategories);
     }
   };
+  
   const handleUpdate = (id)=>{
     newRequest.put(`/user/edit/${id}`,filter, {
       withCredentials: true
@@ -44,6 +50,20 @@ export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, ge
     .catch((error) => {
     });
   }
+  const handelSetFilterBook = (e) =>{
+    let name = e.target.name;
+    let value = e.target.value;
+    if(name == 'price' || name == 'sales_number' || name == 'author'){
+      value = parseInt(value)
+    }
+    setFilterBook((prev)=>(
+      {
+        ...prev,
+        [name]: value,
+      }
+    ))
+  }
+  console.log(filterBoook)
   const handleSetFilter = (e) =>{
     const name = e.target.name;
     const value = e.target.value;
@@ -69,14 +89,26 @@ export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, ge
       setIsPending(false);
     });
   }, [product])
-  const handleInputChange = (name) => {
-    const updatedCategories = product.Categories.map((itemp) => {
-      if (itemp.name === name) {
-        return { ...itemp, checked: !itemp.checked };
-      }
-      return itemp;
+  const handleUpdateBook = (filterBoook, selectedCategories, id) =>{
+    const updatedFilter = {
+      ...filterBoook,
+      categorys: selectedCategories.length == 0 ? product.Categories.map((item)=>{
+        return parseInt(item.id)
+      }) : selectedCategories
+    };
+    setIsPendingUpdate(true);
+    newRequest.put(`/book/update/${id}`,updatedFilter, {
+      withCredentials: true
+    })
+    .then((res) => {
+      getDataProduct('')
+      setIsPendingUpdate(false);
+      handleCloseUpdate()
+    })
+    .catch((error) => {
+      setIsPendingUpdate(false);
     });
-  };
+  }
   return (
     <>
     <Modal show={showUpdate} onHide={handleCloseUpdate}>
@@ -124,56 +156,65 @@ export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, ge
                 <div className={styles.infor_body}>
                   <div className={styles.infor_item}>
                     <span className={styles.book_title}>Giá</span>
-                    <input type="text" defaultValue={product.price} className = {styles.value_book} name='email' onChange={(e)=>handleSetFilter(e)} />
+                    <input type="text" defaultValue={product.price} className = {styles.value_book} name='price' onChange={(e)=>handelSetFilterBook(e)} />
                   </div>
                 </div>
                 <div className={styles.infor_body}>
                   <div className={styles.infor_item}>
                     <span className={styles.book_title}>Tác giả</span>
-                    <input type="text" defaultValue={product.Author.name} className = {styles.value_book} name = 'phone' onChange={(e)=>handleSetFilter(e)}  />
+                    <input type="text" defaultValue={product.Author.name} className = {styles.value_book} name = 'author' onChange={(e)=>handelSetFilterBook(e)}  />
                   </div>
                   <div className={styles.infor_item}>
                     <span className={styles.book_title}>Số lượng</span>
-                    <input type="text" defaultValue={product.sales_number} className = {styles.value_book} />
+                    <input type="text" name='sales_number' defaultValue={product.sales_number} className = {styles.value_book} onChange={(e)=>handelSetFilterBook(e)} />
                   </div>
                   <div className={styles.infor_item}>
                     <span className={styles.book_title}>Thể loại</span>
-                    <div className={styles.value_book}>
-                      {isPending && (<div>........</div>)}
-                      {error && (<div>{error}</div>)}
-                      {!isPending && !error && category && (
-                        category.map((item, i)=>{
-                          <label key={i}>
-                            <input
-                              type="checkbox"
-                              value={item.id}
-                            />  
-                            {item.name}
-                          </label>
-                        })
-                      )}
-                      {}
-                    </div>
                     <div className={styles.value_book}>{product.Categories.map((item)=>(
                       <span>{item.name}</span>
                     ))}</div>
                   </div>
                   <div className={styles.infor_item}>
+                    <span className={styles.book_title}>Chọn thể loại</span>
+                    <div className={styles.value_book}>
+                      {isPending && (<div>........</div>)}
+                      {error && (<div>{error}</div>)}
+                      {!isPending && !error && category && category.map((item, i) =>(
+                        <label key={i}>
+                          <input
+                            type="checkbox"
+                            value={item.id}
+                            onChange={handleCategoryChange}
+                          />  
+                          {item.name}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <div className={styles.infor_item}>
                     <span className={styles.book_title}>Nội dung</span>
-                    <textarea className={styles.desc_book} name="address" id="" cols="30" rows="10" defaultValue={product.desc} onChange={(e)=>handleSetFilter(e)} ></textarea>
+                    <textarea className={styles.desc_book} name="desc" id="" cols="30" rows="10" defaultValue={product.desc} onChange={(e)=>handelSetFilterBook(e)} ></textarea>
                   </div>
                 </div>
               </div>
             </div>
           )}
+           {isPendingUpdate && (<img className={styles.img_loading} src=" https://assets.materialup.com/uploads/ec71c736-9c99-4c75-9fb4-6b263f9717a2/line.gif" alt="" />)}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseUpdate}>
             Close
           </Button>
-          <Button variant="primary" onClick={() => handleUpdate(customer.id)}>
-              Save Change
-          </Button>
+          {customer && (
+              <Button variant="primary" onClick={() => handleUpdate(customer.id)}>
+                  Save Change
+              </Button>
+          )}
+          {product && (
+              <Button variant="primary" onClick={() => handleUpdateBook(filterBoook,selectedCategories,product.id)}>
+                  Save Change
+              </Button>
+          )}
         </Modal.Footer>
       </Modal>
     </>
