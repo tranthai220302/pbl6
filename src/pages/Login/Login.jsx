@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './Login.module.css'
 import newRequest from '../../ults/NewRequest';
+import { Link } from 'react-router-dom';
+import Register from '../Register/Register';
+
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -24,21 +27,47 @@ export default function Login() {
     mutation.mutate({ username, password });
   };
   return (
-    <div className={styles.App}>
-      <div className={styles.loginContainer}>
-        <div className={styles.input_container}>
-          <label>Username </label>
-          <input type="text" name="username" onChange={(e) => setUsername(e.target.value)} />
+    <div className={styles.login}>
+      <div className={styles.form_login}>
+        <span>Đăng nhập</span>
+        <div className={styles.item}>
+          <span>
+            Tên đăng nhập
+          </span>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            value={username} // Thêm giá trị vào trường nhập liệu
+            onChange={(e) => setUsername(e.target.value)} // Cập nhật giá trị vào state
+            placeholder="Nhập tên tài khoản"
+          />
         </div>
-        <div className={styles.input_container}>
-          <label>Password </label>
-          <input type="password" name="password" onChange={(e) => setPassword(e.target.value)} />
+        <div className={styles.item}>
+          <span>
+            Mật khẩu
+          </span>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            value={password} // Thêm giá trị vào trường nhập liệu
+            onChange={(e) => setPassword(e.target.value)} // Cập nhật giá trị vào state
+            placeholder="Nhập mật khẩu"
+          />
+          <i>
+            <span>Quên mật khẩu?</span>
+          </i>
         </div>
-        {error && (<div>{error}</div>)}
-        {mutation.isPending && <div><img className={styles.img_loading} src=" https://assets.materialup.com/uploads/ec71c736-9c99-4c75-9fb4-6b263f9717a2/line.gif" alt="" /></div>}
-        <button className={styles.loginBut} onClick={handleLogin}>
-          Login
-        </button>
+        <div className={styles.btn}>
+          <button onClick={handleLogin}>
+            <span>Đăng nhập</span>
+          </button>
+          <div>
+            <i>Bạn chưa có tài khoản?</i>
+            <Link to="/register">Đăng ký</Link>
+          </div>
+        </div>
       </div>
     </div>
   );
