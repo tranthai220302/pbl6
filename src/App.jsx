@@ -10,7 +10,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import './App.css'
-import Navbar from './compoments/Navbar/Navbar';
+import Header from './compoments/Header/Header';
 import Footer from './compoments/Footer/Footer';
 import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
@@ -27,14 +27,15 @@ const App = () => {
   const Layout = () =>{
     const isAdminPage = useLocation().pathname.includes('/admin');
     const isLoginPage = useLocation().pathname.includes('/login');
-    console.log(isLoginPage)
+
+    console.log(isAdminPage)
     return (
       <QueryClientProvider client={queryClient}>
         <div className="app">
-          {!isAdminPage && !isLoginPage  && (<Navbar setOpenChat={setOpenChat} />)}
+          {!isAdminPage && !isLoginPage && (<Header setOpenChat={setOpenChat} />)}
           {openChat && (<Chat setOpenChat={setOpenChat} />)}
           <Outlet/>
-          {!isAdminPage && (<Footer />)}
+          {!isAdminPage && !isLoginPage && (<Footer />)}
         </div>
       </QueryClientProvider>
     )
