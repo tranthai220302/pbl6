@@ -27,15 +27,17 @@ const App = () => {
   const Layout = () =>{
     const isAdminPage = useLocation().pathname.includes('/admin');
     const isLoginPage = useLocation().pathname.includes('/login');
+    const isRegisterPage = useLocation().pathname.includes('/register');
+
 
     console.log(isAdminPage)
     return (
       <QueryClientProvider client={queryClient}>
         <div className="app">
-          {!isAdminPage && !isLoginPage && (<Header setOpenChat={setOpenChat} />)}
+          {!isAdminPage && !isLoginPage && !isRegisterPage && (<Header setOpenChat={setOpenChat} />)}
           {openChat && (<Chat setOpenChat={setOpenChat} />)}
           <Outlet/>
-          {!isAdminPage && !isLoginPage && (<Footer />)}
+          {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
         </div>
       </QueryClientProvider>
     )

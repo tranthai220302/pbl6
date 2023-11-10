@@ -10,17 +10,7 @@ export default function Header({setOpenChat}) {
   const [open, setOpen] = useState(false);
   // const [openchat, setOpenchay] = useState(false);
   const navigate = useNavigate();
-  useEffect(() => {
-    if (!localStorage.getItem('currentUser')) {
-      navigate("/login");
-    } else {
-      setUser(
-        JSON.parse(
-          localStorage.getItem('currentUser')
-        ) 
-      );
-    }
-  }, []);
+  
   console.log(user)
   return (
     <div className={styles.container}>
