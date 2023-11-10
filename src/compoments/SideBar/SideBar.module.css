@@ -1,0 +1,54 @@
+.SideBar {
+    background-color: white;
+    width: 25%;
+    border-radius: 4px;
+    padding: 16px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.SideBar_item {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 2px solid rgba(78, 165, 139, 0.34);
+}
+
+.SideBar_item .title {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.SideBar_item ul {
+    list-style: none;
+    padding-left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+}
+
+.SideBar_item li:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.SideBar_item li input {
+    margin-right: 10px;
+}
+
+.btn_more {
+    margin: auto;
+    color: #4EA58B;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn_more:hover {
+    color: green;
+}
+
+.btn_more span {
+    margin-right: 4px;
+}
+

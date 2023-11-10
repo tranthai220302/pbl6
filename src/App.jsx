@@ -20,6 +20,7 @@ import LoginAdmin from './pages/Admin/Login/LoginAdmin';
 import HomeAdmin from './pages/Admin/Home/HomeAdmin';
 import Customer from './pages/Admin/Customer/Customer';
 import Store from './pages/Admin/Store/Store';
+import BookList from './pages/BookList/BookList';
 const queryClient = new QueryClient()
 const App = () => {
   const [openChat, setOpenChat] = useState(false)
@@ -58,6 +59,10 @@ const App = () => {
         {
           path: '/register',
           element: <Register/>
+        },
+        {
+          path: '/booklist',
+          element: <BookList/>
         },
         {
           path: '/admin/login',
