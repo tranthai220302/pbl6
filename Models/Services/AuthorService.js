@@ -1,7 +1,7 @@
 import e from "express";
 import db from "../Entitys/index.js"
 import createError from "../../ultis/createError.js";
-
+import { Op } from "sequelize";
 export const createAuthorService = async(name, address, date_birth, date_death, store_id) =>{
     try {
         const checkName = await db.author.findOne({
@@ -13,6 +13,7 @@ export const createAuthorService = async(name, address, date_birth, date_death, 
             address, 
             date_birth, 
             date_death,
+            store_id,
             store_id
         })
         if(!author) return createError(400, 'Thêm tác giả không thành công!')
@@ -47,14 +48,20 @@ export const getAuthorsService = async(id)=>{
         return error;
     }
 }
-export const updateAuthorService = async(name, address, date_birth, date_death, id)=>{
+export const updateAuthorService = async(name, address, date_birth, date_death, id, store_id)=>{
     try {
         const update_author = await db.author.update({
             name,
             address, 
             date_birth,
             date_death
-        }, {where : {id}})
+        }, {
+            where : {
+                [Op.and] : [
+                    {id, store_id}
+                ]
+            }
+        })
         if(update_author[0] == 0) return createError(400, 'Chỉnh sửa không thành công!')
         return {
             status: true,

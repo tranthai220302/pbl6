@@ -11,7 +11,7 @@ export const createAuthor = async(req, res, next) =>{
     try {
         if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'));
         const data = req.body;
-        const author = await createAuthorService(data.name, data.address, data.date_birth, data.date_death);
+        const author = await createAuthorService(data.name, data.address, data.date_birth, data.date_death, req.id);
         if(author instanceof Error) return next(author);
         res.status(200).send(author);
     } catch (error) {
@@ -35,7 +35,7 @@ export const updateAuthor = async(req, res, next) =>{
         if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'));
         if(!id) return next(createError(400, 'Không tìm thấy'))
         const data = req.body;
-        const update_author = await updateAuthorService(data.name, data.address, data.date_birth, data.date_deth, id)
+        const update_author = await updateAuthorService(data.name, data.address, data.date_birth, data.date_deth, id, req.id)
         if(update_author instanceof Error) return next(update_author);
         res.status(200).send(update_author);
     } catch (error) {

@@ -17,6 +17,8 @@ import State from "./State.js";
 import Admin from "./Admin.js";
 import VoucherItem from "./VoucherItem.js";
 import Customer_VoucherItem from "./Customer_VoucherItem.js";
+import StoreRequest from "./StoreRequest.js";
+import ReportStore from "./ReportStore.js";
 const sequelize = new Sequelize(
     configdb.DB,
     configdb.USER,
@@ -38,6 +40,7 @@ const sequelize = new Sequelize(
 const db = {}
 db.sequelize = sequelize
 db.Sequelize = Sequelize
+db
 db.customer_voucherItem = Customer_VoucherItem(sequelize)
 db.admin = Admin(sequelize)
 db.book = Book(sequelize)
@@ -55,6 +58,15 @@ db.state = State(sequelize)
 db.review = Review(sequelize)
 db.voucher = Voucher(sequelize)
 db.voucherItem = VoucherItem(sequelize)
+db.storeRequest = StoreRequest(sequelize)
+db.reportStore = ReportStore(sequelize);
+
+/*reportStore vs customer*/
+db.user.hasMany(db.reportStore, {foreignKey : 'customer_id', as : 'reportByCustomer'});
+db.reportStore.belongsTo(db.user, {foreignKey: 'customer_id', as : 'customerReport'})
+/*reportStore vs store*/
+db.user.hasMany(db.reportStore, {foreignKey : 'store_id', as : 'reportByStore'});
+db.reportStore.belongsTo(db.user, {foreignKey: 'store_id', as : 'storeByReport'})
 /*Author vs store*/
 db.author.belongsTo(db.user, {foreignKey: 'store_id'});
 db.user.hasMany(db.author, {foreignKey: 'store_id'})
@@ -79,7 +91,9 @@ db.cart.belongsTo(db.user, {
 })
 db.cart.belongsTo(db.book)
 db.book.hasOne(db.cart)
-
+/*User vs RequestStore*/
+db.user.hasOne(db.storeRequest, {foreignKey : 'customer_id'});
+db.storeRequest.belongsTo(db.storeRequest, {foreignKey : 'customer_id'});
 /*__Chat__*/
 //chat vs customer
 db.chat.belongsTo(db.user, { as: 'Participant1', foreignKey: 'customer_id' });

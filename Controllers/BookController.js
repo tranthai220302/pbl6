@@ -24,7 +24,7 @@ export const createBook = async (req, res, next) =>{
 }
 export const deleteBook = async(req, res, next) =>{
     try {
-        if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'))
+        if(req.idRole !== 2 && req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'))
         const delete_book = await deleteBookService(req.params.id)
         if(deleteBook instanceof Error) return next(delete_book)
         return res.status(200).send(delete_book)
@@ -34,7 +34,7 @@ export const deleteBook = async(req, res, next) =>{
 }
 export const updateBook = async(req, res, next) =>{
     try {
-        if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'))
+        if(req.idRole !== 2 && req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'))
         const data = req.body;
         const update_book = await updateBookService(req.params.id, data.name, data.desc, data.price, data.sales_number, data.publication_date, data.author_id, data.categorys)
         if(deleteBook instanceof Error) return next(update_book)
@@ -96,7 +96,8 @@ export const getBookById  = async(req, res, next) =>{
 }
 export const getBookByStore = async(req, res, next) =>{
     try {
-        const books = await getBookByStoreService(req.params.id)
+        const name = req.query.name;
+        const books = await getBookByStoreService(req.params.id,name)
         if(books instanceof Error) return next(books)
         return res.status(200).send(books)    
     } catch (error) {

@@ -4,11 +4,14 @@ import {
     getUsersByQueryService,
     getUserByIdService,
     getPrecentCustomerNewService,
-    getPrecentCustomerByAgeService
+    getPrecentCustomerByAgeService,
+    ConfirmStoreService,
+    sendRequireStoreService,
+    getRequestStoresService
 } from "../Models/Services/UserService.js";
 import { Op } from "sequelize";
 import createError from "../ultis/createError.js";
-import { nextDay } from "date-fns";
+import { isToday, nextDay } from "date-fns";
 
 export const updateUser = async(req, res, next) =>{
     try {
@@ -90,5 +93,41 @@ export const getPrecentCustomerByAge = async(req, res, next) =>{
         return res.status(200).send(userByAge)
     } catch (error) {
         next(error);
+    }
+}
+export const ConfirmStore = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này !'));
+        const confirm = await ConfirmStoreService(req.params.id);
+        if(confirm instanceof Error) next(confirm);
+        res.status(200).send(confirm)
+    } catch (error) {
+        next(error)
+    }
+}
+export const sendRequireStore = async(req, res, next) =>{
+    try {
+        if(req.idRole != 1) return next(createError(400, 'Bạn không có quyền này!'))
+        const filter = {
+            ...(req.body.nameStore && {nameStore : req.body.nameStore}),
+            ...(req.body.descStore && {descStore : req.body.descStore}),
+            ...(req.id && {customer_id : req.id}),
+            isConfirm : false
+        }
+        const sendRequire = await sendRequireStoreService(filter);
+        if(filter instanceof Error) next(filter);
+        res.status(200).send(sendRequire)
+    } catch (error) {
+        next(error)
+    }
+}
+export const getRequestStores = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
+        const listRequest = await getRequestStoresService();
+        if(listRequest instanceof Error) return next(listRequest);
+        res.status(200).send(listRequest)
+    } catch (error) {
+        next(error)
     }
 }
