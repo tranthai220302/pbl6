@@ -21,6 +21,7 @@ import HomeAdmin from './pages/Admin/Home/HomeAdmin';
 import Customer from './pages/Admin/Customer/Customer';
 import Store from './pages/Admin/Store/Store';
 import BookList from './pages/BookList/BookList';
+import ProductInf from './pages/ProductInf/ProductInf';
 const queryClient = new QueryClient()
 const App = () => {
   const [openChat, setOpenChat] = useState(false)
@@ -63,6 +64,10 @@ const App = () => {
         {
           path: '/booklist',
           element: <BookList/>
+        },
+        {
+          path: '/productinformation',
+          element: <ProductInf/>
         },
         {
           path: '/admin/login',
