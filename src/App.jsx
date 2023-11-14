@@ -20,12 +20,8 @@ import LoginAdmin from './pages/Admin/Login/LoginAdmin';
 import HomeAdmin from './pages/Admin/Home/HomeAdmin';
 import Customer from './pages/Admin/Customer/Customer';
 import Store from './pages/Admin/Store/Store';
-import RequestStore from './pages/Admin/requestStore/requestStore';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import SliderMenu from './compoments/SliderMenu/SliderMenu';
-import ReportPage from './pages/Admin/ReportPage/ReportPage';
-import Satistical from './pages/Admin/Satistical/Satistical';
+import BookList from './pages/BookList/BookList';
+import ProductInf from './pages/ProductInf/ProductInf';
 const queryClient = new QueryClient()
 const App = () => {
   const [openChat, setOpenChat] = useState(false)
@@ -33,17 +29,17 @@ const App = () => {
   const Layout = () =>{
     const isAdminPage = useLocation().pathname.includes('/admin');
     const isLoginPage = useLocation().pathname.includes('/login');
+    const isRegisterPage = useLocation().pathname.includes('/register');
+
 
     console.log(isAdminPage)
     return (
       <QueryClientProvider client={queryClient}>
-        <div className={isAdminPage ?  'appAdmin' : 'app'}>
-          {!isAdminPage && !isLoginPage && (<Header setOpenChat={setOpenChat} />)}
-          {isAdminPage && <SliderMenu />}
+        <div className="app">
+          {!isAdminPage && !isLoginPage && !isRegisterPage && (<Header setOpenChat={setOpenChat} />)}
           {openChat && (<Chat setOpenChat={setOpenChat} />)}
           <Outlet/>
-          {!isAdminPage && !isLoginPage && (<Footer />)}
-          <ToastContainer />
+          {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
         </div>
       </QueryClientProvider>
     )
@@ -66,6 +62,14 @@ const App = () => {
           element: <Register/>
         },
         {
+          path: '/booklist',
+          element: <BookList/>
+        },
+        {
+          path: '/productinformation',
+          element: <ProductInf/>
+        },
+        {
           path: '/admin/login',
           element: <LoginAdmin />
         },
@@ -80,18 +84,6 @@ const App = () => {
         {
           path: '/admin/store',
           element: <Store />
-        },
-        {
-          path : '/admin/requestStore',
-          element: <RequestStore />
-        },
-        {
-          path : '/admin/report',
-          element: <ReportPage />
-        },
-        {
-          path : '/admin/satistical',
-          element: <Satistical />
         }
       ]
     },
