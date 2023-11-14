@@ -1,6 +1,7 @@
 import { 
     createOrderService, 
     deleteOrderService, 
+    drawPrecentSatiscalService, 
     getOrderByStoreService, 
     getOrdersByCustomerService, 
     satistical7StoreHighService
@@ -55,6 +56,16 @@ export const satistical7StoreHigh = async(req, res, next) =>{
     try {
         if(req.idRole !== 4) return createError(400, 'Bạn không có quyền này!');
         const topStores = await satistical7StoreHighService(req.params.month);
+        if(topStores instanceof Error) return next(topStores);
+        res.status(200).send(topStores)
+    } catch (error) {
+        next(error)
+    }
+}
+export const drawPrecentSatiscal = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return createError(400, 'Bạn không có quyền này!');
+        const topStores = await drawPrecentSatiscalService();
         if(topStores instanceof Error) return next(topStores);
         res.status(200).send(topStores)
     } catch (error) {

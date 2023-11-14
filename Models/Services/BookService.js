@@ -172,3 +172,43 @@ export const getBookByStoreService = async(id, name)=>{
         return error;
     }
 }
+export const getBookByOrderHighService = async() =>{
+    try {
+        const reviews = await db.order.findAll({
+            where: {isPayment : true},
+            include : [
+                {
+                    model : db.book,
+                }
+            ]
+        });
+            
+        function demReview(reviews) {
+            const dem = {};
+            const category = [];
+            const data = []
+            reviews.forEach((review) => {
+                const reviewItem = review.Book.name;
+            
+                if (dem[reviewItem]) {
+                dem[reviewItem]++;
+                } else {
+                dem[reviewItem] = 1;
+                }
+            });
+            Object.keys(dem).map((reviewItem) => {
+                data.push(dem[reviewItem]);
+                category.push(reviewItem)
+            });
+            
+            return {
+                data,
+                category
+            };
+        }  
+        const mangReviewMoi = demReview(reviews);
+        return mangReviewMoi;
+    } catch (error) {
+        return error;
+    }
+}

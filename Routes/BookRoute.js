@@ -3,6 +3,7 @@ import {
     createBook, 
     deleteBook, 
     getBookById, 
+    getBookByOrderHigh, 
     getBookByQuery, 
     getBookByStore, 
     getBooks, 
@@ -16,6 +17,7 @@ routerBook.put('/update/:id',verifyjson, updateBook)
 routerBook.delete('/delete/:id', verifyjson, deleteBook)
 routerBook.get('/', getBooks)
 routerBook.get('/search', getBookByQuery)
-routerBook.get('/:id', getBookById)
+routerBook.get('/item/:id', getBookById)
 routerBook.get('/store/:id', verifyjson, getBookByStore)
+routerBook.get('/bookHigh', verifyjson, getBookByOrderHigh)
 export default routerBook;

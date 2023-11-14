@@ -55,8 +55,6 @@ export const updateReviewService = async(id, desc, num_star, customer_id)=>{
 }
 export const createReviewService = async(desc, customer_id, book_id, num_star) =>{
     try {
-        console.log(customer_id)
-        console.log(book_id)
         const order = await db.order.findAll({
             where : {
                 [Op.and] : [
@@ -81,6 +79,49 @@ export const createReviewService = async(desc, customer_id, book_id, num_star) =
         })
         if(!review) return createError(400, 'Đánh giá không thành công!')
         return review;
+    } catch (error) {
+        return error;
+    }
+}
+export const getBookByReview5StarService = async()=>
+{
+    try {
+        const reviews = await db.review.findAll({
+            where: { num_star: 5 },
+            include : [
+                {
+                    model : db.book,
+                    as: 'review2'
+                }
+            ]
+          });
+          
+          function demReview(reviews) {
+            const dem = {};
+            const category = [];
+            const data = []
+            reviews.forEach((review) => {
+              const reviewItem = review.review2.name;
+          
+              if (dem[reviewItem]) {
+                dem[reviewItem]++;
+              } else {
+                dem[reviewItem] = 1;
+              }
+            });
+            Object.keys(dem).map((reviewItem) => {
+                data.push(dem[reviewItem]);
+                category.push(reviewItem)
+            });
+          
+            return {
+                data,
+                category
+            };
+          }  
+          const mangReviewMoi = demReview(reviews);
+          return mangReviewMoi;
+          
     } catch (error) {
         return error;
     }

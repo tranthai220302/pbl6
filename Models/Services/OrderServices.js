@@ -134,6 +134,26 @@ export const satisticalByStoreService = async(store_id, month) =>{
         return error;
     }
 }
+export const totalPriceStoreService = async(store_id) =>{
+    try {
+        const satistical = await db.order.findAll({
+            where : {
+                [Op.and] : [
+                    {store_id},
+                    {isPayment : 1},
+                ]
+            }
+        })
+
+        let total = 0;
+        satistical.map((item)=>{
+            total += item.priceStore
+        })
+        return total;
+    } catch (error) {
+        return error;
+    }
+}
 export const satistical7StoreHighService = async(month) =>{
     try {
         const store = await db.user.findAll({
@@ -165,3 +185,25 @@ export const satistical7StoreHighService = async(month) =>{
         return error;
     }
 }
+export const drawPrecentSatiscalService = async() =>{
+    try {
+        const satisticalStore = [];
+        const category = []
+        const store = await db.user.findAll({
+            where : {RoleId : 2}
+        })
+        for (const item of store) {
+            const satistical = await totalPriceStoreService(item.id);
+            if(satistical instanceof Error) return satistical;
+            satisticalStore.push(satistical);
+            category.push(item.lastName + item.firstName)
+        }
+        return {
+            store : satisticalStore,
+            category
+        }
+    } catch (error) {
+        return error;   
+    }
+}
+
