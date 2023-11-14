@@ -22,6 +22,12 @@ import Customer from './pages/Admin/Customer/Customer';
 import Store from './pages/Admin/Store/Store';
 import BookList from './pages/BookList/BookList';
 import ProductInf from './pages/ProductInf/ProductInf';
+import RequestStore from './pages/Admin/requestStore/requestStore';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import SliderMenu from './compoments/SliderMenu/SliderMenu';
+import ReportPage from './pages/Admin/ReportPage/ReportPage';
+import Satistical from './pages/Admin/Satistical/Satistical';
 const queryClient = new QueryClient()
 const App = () => {
   const [openChat, setOpenChat] = useState(false)
@@ -37,9 +43,11 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <div className="app">
           {!isAdminPage && !isLoginPage && !isRegisterPage && (<Header setOpenChat={setOpenChat} />)}
+          {isAdminPage && <SliderMenu />}
           {openChat && (<Chat setOpenChat={setOpenChat} />)}
           <Outlet/>
           {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
+          <ToastContainer />
         </div>
       </QueryClientProvider>
     )
@@ -84,6 +92,18 @@ const App = () => {
         {
           path: '/admin/store',
           element: <Store />
+        },
+        {
+          path : '/admin/requestStore',
+          element: <RequestStore />
+        },
+        {
+          path : '/admin/report',
+          element: <ReportPage />
+        },
+        {
+          path : '/admin/satistical',
+          element: <Satistical />
         }
       ]
     },

@@ -18,10 +18,10 @@ export default function Login() {
       console.log(error)
       setError(error.response.data)
     }),
-    // onSuccess: (data, variables, context) => {
-    //   localStorage.setItem('currentUser', JSON.stringify(data.data));
-    //   navigate('/');
-    // },
+    onSuccess: (data, variables, context) => {
+      localStorage.setItem('currentUser', JSON.stringify(data.data));
+      navigate('/');
+    },
   });
   const handleLogin = () => {
     mutation.mutate({ username, password });
