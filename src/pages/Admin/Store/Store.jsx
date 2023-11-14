@@ -63,7 +63,6 @@ export default function Customer() {
   
   return (
     <div className={styles.container}>
-        <SliderMenu />
         <div className={styles.customer}>
           <div className={styles.navbar}>
             <div className={styles.search}>

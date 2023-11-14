@@ -8,6 +8,8 @@
     background: white;
     background-image: url("https://enews.agu.edu.vn/images/assets/2021/05/PSA/American-Book/16.jpg");
     color: white;
+    position: fixed;
+    z-index: 999;
 }
 .sidebar_header{
     width: 100%;

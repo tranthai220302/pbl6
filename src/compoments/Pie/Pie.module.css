@@ -4,3 +4,13 @@
     margin: auto;
     margin-top: 50px;
 }
+.chart{
+    display: flex;
+    margin: auto;
+}
+.pie{
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    margin-top: 11%;
+}

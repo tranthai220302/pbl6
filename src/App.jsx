@@ -20,6 +20,12 @@ import LoginAdmin from './pages/Admin/Login/LoginAdmin';
 import HomeAdmin from './pages/Admin/Home/HomeAdmin';
 import Customer from './pages/Admin/Customer/Customer';
 import Store from './pages/Admin/Store/Store';
+import RequestStore from './pages/Admin/requestStore/requestStore';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import SliderMenu from './compoments/SliderMenu/SliderMenu';
+import ReportPage from './pages/Admin/ReportPage/ReportPage';
+import Satistical from './pages/Admin/Satistical/Satistical';
 const queryClient = new QueryClient()
 const App = () => {
   const [openChat, setOpenChat] = useState(false)
@@ -31,11 +37,13 @@ const App = () => {
     console.log(isAdminPage)
     return (
       <QueryClientProvider client={queryClient}>
-        <div className="app">
+        <div className={isAdminPage ?  'appAdmin' : 'app'}>
           {!isAdminPage && !isLoginPage && (<Header setOpenChat={setOpenChat} />)}
+          {isAdminPage && <SliderMenu />}
           {openChat && (<Chat setOpenChat={setOpenChat} />)}
           <Outlet/>
           {!isAdminPage && !isLoginPage && (<Footer />)}
+          <ToastContainer />
         </div>
       </QueryClientProvider>
     )
@@ -72,6 +80,18 @@ const App = () => {
         {
           path: '/admin/store',
           element: <Store />
+        },
+        {
+          path : '/admin/requestStore',
+          element: <RequestStore />
+        },
+        {
+          path : '/admin/report',
+          element: <ReportPage />
+        },
+        {
+          path : '/admin/satistical',
+          element: <Satistical />
         }
       ]
     },

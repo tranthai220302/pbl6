@@ -16,7 +16,7 @@ export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, ge
   })
   const [filterBoook, setFilterBook] = useState({
     price : product?.price,
-    author : product?.Author.id,
+    author : product?.Author?.id,
     name : product?.name,
     sales_number : product?.sales_number,
     desc: product?.desc
@@ -162,7 +162,7 @@ export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, ge
                 <div className={styles.infor_body}>
                   <div className={styles.infor_item}>
                     <span className={styles.book_title}>Tác giả</span>
-                    <input type="text" defaultValue={product.Author.name} className = {styles.value_book} name = 'author' onChange={(e)=>handelSetFilterBook(e)}  />
+                    <input type="text" defaultValue={product.Author?.name} className = {styles.value_book} name = 'author' onChange={(e)=>handelSetFilterBook(e)}  />
                   </div>
                   <div className={styles.infor_item}>
                     <span className={styles.book_title}>Số lượng</span>

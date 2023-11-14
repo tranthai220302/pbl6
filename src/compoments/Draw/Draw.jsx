@@ -2,24 +2,62 @@ import React, { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import styles from './Draw.module.css'
 import newRequest from '../../ults/NewRequest';
-const ApexChart = () => {
+const ApexChart = ({store, month, setDataStore, book}) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true)
   const [category, setCategory] = useState(null);
   useEffect(()=>{
-    setIsLoading(true)
-    newRequest.get('/user/userByDate',{
-      withCredentials: true
-    }).then((res)=>{
-      setData(res.data.data)
-      setCategory(res.data.date)
-      setIsLoading(false)
-      setError(false)
-    }).catch((error)=>{
-      setError(error.response.data)
-      setIsLoading(false)
-    })
+    if(store){
+      setIsLoading(true)
+      newRequest.get(`/order/satistical/${month}`,{
+        withCredentials: true
+      }).then((res)=>{
+        setData(res.data.data)
+        setDataStore(res.data.storeA)
+        setCategory(res.data.category)
+        setIsLoading(false)
+        console.log(res.data)
+        setError(false)
+      }).catch((error)=>{
+        setError(error.response.data)
+        setIsLoading(false)
+        console.log(error.response.data)
+      })
+    }
+  },[month])
+  useEffect(()=>{
+    if(!store && !book){
+      setIsLoading(true)
+      newRequest.get('/user/userByDate',{
+        withCredentials: true
+      }).then((res)=>{
+        setData(res.data.data)
+        setCategory(res.data.date)
+        setIsLoading(false)
+        setError(false)
+        console.log(res.data)
+      }).catch((error)=>{
+        setError(error.response.data)
+        setIsLoading(false) 
+      })
+    }
+    if(book){
+      setIsLoading(true)
+      newRequest.get('/book/bookHigh',{
+        withCredentials: true
+      }).then((res)=>{
+        setData(res.data.data)
+        setCategory(res.data.category)
+        setIsLoading(false)
+        setError(false)
+        console.log(res.data)
+      }).catch((error)=>{
+        setError(error.response.data)
+        setIsLoading(false) 
+        console.log(error)
+      })
+    }
   },[])
   const [chartData, setChartData] = useState(null);
   useEffect(()=>{
@@ -62,6 +100,11 @@ const ApexChart = () => {
           title: {
             text: 'Người'
           },
+        },
+        title: {
+          text: book && 'Các sản phẩm bán chạy nhất trong tháng',
+          align: 'center',
+          floating: true
         },
         toolbar: {
           show: false, 

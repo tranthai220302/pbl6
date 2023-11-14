@@ -129,7 +129,7 @@ function Example({showExmaple, showCloseExample, id, isOrder}) {
                   <td>{product.desc}</td>
                   <td className={styles.price}>{product.price}đ</td>
                   <td>{product.sales_number}</td>
-                  <td>{product.Author.name}</td>
+                  <td>{product.Author?.name}</td>
                   <td>{product.Categories.map((item)=>(
                     <span>{item.name} <br></br></span> 
                   ))}</td>
@@ -189,10 +189,10 @@ function Example({showExmaple, showCloseExample, id, isOrder}) {
                     ) : ( <td><FontAwesomeIcon icon={faXmark} className={styles.x_icon} /></td>)}
                     <td className={styles.price}>{product.quantity}</td>
                     <td>{Date(product.createdAt)}</td>
-                    <td>{product.customer.firstName} {product.customer.lastName}</td>
-                    <td>{product.store.firstName} {product.store.lastName}</td>
-                    <td>{product.Book.name}</td>
-                    <td>{product.State.status}</td>
+                    <td>{product.customer?.firstName} {product.customer?.lastName}</td>
+                    <td>{product.store?.firstName} {product.store?.lastName}</td>
+                    <td>{product.Book?.name}</td>
+                    <td>{product.State?.status}</td>
                     <td>
                       <button>
                       <FontAwesomeIcon icon={faTrash} className={styles.user_icon} onClick={()=>{handleDeleteClickOrder(product.id)}} />

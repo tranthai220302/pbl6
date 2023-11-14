@@ -1,14 +1,34 @@
 export const itemsStore = [
-    "Danh sách",
-    "Danh sách cửa hàng bị báo cáo",
-    "Danh sách yêu cầu tạo cửa hàng",
-    "Danh sách cửa hàng vi phạm hợp đồng",
-    "Thống kê số liệu"
+    {
+        name : "Danh sách",
+        navigate : '/admin/store'
+    },
+    {
+        name : "Danh sách cửa hàng bị báo cáo",
+        navigate : '/admin/report'
+    },
+    {
+        name : "Danh sách yêu cầu tạo cửa hàng",
+        navigate : '/admin/requestStore'
+    },
+    {
+        name : "Thống kê số liệu",
+        navigate : '/admin/satistical'
+    },
 ];
 export const itemsCustomer = [
-    "Danh sách",
-    "Danh sách khách hàng vip",
-    "Tìm kiếm",
+    {
+        name : "Danh sách",
+        navigate : '/admin/customer'
+    },
+    {
+        name : "Danh sách khách hàng vip",
+        navigate : '/admin/customer'
+    },
+    {
+        name : "Tìm kiếm",
+        navigate : '/admin/customer'
+    },
 ];
 export const itemsShipper = [
     "Danh sách",

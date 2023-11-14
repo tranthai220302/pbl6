@@ -5,14 +5,19 @@ import { faUser, faStore, faShippingFast, faTicketAlt} from '@fortawesome/free-s
 import { useState } from 'react';
 import { itemsCustomer, itemsShipper, itemsStore, itemsVoucher } from '../../data';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 export default function SliderMenu({seOpen}) {
     const [isKhachHangOpen, setIsKhachHangOpen] = useState(false);
     const [isCuaHangOpen, setIsCuaHangOpen] = useState(false);
     const [isShipperOpen, setIsShipperOpen] = useState(false);
     const [isVoucherOpen, setIsVoucherOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
-    const handleItemClick = (index) => {
+    const navigate = useNavigate()
+    const handleItemClick = (index, item) => {
+      console.log(index)
       setSelectedItem(index);
+      console.log(item)
+      navigate(item.navigate)
     };
   return (
     <div className={styles.sidebar_menu}>
@@ -25,7 +30,7 @@ export default function SliderMenu({seOpen}) {
         <div className={styles.item}>
             <div className={styles.name} onClick={()=>{setIsKhachHangOpen(!isKhachHangOpen)}}>
                 <FontAwesomeIcon icon={faUser} className={styles.user_icon} />
-                <span><Link to = '/admin/customer' className={styles.name_item}>Khách hàng</Link></span>
+                <span className={styles.name_item}>Khách hàng</span>
 
             </div>
             {isKhachHangOpen && (
@@ -34,9 +39,9 @@ export default function SliderMenu({seOpen}) {
                     <li
                         className={styles.item_require}
                         key={index}
-                        onClick={() => handleItemClick(index)}
+                        onClick={() => handleItemClick(index, item)}
                     >
-                        <span className={index == selectedItem ? styles.item_require_select : styles.item_require}>{item}</span>
+                        <span className={index == selectedItem ? styles.item_require_select : styles.item_require}>{item.name}</span>
                     </li>
                 ))}
             </ul>
@@ -45,7 +50,7 @@ export default function SliderMenu({seOpen}) {
         <div className={styles.item}>
             <div className={styles.name} onClick={()=>{setIsCuaHangOpen(!isCuaHangOpen)}}>
                 <FontAwesomeIcon icon={faStore} className={styles.store_icon} />
-                <span><Link to = '/admin/store' className={styles.name_item}>Cửa hàng</Link></span>
+                <span className={styles.name_item}>Cửa hàng</span>
 
             </div>
             {isCuaHangOpen && (
@@ -54,9 +59,9 @@ export default function SliderMenu({seOpen}) {
                         <li
                             className={styles.item_require}
                             key={index}
-                            onClick={() => handleItemClick(index + 3)}
+                            onClick={() => handleItemClick(index + 3, item)}
                         >
-                            <span className={index + 3 == selectedItem ? styles.item_require_select : styles.item_require}>{item}</span>
+                            <span className={index + 3 == selectedItem ? styles.item_require_select : styles.item_require}>{item.name}</span>
                         </li>
                         ))}
                 </ul>
@@ -65,7 +70,7 @@ export default function SliderMenu({seOpen}) {
         <div className={styles.item} >
             <div className={styles.name} onClick={()=>{setIsShipperOpen(!isShipperOpen)}}>
                 <FontAwesomeIcon icon={faShippingFast} className={styles.ship_icon} />
-                <span><Link to = '/admin/shipper' className={styles.name_item}>Shipper</Link></span>
+                <span className={styles.name_item}>Shipper</span>
 
             </div>
             {isShipperOpen && (
@@ -74,9 +79,9 @@ export default function SliderMenu({seOpen}) {
                         <li
                             className={styles.item_require}
                             key={index}
-                            onClick={() => handleItemClick(index + 7)}
+                            onClick={() => handleItemClick(index + 7, item)}
                         >
-                            <span className={index + 7 == selectedItem ? styles.item_require_select : styles.item_require}>{item}</span>
+                            <span className={index + 7 == selectedItem ? styles.item_require_select : styles.item_require}>{item.name}</span>
                         </li>
                     ))}
                 </ul>
@@ -85,7 +90,7 @@ export default function SliderMenu({seOpen}) {
         <div className={styles.item}>
             <div className={styles.name} onClick={()=>{setIsShipperOpen(!isShipperOpen)}}>
                 <FontAwesomeIcon icon={faTicketAlt} className={styles.voucher_icon} />
-                <span><Link to = '/admin/voucher' className={styles.name_item}>Voucher</Link></span>
+                <span className={styles.name_item}>Voucher</span>
 
             </div>
             {isVoucherOpen && (
@@ -94,9 +99,9 @@ export default function SliderMenu({seOpen}) {
                         <li
                             className={styles.item_require}
                             key={index}
-                            onClick={() => handleItemClick(index + 11)}
+                            onClick={() => handleItemClick(index + 11, item)}
                         >
-                            <span className={index + 11 == selectedItem ? styles.item_require_select : styles.item_require}>{item}</span>
+                            <span className={index + 11 == selectedItem ? styles.item_require_select : styles.item_require}>{item.name}</span>
                         </li>
                     ))}
                 </ul>
