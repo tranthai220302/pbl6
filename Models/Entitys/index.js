@@ -10,7 +10,7 @@ import Category from "./Category.js";
 import Chat from "./Chat.js";
 import Image from "./Image.js";
 import Message from "./Message.js";
-import Shippemt from "./Shippement.js";
+import Shippemt from "./Shippemt.js";
 import Voucher from "./Voucher.js";
 import Review from "./Review.js";
 import State from "./State.js";

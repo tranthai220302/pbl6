@@ -1,6 +1,6 @@
 import db from "../Entitys/index.js";
 import createError from "../../ultis/createError.js";
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 import sendEmail from "../../ultis/sendEmail.js";
 import { priceVoucherStoreByCustomer} from "./VoucherItemService.js";
 import { distance } from "../../ultis/distance.js";
@@ -36,8 +36,7 @@ export const createOrderService = async(BookId, customer_id, quantity, isPayment
         await order.save();   
         await sendEmail(customer, order, book, priceVS.price_free, priceShip, priceFS.price_free).catch(console.error);
         return {
-            message: 'Order thành công!',
-            order,
+                                           
             vouchersStore: priceVS.voucher,
             FreeShip: priceFS.voucher
         }
