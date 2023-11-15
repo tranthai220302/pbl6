@@ -14,6 +14,9 @@ const Order = (sequelize) => sequelize.define('Order', {
     },
     quantity: {
         type: DataTypes.INTEGER,
+    },
+    priceStore : {
+        type: DataTypes.INTEGER
     }
 
 

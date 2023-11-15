@@ -68,6 +68,8 @@ export const deleteVoucherItemService = async(id, store_id) =>{
 }
 export const BookVoucherItemService = async(voucheritem_id, user_id) =>{
     try {
+        const checkVoucher = await db.voucherItem.findByPk(voucheritem_id)
+        if(!checkVoucher) return createError(400, 'Không tìm thấy voucher!')
         const checkUserBookVoucher = await db.customer_voucherItem.findOne({
             where :{
                 user_id,

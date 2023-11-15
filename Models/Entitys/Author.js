@@ -14,11 +14,11 @@ const Author = (sequelize) => sequelize.define('Author', {
     },
     date_birth:{
       type: DataTypes.DATE,
-      allowNull: false
+
     },
     date_death:{
       type: DataTypes.DATE,
-      allowNull: false
+
     }
     
 });

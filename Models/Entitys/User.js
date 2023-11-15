@@ -31,7 +31,15 @@ const User = (sequelize) => sequelize.define('User', {
     },
     phone: {
       type: DataTypes.INTEGER
-    }
+    },
+    age : {
+      type: DataTypes.INTEGER
+    },
+    createdAt: {
+      type: DataTypes.DATEONLY, //
+      allowNull: false
+  }
+    
 });
 
 export default User;

@@ -4,6 +4,9 @@ import createError from "../../ultis/createError.js";
 import Op from "sequelize";
 export const createCartService = async(quantity, BookId, customerId) =>{
     try {
+        const book = await db.book.findByPk(BookId)
+        if(!quantity || quantity == 0) return createError(400, 'Vui lòng chọn số lượng!')
+        if(!book) return createError(400, 'Không tìm thấy sach!')
         const checkCart = await db.cart.findOne({
             where :{
                 BookId : BookId,
@@ -39,10 +42,15 @@ export const createCartService = async(quantity, BookId, customerId) =>{
     }
 }
 
-export const deleteCartService = async(id) =>{
+export const deleteCartService = async(id, customerId) =>{
     try {
+        const cart = await db.cart.findByPk(id);
+        if(!cart) return createError(400, 'Không tìm thấy giỏ hàng!')
+        if(cart.customerId !== customerId) return createError(400, 'Bạn không thể xó giỏ hầng người khác')
         const delete_cart = await db.cart.destroy({
-            where : {id}
+            where : {
+                id
+            }
         })
         if(delete_cart == 0) return createError(400, 'Xoá giỏ hàng không thành công!')
         return true;
@@ -51,12 +59,11 @@ export const deleteCartService = async(id) =>{
     }
 }
 
-export const getCartByIdService = async(id) =>{
+export const getCartByIdService = async(id, customerId) =>{
     try {
-        const cart = await db.cart.findOne({
-            where: {id}
-        })
-        if(!cart) return createError(400, 'Tìm kiếm không thành công!')
+        const cart = await db.cart.findByPk(id);
+        if(!cart) return createError(400, 'Không tìm thấy giỏ hàng!')
+        if(cart.customerId !== customerId) return createError(400, 'Bạn không thể xem giỏ hầng người khác')
         return cart;
     } catch (error) {
         return error;

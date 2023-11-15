@@ -7,20 +7,35 @@ import dotenv from 'dotenv'
 dotenv.config()
 export const loginService = async (username, password) => {
     try {
+        const checkUsername = await db.user.findOne({
+            where: { username },
+        });     
+        if (!checkUsername) return createError(400, "Tài khoản không chính xác!");
+        
+        if (checkUsername.password) {
+            const checkPass = await argon2.verify(checkUsername.password, password);
+            if (!checkPass) return createError(400, "Mật khẩu không chính xác!");
+        } else {
+            return createError(400, "Mật khẩu không tồn tại!");
+        }
         const user = await db.user.findOne({
-            where : {username}
-        })
-        if(!user) return createError(400, "Tài khoản không chính xác!")
-        const checkPass = await argon2.verify(user.password, password)
-        if(!checkPass) return createError(400, "Mật khẩu không chính xác!")
+            where: { username },
+            attributes: { exclude: ['password'] }
+        }); 
         const token = jwt.sign({
             id: user.id,
-            idRole : user.RoleId
-        }, process.env.JWT_KEY)
-        return token;
+            idRole: user.RoleId
+        }, process.env.JWT_KEY);
+        
+        return {
+            token,
+            user
+        };
+        
     } catch (error) {
         return error;
     }
+    
 } 
 export const registerService = async (username, email, password, confirmPassword) =>{
     try {

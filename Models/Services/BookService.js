@@ -72,7 +72,19 @@ export const updateBookService = async(id, name, desc, price, sales_number, publ
 }
 export const getBooksService = async() =>{
     try {
-        const books = await db.book.findAll();
+        const books = await db.book.findAll({
+            include : [
+                {
+                    model : db.category,
+                },
+                {
+                    model : db.author
+                },
+                {
+                    model : db.image
+                }
+            ]   
+        });
         if(!books) return createError(400, 'Không có sách!');
         return books;
     } catch (error) {
@@ -89,6 +101,9 @@ export const getBookByQueryService = async(filter, category, author) =>{
             },{
                 model: db.author,
                 where: author
+            },
+            {
+                model : db.image
             }],
             where : {
                 [Op.and] : [filter]
@@ -107,10 +122,92 @@ export const getBookByQueryService = async(filter, category, author) =>{
 export const getBookByIdService = async(id) =>{
     try {
         const book = await db.book.findOne({
-            where : {id}
+            where : {id},
+            include : [
+                {
+                    model : db.category,
+                },
+                {
+                    model : db.author
+                },
+                {
+                    model : db.image
+                }
+            ]
         })
         if(!book) return createError(400, 'Không có sách!')
         return book;
+    } catch (error) {
+        return error;
+    }
+}   
+export const getBookByStoreService = async(id, name)=>{
+    try {
+        const book = await db.book.findAll({
+            where: {
+                [Op.and] : [
+                    {store_id : id},
+                    {
+                        name : {
+                            [Op.like] : `%${name}%`
+                        }
+                    }
+                ]
+            },
+            include : [
+                {
+                    model : db.category,
+                },
+                {
+                    model : db.author
+                },
+                {
+                    model : db.image
+                }
+            ]
+        })
+        if(book.length == 0) return createError(400, 'Không có sách!')
+        return book;
+    } catch (error) {
+        return error;
+    }
+}
+export const getBookByOrderHighService = async() =>{
+    try {
+        const reviews = await db.order.findAll({
+            where: {isPayment : true},
+            include : [
+                {
+                    model : db.book,
+                }
+            ]
+        });
+            
+        function demReview(reviews) {
+            const dem = {};
+            const category = [];
+            const data = []
+            reviews.forEach((review) => {
+                const reviewItem = review.Book.name;
+            
+                if (dem[reviewItem]) {
+                dem[reviewItem]++;
+                } else {
+                dem[reviewItem] = 1;
+                }
+            });
+            Object.keys(dem).map((reviewItem) => {
+                data.push(dem[reviewItem]);
+                category.push(reviewItem)
+            });
+            
+            return {
+                data,
+                category
+            };
+        }  
+        const mangReviewMoi = demReview(reviews);
+        return mangReviewMoi;
     } catch (error) {
         return error;
     }

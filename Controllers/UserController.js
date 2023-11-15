@@ -1,10 +1,17 @@
 import { 
     deleteUserService,
     updateUserService,
-    getUsersByQueryService
+    getUsersByQueryService,
+    getUserByIdService,
+    getPrecentCustomerNewService,
+    getPrecentCustomerByAgeService,
+    ConfirmStoreService,
+    sendRequireStoreService,
+    getRequestStoresService
 } from "../Models/Services/UserService.js";
 import { Op } from "sequelize";
 import createError from "../ultis/createError.js";
+import { isToday, nextDay } from "date-fns";
 
 export const updateUser = async(req, res, next) =>{
     try {
@@ -61,9 +68,65 @@ export const getUsersByQuery = async(req, res, next) =>{
 }
 export const getUserById = async(req, res, next) =>{
     try {
-        const user = await getUserById(req.params.id);
+        const user = await getUserByIdService(req.params.id);
         if(user instanceof Error) return next(user)
         return res.status(200).send(user)
+    } catch (error) {
+        next(error)
+    }
+}
+export const getPrecentCustomerNew = async (req, res, next)=>{
+    try {
+        if(req.idRole !== 4) return createError(400, 'Bạn không có quyền này!')
+        const userByDate = await getPrecentCustomerNewService();
+        if(userByDate instanceof Error) next(userByDate);
+        return res.status(200).send(userByDate)
+    } catch (error) {
+        next(error);
+    }
+}
+export const getPrecentCustomerByAge = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return createError(400, 'Bạn không có quyền này!')
+        const userByAge = await getPrecentCustomerByAgeService();
+        if(userByAge instanceof Error) next(userByAge);
+        return res.status(200).send(userByAge)
+    } catch (error) {
+        next(error);
+    }
+}
+export const ConfirmStore = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này !'));
+        const confirm = await ConfirmStoreService(req.params.id);
+        if(confirm instanceof Error) next(confirm);
+        res.status(200).send(confirm)
+    } catch (error) {
+        next(error)
+    }
+}
+export const sendRequireStore = async(req, res, next) =>{
+    try {
+        if(req.idRole != 1) return next(createError(400, 'Bạn không có quyền này!'))
+        const filter = {
+            ...(req.body.nameStore && {nameStore : req.body.nameStore}),
+            ...(req.body.descStore && {descStore : req.body.descStore}),
+            ...(req.id && {customer_id : req.id}),
+            isConfirm : false
+        }
+        const sendRequire = await sendRequireStoreService(filter);
+        if(filter instanceof Error) next(filter);
+        res.status(200).send(sendRequire)
+    } catch (error) {
+        next(error)
+    }
+}
+export const getRequestStores = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
+        const listRequest = await getRequestStoresService();
+        if(listRequest instanceof Error) return next(listRequest);
+        res.status(200).send(listRequest)
     } catch (error) {
         next(error)
     }

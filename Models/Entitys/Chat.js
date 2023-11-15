@@ -5,11 +5,15 @@ const Chat = (sequelize) => sequelize.define('Chat', {
         primaryKey: true,
         autoIncrement: true
     },
-    topic: {
-        type: DataTypes.STRING
+    readBySeller: {
+        type: DataTypes.BOOLEAN
+      },
+    readByBuyer: {
+        type: DataTypes.BOOLEAN,
     },
-
-
+    lastMessage: {
+        type:DataTypes.STRING,
+    },
 })
 
 
