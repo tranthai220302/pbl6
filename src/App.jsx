@@ -21,6 +21,7 @@ import HomeAdmin from './pages/Admin/Home/HomeAdmin';
 import Customer from './pages/Admin/Customer/Customer';
 import Store from './pages/Admin/Store/Store';
 import BookList from './pages/BookList/BookList';
+import Cart from './pages/Cart/Cart';
 import ProductInf from './pages/ProductInf/ProductInf';
 import RequestStore from './pages/Admin/requestStore/requestStore';
 import { ToastContainer } from 'react-toastify';
@@ -76,6 +77,10 @@ const App = () => {
         {
           path: '/productinformation',
           element: <ProductInf/>
+        },
+        {
+          path: '/cart',
+          element: <Cart/>
         },
         {
           path: '/admin/login',

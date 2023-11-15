@@ -7,7 +7,6 @@
 }
 
 .form_register {
-    height: 80vh;
     width: 40vw;
     background-color: #BEDDDD;
     margin: auto;
@@ -15,7 +14,7 @@
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
     padding: 30px 50px;
 }
 
@@ -56,14 +55,30 @@
     background-color: #4EA58B;
 }
 
-.btn button:hover {
+button:hover {
     background-color: green;
+    color: white;
 }
 
-.btn button span {
+button span {
     padding-left: 10px;
     font-weight: 500;
     text-transform: uppercase;
+}
+
+.cancel {
+    width: 60%;
+    display: flex;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    background-color: #DFF4F6 !important;
+    color: #4EA58B;
+    border: #4EA58B 1px solid;
+}
+
+.form_register a {
+    text-decoration: none;
 }
 
 

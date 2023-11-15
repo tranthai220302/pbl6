@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import logo from '../../assets/img/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCartShopping, faBell, faSearch, faBook} from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 export default function Header({setOpenChat}) {
   const [user, setUser] = useState(null);
@@ -24,7 +25,9 @@ export default function Header({setOpenChat}) {
       ):(
         <div className={styles.header}>
             <div className={styles.left}>
-              <img className={styles.logo} src={logo} alt="logo" />
+              <Link to="/">
+                <img className={styles.logo} src={logo} alt="logo" />
+              </Link>
               <div className={styles.search}>
                 <input className={styles.input_search} type="text" placeholder='Tìm kiếm sản phẩm' />
                 <button className={styles.btn_search}>
@@ -35,20 +38,28 @@ export default function Header({setOpenChat}) {
             <div className={styles.right}>
               <ul className={styles.list_item}>
                 <li className={styles.item}>
-                  <FontAwesomeIcon icon={faBook}/>
-                  Danh mục
+                  <Link to="/booklist">
+                    <FontAwesomeIcon icon={faBook}/>
+                    Danh mục
+                  </Link>
                 </li>
                 <li className={styles.item}>
-                  <FontAwesomeIcon icon={faBell}/>
-                  Thông báo
+                  <Link>
+                    <FontAwesomeIcon icon={faBell}/>
+                    Thông báo
+                  </Link>
                 </li>
                 <li className={styles.item}>
-                  <FontAwesomeIcon icon={faCartShopping}/>
-                  Giỏ hàng
+                  <Link to='/cart'>
+                    <FontAwesomeIcon icon={faCartShopping}/>
+                    Giỏ hàng
+                  </Link>
                 </li>
                 <li className={styles.item}>
-                  <FontAwesomeIcon icon={faUser}/>
-                  Tài khoản
+                  <Link to="/login">
+                    <FontAwesomeIcon icon={faUser}/>
+                    Tài khoản
+                  </Link>
                 </li>
               </ul>
             </div>

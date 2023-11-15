@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Chat from '../Chat/Chat'
 import styles from './Home.module.css'
+import { Link } from 'react-router-dom';
 
 export default function Home() {
   const [open, setOpen] = useState(false)

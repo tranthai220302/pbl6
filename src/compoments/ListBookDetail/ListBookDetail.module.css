@@ -40,8 +40,16 @@
     text-align: center;
     margin: 10px auto;
     font-weight: 500;
+    font-size: 14px;
 }
 
 .book_item button:hover {
     background-color: green;
+}
+
+.product a {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    color: black;
 }

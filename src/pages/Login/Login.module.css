@@ -7,7 +7,6 @@
 }
 
 .form_login {
-    height: 70vh;
     width: 40vw;
     background-color: #BEDDDD;
     margin: auto;
@@ -55,7 +54,7 @@
     color: orange;
 }
 
-.btn button {
+.btn .btn_login {
     width: 60%;
     display: flex;
     margin: 0 auto;
@@ -64,6 +63,7 @@
 }
 
 .btn button:hover {
+    color: white;
     background-color: green;
 }
 
@@ -71,6 +71,21 @@
     margin: auto;
     font-weight: 500;
     text-transform: uppercase;
+}
+
+.cancel {
+    width: 60%;
+    display: flex;
+    margin: 0 auto;
+    align-items: center;
+    background-color: #DFF4F6 !important;
+    color: #4EA58B;
+    border: #4EA58B 1px solid;
+    margin-top: 20px;
+}
+
+.btn a {
+    text-decoration: none;
 }
 
 .btn div {

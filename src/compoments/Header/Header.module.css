@@ -74,13 +74,15 @@
     height: 100%;
   }
  
-  .item {
+  .item a {
     display: flex;
     flex-direction: column;
     text-align: center;
+    text-decoration: none;
+    color: black;
   }
 
-  .item:hover {
+  .item a:hover {
     cursor: pointer;
     color: rgb(55, 129, 106);
   }
