@@ -64,9 +64,14 @@ export default function Login() {
           </i>
         </div>
         <div className={styles.btn}>
-          <button onClick={handleLogin}>
+          <button className={styles.btn_login} onClick={handleLogin}>
             <span>Đăng nhập</span>
           </button>
+          <Link to='/'>
+            <button className={styles.cancel}>
+              <span>Hủy bỏ</span>
+            </button>
+          </Link>
           <div>
             <i>Bạn chưa có tài khoản?</i>
             <Link to="/register">Đăng ký</Link>

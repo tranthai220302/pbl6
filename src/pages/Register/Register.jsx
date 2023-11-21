@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './Register.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faCartShopping, faBell, faSearch, faBook} from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 export default function Register() {
   return (
@@ -46,6 +47,11 @@ export default function Register() {
             <span>Đăng ký bằng email</span>
           </button>
         </div>
+        <Link to='/'>
+            <button className={styles.cancel}>
+              <span>Hủy bỏ</span>
+            </button>
+        </Link>
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 .container{
     display: flex;
-    background-color: rgb(232, 230, 230);
+    background-color: #DFF4F6;
     width: 80%;
     flex-direction: column;
     margin-left: auto;
@@ -111,6 +111,12 @@
     background-color: white;
     overflow-y: auto;
 }
+
+.table1 thead {
+    background-color: #BEDDDD;
+    box-shadow: 0px 3px 8px 2px #BEDDDD;  
+}
+
 .title{
     font-size: 22px;
     background-color: white;

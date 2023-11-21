@@ -157,7 +157,7 @@
 
 .product_add_box .btn {
     background-color: #4EA58B;
-    width: 80%;
+    width: 90%;
 }
 
 .product_add_box .btn:hover {
@@ -175,6 +175,11 @@
 
 .add_cart, .buy_product {
     width: 50%;
+}
+
+.buy_product .btn {
+    text-transform: uppercase;
+    font-weight: 500;
 }
 
 .product_view_info, .product_description {

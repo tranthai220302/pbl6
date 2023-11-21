@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './SliderMenu.module.css'
+import logo from '../../assets/img/logo.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faStore, faShippingFast, faTicketAlt} from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
@@ -23,7 +24,7 @@ export default function SliderMenu({seOpen}) {
     <div className={styles.sidebar_menu}>
         <div className={styles.sidebar_header}>
             <div className={styles.logo}>
-                <img className={styles.img_logo} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8OQc61XrE2CMqNfb5-1vJap_bkF5Jzex6_g&usqp=CAU" alt="" />
+                <img className={styles.img_logo} src={logo} alt="" />
             </div>
         </div>
     <div className={styles.main_menu}>

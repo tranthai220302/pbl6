@@ -4,6 +4,7 @@
     display: flex;
     margin: auto;
     align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .header {
@@ -71,21 +72,67 @@
     gap: 20px;
     list-style: none;
     align-items: center;
-    height: 100%;
+    height: 110%;
+    margin: 0;
+    /* padding-bottom: 16px; */
   }
  
-  .item {
+  .item a {
     display: flex;
     flex-direction: column;
     text-align: center;
+    text-decoration: none;
+    color: black;
   }
 
-  .item:hover {
+  .item a:hover {
     cursor: pointer;
     color: rgb(55, 129, 106);
   }
 
+.account {
+  position: relative;
+  display: grid;
+  cursor: pointer;
+  justify-items: center;
+}
 
+.acc_dropdown {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  z-index: 1;
+  border-radius: 4px;
+  top: 40px;
+  right: 0px;
+  width: max-content;
+}
+
+.acc_dropdown a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+  text-align: left;
+}
+
+.acc_dropdown a:hover {
+  background-color: #f4f4f4;
+  border-radius: 4px;
+}
+
+.account:hover .acc_dropdown {
+  display: block;
+}
+
+.account:hover {
+  color: rgb(55, 129, 106);
+}
+
+.acc_dropdown:hover {
+  display: block;
+}
 
 
 .user{
