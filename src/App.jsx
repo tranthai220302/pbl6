@@ -23,6 +23,7 @@ import Store from './pages/Admin/Store/Store';
 import BookList from './pages/BookList/BookList';
 import Cart from './pages/Cart/Cart';
 import ProductInf from './pages/ProductInf/ProductInf';
+import Profile from './pages/Profile/Profile'
 import RequestStore from './pages/Admin/requestStore/requestStore';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -81,6 +82,10 @@ const App = () => {
         {
           path: '/cart',
           element: <Cart/>
+        },
+        {
+          path: '/profile',
+          element: <Profile/>
         },
         {
           path: '/admin/login',

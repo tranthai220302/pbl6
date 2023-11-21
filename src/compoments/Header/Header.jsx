@@ -13,6 +13,22 @@ export default function Header({setOpenChat}) {
   const navigate = useNavigate();
   
   console.log(user)
+
+  const [isLoggedIn, setLoggedIn] = useState(true);
+
+  const handleLogin = () => {
+    setLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setLoggedIn(false);
+  };
+
+  const handleClick = () => {
+    // Gọi đến hàm reload để làm mới trang
+    window.location.reload();
+  };
+
   return (
     <div className={styles.container}>
       {user ? (
@@ -55,11 +71,23 @@ export default function Header({setOpenChat}) {
                     Giỏ hàng
                   </Link>
                 </li>
-                <li className={styles.item}>
-                  <Link to="/login">
-                    <FontAwesomeIcon icon={faUser}/>
-                    Tài khoản
-                  </Link>
+                <li className={`${styles.item } ${styles.account}`}>
+                  <FontAwesomeIcon icon={faUser}/>
+                  Tài khoản
+                  <div className={styles.acc_dropdown}>
+                    {isLoggedIn ? (
+                      <>
+                      <Link to='/profile'>Tài khoản của tôi</Link>
+                      <Link>Đơn mua</Link>
+                      <Link onClick={handleLogout}>Đăng xuất</Link>
+                      </>
+                    ) : (
+                      <>
+                        <Link to="/login" onClick={handleLogin}>Đăng nhập</Link>
+                        <Link to="/register">Đăng ký</Link>
+                      </>
+                    )}
+                  </div>
                 </li>
               </ul>
             </div>

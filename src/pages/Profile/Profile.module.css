@@ -1,0 +1,11 @@
+.Profile {
+    padding: 0 calc(100vw/15);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: #DFF4F6;
+}
+
+.profile_view_name {
+    
+}
