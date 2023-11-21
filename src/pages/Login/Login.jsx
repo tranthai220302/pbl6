@@ -20,7 +20,11 @@ export default function Login() {
     }),
     onSuccess: (data, variables, context) => {
       localStorage.setItem('currentUser', JSON.stringify(data.data));
-      navigate('/');
+      if(data.data.RoleId == 1){
+        navigate('/')
+      }else if(data.data.RoleId == 4){
+        navigate('/admin/customer')
+      }
     },
   });
   const handleLogin = () => {

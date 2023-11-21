@@ -38,10 +38,19 @@
     font-size: 15px;
     padding: 3px 5px;
 }
+.notify_icon{
+    height: 20px;
+    color: black;
+    padding: 5px 8px;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+}
 .pie{
     width: 50%;
     background-color: white ;
     border-radius: 10px;
+    padding: 20px 10px;
 }
 .navbar{
     height: 55px;
@@ -53,6 +62,8 @@
     height: 30px;
     border-radius: 50%;
     cursor: pointer;
+    z-index: 999;
+    background-color: red;
 }
 .navbar{
     height: 55px;
@@ -64,9 +75,16 @@
     align-items: center;
     padding: 0 10px;
     position: fixed;
-    z-index: 88;
+    z-index: 99;
 }
-
+.user{
+   position: fixed;
+   display: flex;
+   right: 0;
+   margin-right: 10px;
+   align-items: center;
+   gap: 40px;
+}
 .back_loading{
     height: 100%;
     

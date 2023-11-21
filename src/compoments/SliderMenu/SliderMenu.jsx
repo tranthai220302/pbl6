@@ -88,13 +88,13 @@ export default function SliderMenu({seOpen}) {
             )}
         </div>
         <div className={styles.item}>
-            <div className={styles.name} onClick={()=>{setIsShipperOpen(!isShipperOpen)}}>
+            <div className={styles.name} onClick={()=>{setIsVoucherOpen(!isVoucherOpen)}}>
                 <FontAwesomeIcon icon={faTicketAlt} className={styles.voucher_icon} />
                 <span className={styles.name_item}>Voucher</span>
 
             </div>
             {isVoucherOpen && (
-                <ul className={styles.require} onClick={()=>{setIsShipperOpen(!isShipperOpen)}}>
+                <ul className={styles.require}>
                     {itemsVoucher.map((item, index) => (
                         <li
                             className={styles.item_require}

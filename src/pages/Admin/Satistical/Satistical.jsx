@@ -13,10 +13,16 @@ export default function Satistical() {
   const [isPending, setIsPending] = useState(null);
   const [data, setData] = useState(null);
   const [month, setMonth] = useState(date.getMonth() + 1)
+  const [monthDraw, setMonthDraw] = useState(date.getMonth() + 1);
   const [dataStore, setDataStore] = useState(null)
   const handleKeyPress = (e) =>{
     if (e.key === 'Enter') {
       setMonth(e.target.value)
+    }
+  }
+  const handleKeyPressDraw = (e) =>{
+    if (e.key === 'Enter') {
+      setMonthDraw(e.target.value)
     }
   }
   return (
@@ -34,7 +40,8 @@ export default function Satistical() {
         <div className={styles.content}>
           <div className={styles.draw}>
             <div className={styles.pie}>
-              <Pie admin = {true} />
+            <input type="text" placeholder='Nhập tháng...' onKeyPress={(e) => handleKeyPressDraw(e)} className={styles.input_month}/>
+              <Pie admin = {true} month={monthDraw}/>
               <span className={styles.name_draw}>Phần trăm doanh của các cửa hàng</span>
             </div>
             <div className={styles.draw_line}>

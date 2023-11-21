@@ -36,7 +36,8 @@ export const itemsShipper = [
     "Tìm kiếm"
 ];
 export const itemsVoucher = [
-    "Danh sách",
-    "Thêm Voucher -FreeShip",
-    "Tìm kiếm"
+    {
+        name : "Danh sách",
+        navigate : '/admin/voucher'
+    },
 ];

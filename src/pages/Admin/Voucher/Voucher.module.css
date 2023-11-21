@@ -63,16 +63,16 @@
 }
 .list{
     display: flex;
-    width: 80%;
+    width: 100%;
     height: 100%;
-    margin: auto;
 }
 
 .table1 {
-    max-height: 100%; 
     overflow: auto;  
     position: relative; 
     width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .table1 table {
@@ -95,6 +95,12 @@ table, th, td {
 th, td {
     padding: 10px;
     text-align: left;
+}
+td{
+    text-align: center;
+}
+th{
+    text-align: center;
 }
 
 button {
