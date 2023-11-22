@@ -30,17 +30,25 @@ export const deleteUserService = async (id) =>{
 }
 export const getUsersByQueryService = async(filter, idRole) =>{
     try {
-        const users = await db.user.findAll({
+        const usersInclude = [
+            {
+              model: db.role,
+              attributes: ['name'],
+              where: { id: idRole },
+            },
+          ];
+          
+          if (idRole == 2) {
+            usersInclude.push({
+              model: db.storeRequest,
+            });
+          }
+          
+          const users = await db.user.findAll({
             attributes: { exclude: ['password'] },
             where: filter,
-            include: [
-                {
-                    model: db.role,
-                    attributes: ['name'],
-                    where: { id: idRole },
-                },
-            ],
-        });     
+            include: usersInclude,
+          });   
         if(users.length == 0) return createError(400, 'Không tìm thấy người dùng!')
         return users;
     } catch (error) {

@@ -8,15 +8,16 @@ import {
     getBookByIdService,
     getBookByStoreService,
     getBookByOrderHighService,
+    getBookIsOrderByStoreService,
 } 
 from "../Models/Services/BookService.js"
 import createError from "../ultis/createError.js"
 
 export const createBook = async (req, res, next) =>{
     try {
-        if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'))
+        if(req.idRole !== 2 && req.idRole !==4) return next(createError(400, 'Bạn không có quyền này!'))
         const data = req.body;
-        const book = await createBookService(req.id, data.name, data.desc, data.price, data.sales_number, data.publication_date, data.author_id, data.categorys, data.images)
+        const book = await createBookService(req.params.id, data.name, data.desc, data.price, data.sales_number, data.publication_date, data.author_id, data.categorys, data.images)
         if(book instanceof Error) return next(book)
         return res.status(200).send(book)
     } catch (error) {
@@ -109,6 +110,16 @@ export const getBookByOrderHigh = async (req, res, next) =>{
     try {
         if(req.idRole !== 4) return next(createBook(400, 'Bạn không có quyền này!'))
         const book = await getBookByOrderHighService();
+        if(book instanceof Error) return next(book);
+        return res.status(200).send(book)
+    } catch (error) {
+        next(error)
+    }
+}
+export const getBookIsOrderByStore = async (req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createBook(400, 'Bạn không có quyền này!'))
+        const book = await getBookIsOrderByStoreService(req.params.id);
         if(book instanceof Error) return next(book);
         return res.status(200).send(book)
     } catch (error) {

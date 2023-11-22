@@ -1,10 +1,13 @@
 import { 
     createOrderService, 
     deleteOrderService, 
+    revenueStoreByMonthService, 
     drawPrecentSatiscalService, 
     getOrderByStoreService, 
     getOrdersByCustomerService, 
-    satistical7StoreHighService
+    satistical7StoreHighService,
+    getNumOrderByDateByStoreService,
+    getNumOrderBy7DateService
 } 
 from "../Models/Services/OrderServices.js";
 import { ConfirmStoreService } from "../Models/Services/UserService.js";
@@ -65,10 +68,31 @@ export const satistical7StoreHigh = async(req, res, next) =>{
 export const drawPrecentSatiscal = async(req, res, next) =>{
     try {
         if(req.idRole !== 4) return createError(400, 'Bạn không có quyền này!');
-        const topStores = await drawPrecentSatiscalService();
+        const topStores = await drawPrecentSatiscalService(req.params.month);
         if(topStores instanceof Error) return next(topStores);
         res.status(200).send(topStores)
     } catch (error) {
         next(error)
     }
 }
+export const revenueStoreByMonth = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return createError(400, 'Bạn không có quyền này!');
+        const doanhhthu = await revenueStoreByMonthService(req.params.id, req.body.month);
+        if(doanhhthu instanceof Error) return next(doanhhthu);
+        res.status(200).send(doanhhthu)
+    } catch (error) {
+        next(error)
+    }
+}
+export const getNumOrderBy7Date = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return createError(400, 'Bạn không có quyền này!');
+        const doanhhthu = await getNumOrderBy7DateService(req.params.id);
+        if(doanhhthu instanceof Error) return next(doanhhthu);
+        res.status(200).send(doanhhthu)
+    } catch (error) {
+        next(error)
+    }
+}
+

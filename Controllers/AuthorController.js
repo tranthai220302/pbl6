@@ -9,9 +9,9 @@ import createError from "../ultis/createError.js"
 
 export const createAuthor = async(req, res, next) =>{
     try {
-        if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'));
+        if(req.idRole !== 2 && req.idRole !==4) return next(createError(400, 'Bạn không có quyền này!'));
         const data = req.body;
-        const author = await createAuthorService(data.name, data.address, data.date_birth, data.date_death, req.id);
+        const author = await createAuthorService(data.name, data.address, data.date_birth, data.date_death, req.params.id);
         if(author instanceof Error) return next(author);
         res.status(200).send(author);
     } catch (error) {
@@ -21,8 +21,8 @@ export const createAuthor = async(req, res, next) =>{
 
 export const getAuthors = async(req, res, next) =>{
     try {
-        if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'));
-        const authors = await getAuthorsService(req.id);
+        if(req.idRole !== 2 && req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
+        const authors = await getAuthorsService(req.params.id);
         if(authors instanceof Error) return next(authors);
         res.status(200).send(authors);
     } catch (error) {

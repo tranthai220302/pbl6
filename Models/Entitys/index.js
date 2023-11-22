@@ -19,6 +19,8 @@ import VoucherItem from "./VoucherItem.js";
 import Customer_VoucherItem from "./Customer_VoucherItem.js";
 import StoreRequest from "./StoreRequest.js";
 import ReportStore from "./ReportStore.js";
+import DetailStore from "./DetailStore.js";
+import DetailShipper from "./DetailShipper.js";
 const sequelize = new Sequelize(
     configdb.DB,
     configdb.USER,
@@ -40,7 +42,7 @@ const sequelize = new Sequelize(
 const db = {}
 db.sequelize = sequelize
 db.Sequelize = Sequelize
-db
+db.detailStore = DetailStore(sequelize)
 db.customer_voucherItem = Customer_VoucherItem(sequelize)
 db.admin = Admin(sequelize)
 db.book = Book(sequelize)
@@ -60,7 +62,14 @@ db.voucher = Voucher(sequelize)
 db.voucherItem = VoucherItem(sequelize)
 db.storeRequest = StoreRequest(sequelize)
 db.reportStore = ReportStore(sequelize);
+db.detailShipper = DetailShipper(sequelize)
 
+/*shipper vs deetailShipper*/
+db.user.hasOne(db.detailShipper, {foreignKey : 'shipper_id'});
+db.detailShipper.belongsTo(db.user, {foreignKey : 'shipper_id'})
+/*store vs detailStore*/
+db.user.hasOne(db.detailStore, {foreignKey : 'store_id'});
+db.detailStore.belongsTo(db.user, {foreignKey : 'store_id'})
 /*reportStore vs customer*/
 db.user.hasMany(db.reportStore, {foreignKey : 'customer_id', as : 'reportByCustomer'});
 db.reportStore.belongsTo(db.user, {foreignKey: 'customer_id', as : 'customerReport'})
@@ -78,8 +87,12 @@ db.user.hasMany(db.order, { foreignKey: 'customer_id', as: 'ordersCustomer' });
 db.order.belongsTo(db.user, { foreignKey: 'store_id', as: 'store' });
 db.user.hasMany(db.order, { foreignKey: 'store_id', as: 'ordersStore' });
 //order vs book
-db.order.belongsTo(db.book)
-db.book.hasMany(db.order)
+db.order.belongsTo(db.book,{
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION'
+})
+db.book.hasMany(db.order, {
+})
 
 /*__Cart__*/
 //customerId
@@ -90,7 +103,10 @@ db.cart.belongsTo(db.user, {
   foreignKey: 'customerId'
 })
 db.cart.belongsTo(db.book)
-db.book.hasOne(db.cart)
+db.book.hasOne(db.cart, {
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION'
+})
 /*User vs RequestStore*/
 db.user.hasOne(db.storeRequest, {foreignKey : 'customer_id'});
 db.storeRequest.belongsTo(db.storeRequest, {foreignKey : 'customer_id'});
@@ -117,7 +133,10 @@ db.user.belongsTo(db.role)
 
 /*__Image__*/
 //bookId
-db.book.hasMany(db.image)
+db.book.hasMany(db.image,{
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION'
+})
 db.image.belongsTo(db.book)
 
 
@@ -131,14 +150,18 @@ db.book.belongsTo(db.user,{
 })
 //authorId
 db.author.hasMany(db.book, {
-  foreignKey: 'author_id'
+  foreignKey: 'author_id',
+  onDelete: 'CASCADE',
+  onUpdate: 'NO ACTION'
 })
 db.book.belongsTo(db.author,{
   foreignKey: 'author_id'
 })
 
 /*Book vs Category*/
-db.category.belongsToMany(db.book, {through: 'Category_Book'})
+db.category.belongsToMany(db.book, {
+  through: 'Category_Book',
+})
 db.book.belongsToMany(db.category, {through: 'Category_Book'})
 /*Shipment*/
 //OrderItemId//
@@ -165,8 +188,8 @@ db.order.belongsTo(db.state)
 db.state.hasMany(db.order)
 /*Review*/
 db.review.belongsTo(db.user, { as: 'review1', foreignKey: 'customer_id' });
-db.review.belongsTo(db.book, { as: 'review2', foreignKey: 'book_id' });
+db.review.belongsTo(db.book, { as: 'review2', foreignKey: 'book_id', onDelete: 'CASCADE',onUpdate: 'NO ACTION'  });
 db.user.hasMany(db.review, { as: 'review_customer', foreignKey: 'customer_id' })
-db.book.hasMany(db.review, { as: 'review_book', foreignKey: 'book_id' })
+db.book.hasMany(db.review, { as: 'review_book', foreignKey: 'book_id'})
 
 export default db;

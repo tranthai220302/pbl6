@@ -1,6 +1,7 @@
 import createError from "../../ultis/createError.js";
 import db from "../Entitys/index.js";
 import { Op, where } from 'sequelize';
+import Sequelize from "sequelize";
 export const createBookService = async (store_id, name, desc, price, sales_number, publication_date, author_id, categorys, images) =>{
     try {
         const checkBook = await db.book.findOne({
@@ -174,8 +175,15 @@ export const getBookByStoreService = async(id, name)=>{
 }
 export const getBookByOrderHighService = async() =>{
     try {
+        const date = new Date();
+        const month = date.getMonth() + 1;
         const reviews = await db.order.findAll({
-            where: {isPayment : true},
+            where: {
+                [Op.and] : [
+                    {isPayment : true},
+                ]
+            },
+            
             include : [
                 {
                     model : db.book,
@@ -188,7 +196,7 @@ export const getBookByOrderHighService = async() =>{
             const category = [];
             const data = []
             reviews.forEach((review) => {
-                const reviewItem = review.Book.name;
+                const reviewItem = review.Book?.name;
             
                 if (dem[reviewItem]) {
                 dem[reviewItem]++;
@@ -208,6 +216,30 @@ export const getBookByOrderHighService = async() =>{
         }  
         const mangReviewMoi = demReview(reviews);
         return mangReviewMoi;
+    } catch (error) {
+        return error;
+    }
+}
+export const getBookIsOrderByStoreService = async(store_id) => {
+    try {
+        const orders = await db.order.findAll({
+            where : {store_id},
+            include : [
+                {
+                    model : db.book,
+                }
+            ]
+        })
+        const ob = {}
+        orders.map((item)=>{
+            ob[item.Book.name] = ob[item.Book.name] ? ob[item.Book.name] + 1: 1;
+        })
+        const nameBook = Object.keys(ob);
+        const data = Object.values(ob);
+        return {
+            nameBook,
+            data,
+        };
     } catch (error) {
         return error;
     }

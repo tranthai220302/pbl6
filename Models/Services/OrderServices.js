@@ -13,6 +13,7 @@ export const priceVoucherStore = async()=>{
 export const createOrderService = async(BookId, customer_id, quantity, isPayment) =>{
     try {
         const book = await getBookByIdService(BookId)
+        console.log(quantity)
         const store_id = book.store_id;
         const customer = await getUserByIdService(customer_id)
         const store = await getUserByIdService(store_id)
@@ -30,6 +31,7 @@ export const createOrderService = async(BookId, customer_id, quantity, isPayment
         var currentTotal = order.total_price;
         const priceVS = await priceVoucherStoreByCustomer(customer_id, 1, store_id, currentTotal);
         const priceFS = await priceVoucherStoreByCustomer(customer_id, 2, store_id, currentTotal);
+        console.log(priceVS)
         const kc = await distance(customer.address, store.address)
         if(kc instanceof Error) return kc;
         const priceShip = parseInt((kc/1000)*5000);
@@ -185,12 +187,17 @@ export const satistical7StoreHighService = async(month) =>{
         return error;
     }
 }
-export const drawPrecentSatiscalService = async() =>{
+export const drawPrecentSatiscalService = async(month) =>{
     try {
         const satisticalStore = [];
         const category = []
         const store = await db.user.findAll({
-            where : {RoleId : 2}
+            where : {
+                [Op.and] : [
+                    {RoleId : 2},
+                    Sequelize.literal(`MONTH(createdAt) = ${month}`),
+                ]
+            },
         })
         for (const item of store) {
             const satistical = await totalPriceStoreService(item.id);
@@ -204,6 +211,96 @@ export const drawPrecentSatiscalService = async() =>{
         }
     } catch (error) {
         return error;   
+    }
+}
+export const revenueDateByStoreService = async (date, month, year, store_id) =>{
+    try {
+        const orders = await db.order.findAll({
+            where: {
+                [Op.and]: [
+                    Sequelize.literal(`
+                        DAY(createdAt) = ${date} AND
+                        MONTH(createdAt) = ${month} AND
+                        YEAR(createdAt) = ${year}
+                    `),
+                    { store_id},
+                    {isPayment : 1}
+                ]
+            }
+        });
+        let total = 0;
+        orders.map((item)=>{
+            item.priceStore ? total += item .priceStore : total += 0;
+        })
+        return total;
+    } catch (error) {
+        return error;
+    }
+}
+export const revenueStoreByMonthService = async(idStore, month) =>{
+    try {
+        const date = new Date()
+        const currentDate = new Date(date.getFullYear(), month, 0);
+        const numDate = currentDate.getDate();
+        const data = [];
+        const dateTitle = []
+        if(month > 0 && month  < 13){
+            for(let i = 1; i <= numDate; i++){
+                const totalByDate = await revenueDateByStoreService(i, month, date.getFullYear(), idStore);
+                data.push(totalByDate);
+                dateTitle.push(i)
+            }
+            return {
+                data,
+                dateTitle
+            }
+        }
+        return createError(400, 'Tháng không chính xác!')
+    } catch (error) {
+        return error;
+    }
+}
+export const getNumOrderByDateByStoreService = async (date, month, year, store_id) =>{
+    try {
+        const orders = await db.order.findAll({
+            where: {
+                [Op.and]: [
+                    Sequelize.literal(`
+                        DAY(createdAt) = ${date} AND
+                        MONTH(createdAt) = ${month} AND
+                        YEAR(createdAt) = ${year}
+                    `),
+                    { store_id},
+                ]
+            }
+        });
+        return orders.length;
+    } catch (error) {
+        return error;
+    }
+}
+export const getNumOrderBy7DateService = async (store_id) =>{
+    try {
+        const today = new Date();
+        const daysOfWeek = [];
+        for(let i = 0; i < 7; i++){
+            const day = new Date(today);
+            day.setDate(today.getDate() - i);
+            daysOfWeek.push(day);
+        }
+        const dateTitle = [];
+        const data = [];
+        for(const date of daysOfWeek){
+            const dateItem = await getNumOrderByDateByStoreService(date.getDate(), date.getMonth() + 1, date.getFullYear(), store_id)
+            data.push(dateItem);
+            dateTitle.push(`${date.getDate()}-${date.getMonth()}`);
+        }
+        return {
+            data,
+            dateTitle
+        }
+    } catch (error) {
+        return error;
     }
 }
 

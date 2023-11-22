@@ -17,10 +17,15 @@ export const createVoucherItemService = async (data) =>{
     }
 }
 
-export const getVoucherItemByStoreService = async(store_id) =>{
+export const getVoucherItemByStoreService = async(filter) =>{
     try {
         const voucherItems = await db.voucherItem.findAll({
-            where: {store_id}
+            where: {
+                [Op.and] : filter
+            },
+            include : {
+                model : db.voucher
+            }
         })
         if(voucherItems.length == 0) return createError(400, 'Không có voucher!');
         return voucherItems;
@@ -28,13 +33,13 @@ export const getVoucherItemByStoreService = async(store_id) =>{
         return error;
     }
 }
-export const updateVoucherItemService = async(data, id, store_id) =>{
+export const updateVoucherItemService = async(data, id) =>{
     try {
+        console.log(data)
         const updateVoucherItem = await db.voucherItem.update(data, {
             where : {
                 [Op.and] : [
                     {id},
-                    {store_id}
                 ]
             }
         })
@@ -47,15 +52,24 @@ export const updateVoucherItemService = async(data, id, store_id) =>{
         return error;
     }
 }
-export const deleteVoucherItemService = async(id, store_id) =>{
+export const deleteVoucherItemService = async(id, store_id, isAdmin) =>{
     try {
-        const deleteVoucherItem = await db.voucherItem.destroy({
-            where : {
+        let filter;
+        if(isAdmin){
+            filter = {
+                id
+            }
+        }else {
+        filter = {
                 [Op.and] : [
                     {id},
                     {store_id}
                 ]
             }
+        }
+
+        const deleteVoucherItem = await db.voucherItem.destroy({
+            where : filter
         })
         if(deleteVoucherItem == 0) return(createError(400, 'Xoá voucher không thành công!'))
         return {
@@ -154,3 +168,17 @@ export const priceVoucherStoreByCustomer = async(customer_id, voucher_id, store_
         return error;
     }
 }
+export const getVoucher_FreeShipService = async(filter) =>{
+    try {
+        const voucher_freeShip = await db.voucherItem.findAll({
+            where : {
+                [Op.and] : [filter]
+            }
+        })
+        if(voucher_freeShip.length == 0) return createError(400, 'Không có voucher FreeShip')
+        return voucher_freeShip;
+    } catch (error) {
+        return error;
+    }
+}
+
