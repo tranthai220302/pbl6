@@ -119,7 +119,8 @@ export const getBookByOrderHigh = async (req, res, next) =>{
 export const getBookIsOrderByStore = async (req, res, next) =>{
     try {
         if(req.idRole !== 4) return next(createBook(400, 'Bạn không có quyền này!'))
-        const book = await getBookIsOrderByStoreService(req.params.id);
+        const isHigh = req.params.isHigh
+        const book = await getBookIsOrderByStoreService(req.params.id, isHigh);
         if(book instanceof Error) return next(book);
         return res.status(200).send(book)
     } catch (error) {

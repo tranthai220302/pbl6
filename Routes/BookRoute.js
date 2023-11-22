@@ -21,5 +21,5 @@ routerBook.get('/search', getBookByQuery)
 routerBook.get('/item/:id', getBookById)
 routerBook.get('/store/:id', verifyjson, getBookByStore)
 routerBook.get('/bookHigh', verifyjson, getBookByOrderHigh)
-routerBook.get('/bookIsOrder/:id', verifyjson, getBookIsOrderByStore)
+routerBook.get('/bookIsOrder/:id/:isHigh', verifyjson, getBookIsOrderByStore)
 export default routerBook;

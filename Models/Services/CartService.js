@@ -74,7 +74,12 @@ export const getCartsService = async(customer_id) =>{
         const carts = await db.cart.findAll({
             where:{
                 customerId : customer_id
-            }
+            },
+            include : [
+                {
+                    model : db.book
+                }
+            ]
         })
         if(carts.length == 0) return createError(400, 'Không có sản phẩm !')
         return carts;

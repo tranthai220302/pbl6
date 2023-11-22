@@ -220,7 +220,7 @@ export const getBookByOrderHighService = async() =>{
         return error;
     }
 }
-export const getBookIsOrderByStoreService = async(store_id) => {
+export const getBookIsOrderByStoreService = async(store_id, isHigh) => {
     try {
         const orders = await db.order.findAll({
             where : {store_id},
@@ -231,9 +231,22 @@ export const getBookIsOrderByStoreService = async(store_id) => {
             ]
         })
         const ob = {}
+        const book = {}
         orders.map((item)=>{
             ob[item.Book.name] = ob[item.Book.name] ? ob[item.Book.name] + 1: 1;
+            book[""]
         })
+        if(isHigh == 1){
+            const filteredOb = Object.fromEntries(
+                Object.entries(ob).filter(([key, value]) => value > 5)
+            );
+            const nameBook = Object.keys(filteredOb);
+            const data = Object.values(filteredOb);
+            return {
+                nameBook,
+                data
+            }
+        }
         const nameBook = Object.keys(ob);
         const data = Object.values(ob);
         return {
