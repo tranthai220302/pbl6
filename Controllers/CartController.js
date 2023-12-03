@@ -2,7 +2,8 @@ import {
     deleteCartService,
     createCartService,
     getCartByIdService,
-    getCartsService
+    getCartsService,
+    updateCartService
 } from "../Models/Services/CartService.js";
 import createError from "../ultis/createError.js";
 
@@ -32,7 +33,16 @@ export const deleteCart = async(req, res, next) =>{
         next(error)
     }
 }
-
+export const updateCart = async(req, res, next) =>{
+    try {
+        if(req.idRole !==1) return next(createError(400, 'Bạn không có quyền này!'));
+        const updateCart = await updateCartService(req.params.idCart, req.id, req.body.quantity);
+        if(updateCart instanceof Error) return next(updateCart);
+        res.status(200).send(updateCart);
+    } catch (error) {
+        next(error);
+    }
+}
 export const getCartById = async(req, res, next) =>{
     try {
         const idCart = req.params.idCart;

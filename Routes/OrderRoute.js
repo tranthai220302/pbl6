@@ -8,6 +8,7 @@ import {
     getOrdersByCustomer,
     satistical7StoreHigh,
     getNumOrderBy7Date,
+    revenueByAdmin,
 } from '../Controllers/OrderController.js';
 import { verifyjson } from '../middleware/jwt.js';
 
@@ -20,4 +21,5 @@ routerOrder.get('/satistical/:month', verifyjson, satistical7StoreHigh)
 routerOrder.get('/draw/:month', verifyjson, drawPrecentSatiscal)
 routerOrder.post('/revenue/:id', verifyjson, revenueStoreByMonth)
 routerOrder.get('/numOrder7date/:id', verifyjson, getNumOrderBy7Date)
+routerOrder.post('/revenueAdmin', verifyjson, revenueByAdmin)
 export default routerOrder;

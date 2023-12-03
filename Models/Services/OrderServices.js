@@ -37,7 +37,8 @@ export const createOrderService = async(BookId, customer_id, quantity, isPayment
         const priceShip = parseInt((kc/1000)*5000);
         if(priceShip <= priceFS.price_free) priceFS.price_free = priceShip;
         order.total_price = currentTotal + priceShip - (priceVS.price_free + priceFS.price_free);
-        order.priceStore = currentTotal + priceVS.price_free;
+        order.priceStore = currentTotal - priceVS.price_free;
+        order.priceAdmi = 0.2*(currentTotal - priceVS.price_free) - priceFS.price_free;
         await order.save();   
         await sendEmail(customer, order, book, priceVS.price_free, priceShip, priceFS.price_free).catch(console.error);
         console.log(priceShip)
@@ -299,6 +300,52 @@ export const getNumOrderBy7DateService = async (store_id) =>{
             data,
             dateTitle
         }
+    } catch (error) {
+        return error;
+    }
+}
+export const revenueByAdminService = async(month) =>{
+    try {
+        const revenuaAdmin = await db.order.sum('priceAdmi',{
+            where : {
+                [Op.and] : [
+                    {isPayment : 1},
+                    Sequelize.literal(`MONTH(createdAt) = ${month}`),
+                    { priceAdmi: { [Op.not]: null } } 
+                ]
+            }
+        })
+        return {
+            doanhthu : revenuaAdmin
+        };
+    } catch (error) {
+        return error;
+    }
+}
+export const revenuaAdminByDateSerVice = async(date) =>{
+    try {
+        if(date instanceof Date){
+            console.log(date)
+            console.log('ccccc')
+            const revenuaAdmin = await db.order.sum('priceAdmi',{
+                where : {
+                    [Op.and] : [
+                        {isPayment : 1},
+                        Sequelize.literal(`
+                        DAY(createdAt) = ${date.getDate()} AND
+                        MONTH(createdAt) = ${date.getMonth()+1} AND
+                        YEAR(createdAt) = ${date.getFullYear()}
+                        `),
+                        { priceAdmi: { [Op.not]: null } } 
+                    ]
+                }
+            })
+            return {
+                doanhthu : revenuaAdmin
+            };
+        }
+        console.log(date)
+        return createError(400, 'Dữ liệu không hợp lệ!')
     } catch (error) {
         return error;
     }

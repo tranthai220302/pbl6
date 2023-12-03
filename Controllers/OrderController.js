@@ -7,7 +7,9 @@ import {
     getOrdersByCustomerService, 
     satistical7StoreHighService,
     getNumOrderByDateByStoreService,
-    getNumOrderBy7DateService
+    getNumOrderBy7DateService,
+    revenueByAdminService,
+    revenuaAdminByDateSerVice
 } 
 from "../Models/Services/OrderServices.js";
 import { ConfirmStoreService } from "../Models/Services/UserService.js";
@@ -87,10 +89,22 @@ export const revenueStoreByMonth = async(req, res, next) =>{
 }
 export const getNumOrderBy7Date = async(req, res, next) =>{
     try {
-        if(req.idRole !== 4) return createError(400, 'Bạn không có quyền này!');
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
         const doanhhthu = await getNumOrderBy7DateService(req.params.id);
         if(doanhhthu instanceof Error) return next(doanhhthu);
         res.status(200).send(doanhhthu)
+    } catch (error) {
+        next(error)
+    }
+}
+export const revenueByAdmin = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
+        let doanhhthu;
+        if(req.body.month) doanhhthu = await revenueByAdminService(req.body.month)
+        else doanhhthu = await revenuaAdminByDateSerVice(req.body.date)
+        if(doanhhthu instanceof Error) return next(doanhhthu);
+        return res.status(200).send(doanhhthu)
     } catch (error) {
         next(error)
     }

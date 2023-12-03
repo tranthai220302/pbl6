@@ -83,6 +83,14 @@ export const getBooksService = async() =>{
                 },
                 {
                     model : db.image
+                },
+                {
+                    model : db.user,
+                    include : [
+                        {
+                            model : db.detailStore
+                        }
+                    ]
                 }
             ]   
         });

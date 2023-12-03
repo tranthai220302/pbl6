@@ -3,7 +3,8 @@ import {
     deleteCart, 
     getCartById, 
     createCart,
-    getCarts
+    getCarts,
+    updateCart
 } from '../Controllers/CartController.js';
 import { verifyjson } from '../middleware/jwt.js';
 
@@ -12,4 +13,5 @@ routerCart.post('/create/:idBook', verifyjson, createCart)
 routerCart.delete('/delete/:idCart', verifyjson, deleteCart)
 routerCart.get('/:idCart',verifyjson, getCartById)
 routerCart.get('/',verifyjson, getCarts)
+routerCart.put('/update/:idCart', verifyjson, updateCart)
 export default routerCart;  
