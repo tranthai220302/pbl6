@@ -89,9 +89,22 @@ export const deleteCartService = async(id, customerId) =>{
 
 export const getCartByIdService = async(id, customerId) =>{
     try {
-        const cart = await db.cart.findByPk(id);
+        console.log(customerId)
+        const cart = await db.cart.findOne({
+            where : {
+                [Op.and] : [
+                    {id},
+                    {customerId}
+                ]
+            },
+            include : [
+                {
+                    model : db.book,
+                }
+            ]
+        });
+        console.log(customerId)
         if(!cart) return createError(400, 'Không tìm thấy giỏ hàng!')
-        if(cart.customerId !== customerId) return createError(400, 'Bạn không thể xem giỏ hầng người khác')
         return cart;
     } catch (error) {
         return error;
