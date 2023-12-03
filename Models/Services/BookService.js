@@ -103,17 +103,26 @@ export const getBooksService = async() =>{
 export const getBookByQueryService = async(filter, category, author) =>{
     try {
         const booksByQuery = await db.book.findAll({
-            include :[{
-                model : db.category,
-                where : category
-                
-            },{
-                model: db.author,
-                where: author
-            },
-            {
-                model : db.image
-            }],
+            include : [
+                {
+                    model : db.category,
+                },
+                {
+                    model : db.author
+                },
+                {
+                    model : db.image
+                },
+                {
+                    model : db.user,
+                    include : [
+                        {
+                            model : db.detailStore
+                        }
+                    ]
+                }
+            ] ,  
+            
             where : {
                 [Op.and] : [filter]
             }
@@ -141,8 +150,16 @@ export const getBookByIdService = async(id) =>{
                 },
                 {
                     model : db.image
+                },
+                {
+                    model : db.user,
+                    include : [
+                        {
+                            model : db.detailStore
+                        }
+                    ]
                 }
-            ]
+            ]   
         })
         if(!book) return createError(400, 'Không có sách!')
         return book;
@@ -172,8 +189,16 @@ export const getBookByStoreService = async(id, name)=>{
                 },
                 {
                     model : db.image
+                },
+                {
+                    model : db.user,
+                    include : [
+                        {
+                            model : db.detailStore
+                        }
+                    ]
                 }
-            ]
+            ]   
         })
         if(book.length == 0) return createError(400, 'Không có sách!')
         return book;
