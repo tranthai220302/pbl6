@@ -8,7 +8,11 @@ import { useState } from 'react';
 import newRequest from '../../ults/NewRequest';
 import { useEffect } from 'react';
 import { useBootstrapBreakpoints } from 'react-bootstrap/esm/ThemeProvider';
-export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, getData, product, getDataProduct}) {
+import moment from 'moment';
+import Voucher from '../../pages/Admin/Voucher/Vouher';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
+export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, getData, product, getDataProduct, voucher}) {
   const [filter, setFilter] = useState({
     email : customer?.email,
     address : customer?.address,
@@ -20,6 +24,14 @@ export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, ge
     name : product?.name,
     sales_number : product?.sales_number,
     desc: product?.desc
+  })
+  const [filterVoucher, setFilterVoucher] = useState({
+    name : voucher?.name,
+    discountType : voucher?.discountType,
+    codition : voucher?.codition,
+    discountValue: voucher?.discountValue,
+    quantity : voucher?.quantity,
+    expiryDate: voucher?.expiryDate
   })
   const [selectedCategories, setSelectedCategories] = useState([]);
 
@@ -50,6 +62,34 @@ export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, ge
     .catch((error) => {
     });
   }
+  const handleSetFilterVoucher = (e) =>{
+    const name = e.target.name;
+    const value = e.target.value;
+    console.log(name)
+    console.log(value)
+    setFilterVoucher((prev)=>(
+      {
+        ...prev,
+        [name]: name === 'codition' ? parseInt(value, 10) : name === 'discountValue' ? parseInt(value, 10): name === 'quantity' ? parseInt(value, 10) : value,
+      }
+    ))
+  }
+  const handleUpdateVoucher = (id, filterVoucher)=>{
+    newRequest.put(`/voucherItem/update/${id}`,filterVoucher, {
+      withCredentials: true
+    })
+    .then((res) => {
+      toast.success("Chỉnh sửa voucher thành công!", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000, 
+      });
+      getData('')
+      handleCloseUpdate()
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+  }
   const handelSetFilterBook = (e) =>{
     let name = e.target.name;
     let value = e.target.value;
@@ -63,14 +103,14 @@ export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, ge
       }
     ))
   }
-  console.log(filterBoook)
+  console.log(filterVoucher)
   const handleSetFilter = (e) =>{
     const name = e.target.name;
     const value = e.target.value;
     setFilter((prev)=>(
       {
         ...prev,
-        [name]: name === 'phone' ? parseInt(value, 10) : value,
+        [name]: name === 'codition' ? parseInt(value, 10) : value,
       }
     ))
   }
@@ -147,7 +187,7 @@ export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, ge
             </div>
           )}
           {product && (
-              <div className={styles.card}>
+            <div className={styles.card}>
               <div className={styles.avatar_card}>
                 <img className={styles.img_card} src={product.Images[0].filename} alt="" />
                 <div className={styles.card_name}>{product.name}</div>
@@ -200,6 +240,48 @@ export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, ge
             </div>
           )}
            {isPendingUpdate && (<img className={styles.img_loading} src=" https://assets.materialup.com/uploads/ec71c736-9c99-4c75-9fb4-6b263f9717a2/line.gif" alt="" />)}
+           {voucher && (
+            <div className={styles.card}>
+              <div className={styles.avatar_card}>
+                <img className={styles.img_card} src="https://saigonpavillon.com.vn/wp-content/uploads/2022/10/avatar-cute-nam-6.jpg" alt="" />
+                <div className={styles.card_name}>
+                <input type="text" defaultValue={voucher.name} className = {styles.value_book} name='name' onChange={(e)=>handleSetFilterVoucher(e)} />
+                </div>
+              </div>
+              <div className={styles.infor}>
+                <div className={styles.infor_body}>
+                  <div className={styles.infor_item1}>
+                    <span className={styles.book_title}>Loại</span>
+                    <select className={styles.value_book1} name='discountType' onChange={(e)=>handleSetFilterVoucher(e)}>
+                        <option value={voucher.discountType == 'amount' ? 'amount' : "percent" }>{voucher.discountType == 'amount' ? 'amount' : "percent" }</option>
+                        <option value={voucher.discountType == 'amount' ? 'percent' : "amount" }>{voucher.discountType == 'amount' ? 'percent' : "amount" }</option>
+                    </select>
+                  </div>
+                </div>
+                <div className={styles.infor_body}>
+                  <div className={styles.infor_item1}>
+                    <span className={styles.book_title}>Điều kiện đơn hàng lớn hơn</span>
+                    <input type="text" defaultValue={voucher.codition} className = {styles.value_book1} name = 'codition' onChange={(e)=>handleSetFilterVoucher(e)}  />
+                  </div>
+                  <div className={styles.infor_item1}>
+                    <span className={styles.book_title}>Giảm giá</span>
+                    <div className={styles.amount}>
+                    <input type="text" name='discountValue' defaultValue={voucher.discountValue} className = {styles.value_book1} onChange={(e)=>handleSetFilterVoucher(e)} />
+                    <span>{filterVoucher.discountType == "amount" ? "đ" : "%"}</span>
+                    </div>
+                  </div>
+                  <div className={styles.infor_item1}>
+                    <span className={styles.book_title}>Số lượng</span>
+                    <input className={styles.value_book1} defaultValue={voucher.quantity} onChange={(e)=>handleSetFilterVoucher(e)} name='quantity' />
+                  </div>
+                  <div className={styles.infor_item1}>
+                    <span className={styles.book_title}>Ngày hết hạn</span>
+                    <input type='date' name='expiryDate' defaultValue={moment(voucher.expiryDate).format("YYYY-MM-DD")} className={styles.value_book1} onChange={(e)=>handleSetFilterVoucher(e)}/>
+                  </div>
+                </div>
+              </div>
+            </div>
+           )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseUpdate}>
@@ -212,6 +294,11 @@ export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, ge
           )}
           {product && (
               <Button variant="primary" onClick={() => handleUpdateBook(filterBoook,selectedCategories,product.id)}>
+                  Save Change
+              </Button>
+          )}
+          {voucher && (
+              <Button variant="primary" onClick={() => handleUpdateVoucher(voucher.id, filterVoucher)}>
                   Save Change
               </Button>
           )}

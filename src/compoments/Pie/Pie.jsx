@@ -3,7 +3,9 @@ import { useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import newRequest from '../../ults/NewRequest';
 import styles from './Pie.module.css'
-const Pie= ({admin}) => {
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+const Pie= ({admin, month}) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true)
@@ -21,9 +23,12 @@ const Pie= ({admin}) => {
         setError(error.response.data)
         setIsLoading(false)
       })
-    }else{
+    }
+  },[])
+  useEffect(()=>{
+    if(admin){
       setIsLoading(true)
-      newRequest.get('/order/draw',{
+      newRequest.get(`/order/draw/${month}`,{
       }).then((res)=>{
         setData(res.data.store  )
         console.log(res.data)
@@ -31,11 +36,11 @@ const Pie= ({admin}) => {
         setIsLoading(false)
         setError(false)
       }).catch((error)=>{
-        setError(error.response.data)
+        setError(error.response)
         setIsLoading(false)
       })
     }
-  },[])
+  },[month])
   const [chartData, setChartData] = useState(null);
   useEffect(()=>{
     setChartData({

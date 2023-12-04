@@ -71,3 +71,19 @@
     margin: auto;
     width: 100%;
 }
+.amount{
+    display: flex;
+    gap: 5px;
+}
+.amount span{
+    color:  orange;
+    font-weight: 600;
+}
+.infor_item1{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.value_book1{
+    width: 80%;
+}

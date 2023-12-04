@@ -30,6 +30,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import SliderMenu from './compoments/SliderMenu/SliderMenu';
 import ReportPage from './pages/Admin/ReportPage/ReportPage';
 import Satistical from './pages/Admin/Satistical/Satistical';
+import Voucher from './pages/Admin/Voucher/Vouher';
 const queryClient = new QueryClient()
 const App = () => {
   const [openChat, setOpenChat] = useState(false)
@@ -114,6 +115,10 @@ const App = () => {
         {
           path : '/admin/satistical',
           element: <Satistical />
+        },
+        {
+          path : '/admin/voucher',
+          element: <Voucher />
         }
       ]
     },
