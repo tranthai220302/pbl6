@@ -69,7 +69,7 @@ export default function HomeAdmin() {
                   <FontAwesomeIcon icon={faArrowUp} className={styles.ff}  />
                     Sản phẩm
                   </span>
-                  <span className={styles.num_num}>100001</span>
+                  <span className={styles.num_num}>10000</span>
                 </div>
               </div>
             </div>
