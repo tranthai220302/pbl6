@@ -2,12 +2,17 @@ import express from 'express'
 import { 
     createOrder,
     deleteOrder,
+    revenueStoreByMonth,
     drawPrecentSatiscal,
     getOdrderByStore,
     getOrdersByCustomer,
     satistical7StoreHigh,
+
     update_state_oder,
-    update_state_oder_2
+    update_state_oder_2,
+
+    getNumOrderBy7Date,
+    revenueByAdmin,
 } from '../Controllers/OrderController.js';
 import { verifyjson } from '../middleware/jwt.js';
 
@@ -17,7 +22,13 @@ routerOrder.get('/customer',verifyjson, getOrdersByCustomer)
 routerOrder.get('/store/:id',verifyjson, getOdrderByStore)
 routerOrder.delete('/delete/:id', verifyjson, deleteOrder)
 routerOrder.get('/satistical/:month', verifyjson, satistical7StoreHigh)
-routerOrder.get('/draw', verifyjson, drawPrecentSatiscal)
+
 routerOrder.put('/state-successful/:id',verifyjson, update_state_oder)
 routerOrder.put('/state-failed/:id',verifyjson, update_state_oder_2)
+
+routerOrder.get('/draw/:month', verifyjson, drawPrecentSatiscal)
+routerOrder.post('/revenue/:id', verifyjson, revenueStoreByMonth)
+routerOrder.get('/numOrder7date/:id', verifyjson, getNumOrderBy7Date)
+routerOrder.post('/revenueAdmin', verifyjson, revenueByAdmin)
+
 export default routerOrder;

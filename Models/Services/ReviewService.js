@@ -1,6 +1,7 @@
 import { Op, where } from "sequelize";
 import createError from "../../ultis/createError.js";
 import db from "../Entitys/index.js";
+import Sequelize from "sequelize";
 export const deleteReviewService = async(id,customer_id)=>{
     try {
         const delete_review = await db.review.destroy({
@@ -86,8 +87,14 @@ export const createReviewService = async(desc, customer_id, book_id, num_star) =
 export const getBookByReview5StarService = async()=>
 {
     try {
-        const reviews = await db.review.findAll({
-            where: { num_star: 5 },
+        const date = new Date();
+        const month = date.getMonth() + 1;
+            const reviews = await db.review.findAll({
+                where:{
+                    [Op.and] : [
+                        { num_star: 5 },
+                    ]
+                },
             include : [
                 {
                     model : db.book,

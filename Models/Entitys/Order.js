@@ -17,9 +17,10 @@ const Order = (sequelize) => sequelize.define('Order', {
     },
     priceStore : {
         type: DataTypes.INTEGER
+    },
+    priceAdmi : {
+        type : DataTypes.INTEGER
     }
-
-
 })
 
 

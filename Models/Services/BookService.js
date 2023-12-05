@@ -1,6 +1,7 @@
 import createError from "../../ultis/createError.js";
 import db from "../Entitys/index.js";
 import { Op, where } from 'sequelize';
+import Sequelize from "sequelize";
 export const createBookService = async (store_id, name, desc, price, sales_number, publication_date, author_id, categorys, images) =>{
     try {
         const checkBook = await db.book.findOne({
@@ -82,6 +83,14 @@ export const getBooksService = async() =>{
                 },
                 {
                     model : db.image
+                },
+                {
+                    model : db.user,
+                    include : [
+                        {
+                            model : db.detailStore
+                        }
+                    ]
                 }
             ]   
         });
@@ -94,17 +103,26 @@ export const getBooksService = async() =>{
 export const getBookByQueryService = async(filter, category, author) =>{
     try {
         const booksByQuery = await db.book.findAll({
-            include :[{
-                model : db.category,
-                where : category
-                
-            },{
-                model: db.author,
-                where: author
-            },
-            {
-                model : db.image
-            }],
+            include : [
+                {
+                    model : db.category,
+                },
+                {
+                    model : db.author
+                },
+                {
+                    model : db.image
+                },
+                {
+                    model : db.user,
+                    include : [
+                        {
+                            model : db.detailStore
+                        }
+                    ]
+                }
+            ] ,  
+            
             where : {
                 [Op.and] : [filter]
             }
@@ -132,8 +150,16 @@ export const getBookByIdService = async(id) =>{
                 },
                 {
                     model : db.image
+                },
+                {
+                    model : db.user,
+                    include : [
+                        {
+                            model : db.detailStore
+                        }
+                    ]
                 }
-            ]
+            ]   
         })
         if(!book) return createError(400, 'Không có sách!')
         return book;
@@ -163,8 +189,16 @@ export const getBookByStoreService = async(id, name)=>{
                 },
                 {
                     model : db.image
+                },
+                {
+                    model : db.user,
+                    include : [
+                        {
+                            model : db.detailStore
+                        }
+                    ]
                 }
-            ]
+            ]   
         })
         if(book.length == 0) return createError(400, 'Không có sách!')
         return book;
@@ -174,8 +208,15 @@ export const getBookByStoreService = async(id, name)=>{
 }
 export const getBookByOrderHighService = async() =>{
     try {
+        const date = new Date();
+        const month = date.getMonth() + 1;
         const reviews = await db.order.findAll({
-            where: {isPayment : true},
+            where: {
+                [Op.and] : [
+                    {isPayment : true},
+                ]
+            },
+            
             include : [
                 {
                     model : db.book,
@@ -188,7 +229,7 @@ export const getBookByOrderHighService = async() =>{
             const category = [];
             const data = []
             reviews.forEach((review) => {
-                const reviewItem = review.Book.name;
+                const reviewItem = review.Book?.name;
             
                 if (dem[reviewItem]) {
                 dem[reviewItem]++;
@@ -208,6 +249,43 @@ export const getBookByOrderHighService = async() =>{
         }  
         const mangReviewMoi = demReview(reviews);
         return mangReviewMoi;
+    } catch (error) {
+        return error;
+    }
+}
+export const getBookIsOrderByStoreService = async(store_id, isHigh) => {
+    try {
+        const orders = await db.order.findAll({
+            where : {store_id},
+            include : [
+                {
+                    model : db.book,
+                }
+            ]
+        })
+        const ob = {}
+        const book = {}
+        orders.map((item)=>{
+            ob[item.Book.name] = ob[item.Book.name] ? ob[item.Book.name] + 1: 1;
+            book[""]
+        })
+        if(isHigh == 1){
+            const filteredOb = Object.fromEntries(
+                Object.entries(ob).filter(([key, value]) => value > 5)
+            );
+            const nameBook = Object.keys(filteredOb);
+            const data = Object.values(filteredOb);
+            return {
+                nameBook,
+                data
+            }
+        }
+        const nameBook = Object.keys(ob);
+        const data = Object.values(ob);
+        return {
+            nameBook,
+            data,
+        };
     } catch (error) {
         return error;
     }

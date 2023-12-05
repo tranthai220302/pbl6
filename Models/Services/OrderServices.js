@@ -13,6 +13,7 @@ export const priceVoucherStore = async()=>{
 export const createOrderService = async(BookId, customer_id, quantity, isPayment) =>{
     try {
         const book = await getBookByIdService(BookId)
+        console.log(quantity)
         const store_id = book.store_id;
         const customer = await getUserByIdService(customer_id)
         const store = await getUserByIdService(store_id)
@@ -30,12 +31,14 @@ export const createOrderService = async(BookId, customer_id, quantity, isPayment
         var currentTotal = order.total_price;
         const priceVS = await priceVoucherStoreByCustomer(customer_id, 1, store_id, currentTotal);
         const priceFS = await priceVoucherStoreByCustomer(customer_id, 2, store_id, currentTotal);
+        console.log(priceVS)
         const kc = await distance(customer.address, store.address)
         if(kc instanceof Error) return kc;
         const priceShip = parseInt((kc/1000)*5000);
         if(priceShip <= priceFS.price_free) priceFS.price_free = priceShip;
         order.total_price = currentTotal + priceShip - (priceVS.price_free + priceFS.price_free);
-        order.priceStore = currentTotal + priceVS.price_free;
+        order.priceStore = currentTotal - priceVS.price_free;
+        order.priceAdmi = 0.2*(currentTotal - priceVS.price_free) - priceFS.price_free;
         await order.save();   
         await sendEmail(customer, order, book, priceVS.price_free, priceShip, priceFS.price_free).catch(console.error);
         console.log(priceShip)
@@ -54,7 +57,26 @@ export const getOrdersByCustomerService = async(customer_id) =>{
         const orders = await db.order.findAll({
             where : {
                 customer_id
-            }
+            },
+            include : [
+                {
+                    model : db.user,
+                    as : 'customer',
+                    attributes: { exclude: ['password'] },
+                },
+                {
+                    model : db.user,
+                    as : 'store',
+                    attributes: { exclude: ['password'] },
+                },
+                {
+                    model : db.state,
+                    attributes: ['status'],
+                },
+                {
+                    model : db.book,
+                },
+            ]
         })
         if(orders.length == 0) return createError(400, 'Bạn không có đơn hàng!')
         return orders;
@@ -74,12 +96,12 @@ export const getOrderByStoreService = async(store_id) =>{
                 {
                     model : db.user,
                     as : 'customer',
-                    attributes: ['firstName', 'lastName'],
+                    attributes: { exclude: ['password'] },
                 },
                 {
                     model : db.user,
                     as : 'store',
-                    attributes: ['firstName', 'lastName'],
+                    attributes: { exclude: ['password'] },
                 },
                 {
                     model : db.state,
@@ -87,7 +109,6 @@ export const getOrderByStoreService = async(store_id) =>{
                 },
                 {
                     model : db.book,
-                    attributes: ['name'],
                 },
             ]
         })
@@ -184,12 +205,17 @@ export const satistical7StoreHighService = async(month) =>{
         return error;
     }
 }
-export const drawPrecentSatiscalService = async() =>{
+export const drawPrecentSatiscalService = async(month) =>{
     try {
         const satisticalStore = [];
         const category = []
         const store = await db.user.findAll({
-            where : {RoleId : 2}
+            where : {
+                [Op.and] : [
+                    {RoleId : 2},
+                    Sequelize.literal(`MONTH(createdAt) = ${month}`),
+                ]
+            },
         })
         for (const item of store) {
             const satistical = await totalPriceStoreService(item.id);
@@ -203,6 +229,142 @@ export const drawPrecentSatiscalService = async() =>{
         }
     } catch (error) {
         return error;   
+    }
+}
+export const revenueDateByStoreService = async (date, month, year, store_id) =>{
+    try {
+        const orders = await db.order.findAll({
+            where: {
+                [Op.and]: [
+                    Sequelize.literal(`
+                        DAY(createdAt) = ${date} AND
+                        MONTH(createdAt) = ${month} AND
+                        YEAR(createdAt) = ${year}
+                    `),
+                    { store_id},
+                    {isPayment : 1}
+                ]
+            }
+        });
+        let total = 0;
+        orders.map((item)=>{
+            item.priceStore ? total += item .priceStore : total += 0;
+        })
+        return total;
+    } catch (error) {
+        return error;
+    }
+}
+export const revenueStoreByMonthService = async(idStore, month) =>{
+    try {
+        const date = new Date()
+        const currentDate = new Date(date.getFullYear(), month, 0);
+        const numDate = currentDate.getDate();
+        const data = [];
+        const dateTitle = []
+        if(month > 0 && month  < 13){
+            for(let i = 1; i <= numDate; i++){
+                const totalByDate = await revenueDateByStoreService(i, month, date.getFullYear(), idStore);
+                data.push(totalByDate);
+                dateTitle.push(i)
+            }
+            return {
+                data,
+                dateTitle
+            }
+        }
+        return createError(400, 'Tháng không chính xác!')
+    } catch (error) {
+        return error;
+    }
+}
+export const getNumOrderByDateByStoreService = async (date, month, year, store_id) =>{
+    try {
+        const orders = await db.order.findAll({
+            where: {
+                [Op.and]: [
+                    Sequelize.literal(`
+                        DAY(createdAt) = ${date} AND
+                        MONTH(createdAt) = ${month} AND
+                        YEAR(createdAt) = ${year}
+                    `),
+                    { store_id},
+                ]
+            }
+        });
+        return orders.length;
+    } catch (error) {
+        return error;
+    }
+}
+export const getNumOrderBy7DateService = async (store_id) =>{
+    try {
+        const today = new Date();
+        const daysOfWeek = [];
+        for(let i = 0; i < 7; i++){
+            const day = new Date(today);
+            day.setDate(today.getDate() - i);
+            daysOfWeek.push(day);
+        }
+        const dateTitle = [];
+        const data = [];
+        for(const date of daysOfWeek){
+            const dateItem = await getNumOrderByDateByStoreService(date.getDate(), date.getMonth() + 1, date.getFullYear(), store_id)
+            data.push(dateItem);
+            dateTitle.push(`${date.getDate()}-${date.getMonth()}`);
+        }
+        return {
+            data,
+            dateTitle
+        }
+    } catch (error) {
+        return error;
+    }
+}
+export const revenueByAdminService = async(month) =>{
+    try {
+        const revenuaAdmin = await db.order.sum('priceAdmi',{
+            where : {
+                [Op.and] : [
+                    {isPayment : 1},
+                    Sequelize.literal(`MONTH(createdAt) = ${month}`),
+                    { priceAdmi: { [Op.not]: null } } 
+                ]
+            }
+        })
+        return {
+            doanhthu : revenuaAdmin
+        };
+    } catch (error) {
+        return error;
+    }
+}
+export const revenuaAdminByDateSerVice = async(date) =>{
+    try {
+        if(date instanceof Date){
+            console.log(date)
+            console.log('ccccc')
+            const revenuaAdmin = await db.order.sum('priceAdmi',{
+                where : {
+                    [Op.and] : [
+                        {isPayment : 1},
+                        Sequelize.literal(`
+                        DAY(createdAt) = ${date.getDate()} AND
+                        MONTH(createdAt) = ${date.getMonth()+1} AND
+                        YEAR(createdAt) = ${date.getFullYear()}
+                        `),
+                        { priceAdmi: { [Op.not]: null } } 
+                    ]
+                }
+            })
+            return {
+                doanhthu : revenuaAdmin
+            };
+        }
+        console.log(date)
+        return createError(400, 'Dữ liệu không hợp lệ!')
+    } catch (error) {
+        return error;
     }
 }
 

@@ -1,7 +1,7 @@
 import db from "../Entitys/index.js";
-import { Sequelize } from "sequelize";
+import { Sequelize, where } from "sequelize";
 import createError from "../../ultis/createError.js";
-import Op from "sequelize";
+import {Op} from "sequelize";
 export const createCartService = async(quantity, BookId, customerId) =>{
     try {
         const book = await db.book.findByPk(BookId)
@@ -41,7 +41,35 @@ export const createCartService = async(quantity, BookId, customerId) =>{
         return error;
     }
 }
-
+export const updateCartService = async(id, idCustomer, quantity) =>{
+    try {
+        console.log(id)
+        const cart = await db.cart.findOne({
+            where : {
+                [Op.and] : [
+                    {id : id},
+                    {customerId : idCustomer}
+                ]
+            }
+        });
+        if(!cart) return createError(400, 'Không tìm thấy giỏ hàng !');
+        const updateCart = await db.cart.update({
+            quantity : quantity
+        },
+        {
+            where : {
+                id
+            }
+        })
+        console.log(updateCart)
+        if(updateCart[0] == 0) return createError(400, 'Update không thành công!')
+        return {
+            message : 'Update thành công!'
+        }
+    } catch (error) {
+        return error;
+    }
+}
 export const deleteCartService = async(id, customerId) =>{
     try {
         const cart = await db.cart.findByPk(id);
@@ -61,9 +89,41 @@ export const deleteCartService = async(id, customerId) =>{
 
 export const getCartByIdService = async(id, customerId) =>{
     try {
-        const cart = await db.cart.findByPk(id);
+        console.log(customerId)
+        const cart = await db.cart.findOne({
+            where : {
+                [Op.and] : [
+                    {id},
+                    {customerId}
+                ]
+            },
+            include : [
+                {
+                    model : db.book,
+                    include : [
+                        {
+                            model : db.category,
+                        },
+                        {
+                            model : db.author
+                        },
+                        {
+                            model : db.image
+                        },
+                        {
+                            model : db.user,
+                            include : [
+                                {
+                                    model : db.detailStore
+                                }
+                            ]
+                        }
+                    ] 
+                }
+            ]
+        });
+        console.log(customerId)
         if(!cart) return createError(400, 'Không tìm thấy giỏ hàng!')
-        if(cart.customerId !== customerId) return createError(400, 'Bạn không thể xem giỏ hầng người khác')
         return cart;
     } catch (error) {
         return error;
@@ -74,7 +134,31 @@ export const getCartsService = async(customer_id) =>{
         const carts = await db.cart.findAll({
             where:{
                 customerId : customer_id
-            }
+            },
+            include : [
+                {
+                    model : db.book,
+                    include : [
+                        {
+                            model : db.category,
+                        },
+                        {
+                            model : db.author
+                        },
+                        {
+                            model : db.image
+                        },
+                        {
+                            model : db.user,
+                            include : [
+                                {
+                                    model : db.detailStore
+                                }
+                            ]
+                        }
+                    ] 
+                }
+            ]
         })
         if(carts.length == 0) return createError(400, 'Không có sản phẩm !')
         return carts;

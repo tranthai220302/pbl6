@@ -5,10 +5,10 @@ const DetailShipper = (sequelize) => sequelize.define('DetailShipper', {
         primaryKey: true,
         autoIncrement: true
     },
-    drivingLicence:{
+    drivingLience:{
         type: DataTypes.STRING,
     },
-    numberPlate : {
+    numMobike : {
         type: DataTypes.STRING,
     }
 
