@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styles from './Collab.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faCircleCheck, faTableList, faTicket, faLink, faKey} from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 export default function Collab() {
     const [isStoreFormVisible, setStoreFormVisibility] = useState(false);
@@ -118,7 +119,9 @@ export default function Collab() {
                         <input type="email" name="" id="" />
                         <label htmlFor="editName">Số điện thoại: </label>
                         <input type="text" id="" name="" />
-                        <button onClick={handleRegistration}>Đăng ký</button>
+                        <button onClick={handleRegistration}>
+                            <Link to="/store/home" target='_blank'>Đăng ký</Link>
+                        </button>
                     </div>
                 </div>
             )}

@@ -24,11 +24,6 @@ export default function Header({setOpenChat}) {
     setLoggedIn(false);
   };
 
-  const handleClick = () => {
-    // Gọi đến hàm reload để làm mới trang
-    window.location.reload();
-  };
-
   return (
     <div className={styles.container}>
       {user ? (
