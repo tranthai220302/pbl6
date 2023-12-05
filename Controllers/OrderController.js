@@ -19,7 +19,7 @@ export const createOrder = async (req, res, next) =>{
         if(req.idRole !== 1) return next(createError(400, 'Bạn không có quyền này!'))
         const quantity = req.body.quantity;
         const isPayment = req.body.isPayment
-        const order = await createOrderService(req.params.idBook, req.id, quantity, isPayment);
+        const order = await createOrderService(req.params.idBook, req.id, quantity, isPayment, req.body.addressCus);
         if(order instanceof Error) return next(order)
         res.status(200).send(order);
     } catch (error) {

@@ -20,6 +20,12 @@ const Order = (sequelize) => sequelize.define('Order', {
     },
     priceAdmi : {
         type : DataTypes.INTEGER
+    },
+    addressCustomer : {
+        type : DataTypes.STRING
+    },
+    addressStore : {
+        type: DataTypes.STRING
     }
 })
 

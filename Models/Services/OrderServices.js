@@ -10,14 +10,15 @@ import Sequelize from "sequelize";
 export const priceVoucherStore = async()=>{
 
 }
-export const createOrderService = async(BookId, customer_id, quantity, isPayment) =>{
+export const createOrderService = async(BookId, customer_id, quantity, isPayment, addressCustomer) =>{
     try {
+        if(!addressCustomer) return createError(400, 'Vui lòng nhập địa chỉ!')
         const book = await getBookByIdService(BookId)
         console.log(quantity)
         const store_id = book.store_id;
         const customer = await getUserByIdService(customer_id)
         const store = await getUserByIdService(store_id)
-        const order = await db.order.create({
+        const order = await db.order.create({   
             total_price : quantity*(book.price),
             customer_id,
             BookId,
@@ -25,14 +26,16 @@ export const createOrderService = async(BookId, customer_id, quantity, isPayment
             isPayment,
             StateId: 1,
             quantity : quantity,
-            priceStore : quantity*(book.price)
+            priceStore : quantity*(book.price),
+            addressCustomer,
+            addressStore : store.address
         })
         if(!order) return createError(400, 'Order không thành công!')
         var currentTotal = order.total_price;
         const priceVS = await priceVoucherStoreByCustomer(customer_id, 1, store_id, currentTotal);
         const priceFS = await priceVoucherStoreByCustomer(customer_id, 2, store_id, currentTotal);
         console.log(priceVS)
-        const kc = await distance(customer.address, store.address)
+        const kc = await distance(order.addressCustomer, store.address)
         if(kc instanceof Error) return kc;
         const priceShip = parseInt((kc/1000)*5000);
         if(priceShip <= priceFS.price_free) priceFS.price_free = priceShip;

@@ -88,7 +88,8 @@ export const getBooksService = async() =>{
                     model : db.user,
                     include : [
                         {
-                            model : db.detailStore
+                            model : db.storeRequest,
+                            as : "DetailStore"
                         }
                     ]
                 }
@@ -117,7 +118,8 @@ export const getBookByQueryService = async(filter, category, author) =>{
                     model : db.user,
                     include : [
                         {
-                            model : db.detailStore
+                            model : db.storeRequest,
+                            as : "DetailStore"
                         }
                     ]
                 }
@@ -155,7 +157,8 @@ export const getBookByIdService = async(id) =>{
                     model : db.user,
                     include : [
                         {
-                            model : db.detailStore
+                            model : db.storeRequest,
+                            as : "DetailStore"
                         }
                     ]
                 }
@@ -194,7 +197,8 @@ export const getBookByStoreService = async(id, name)=>{
                     model : db.user,
                     include : [
                         {
-                            model : db.detailStore
+                            model : db.storeRequest,
+                            as : "DetailStore"
                         }
                     ]
                 }
