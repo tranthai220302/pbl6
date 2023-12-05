@@ -206,3 +206,56 @@ export const drawPrecentSatiscalService = async() =>{
     }
 }
 
+export const update_state_oderService = async(id) =>{
+    try {
+        
+        const order = await db.order.findOne({ where: { id: id } });
+
+        if (!order || order.StateId !== 4) {
+            return createError(400, 'Đơn hàng chưa được giao cho shipper!');
+        }
+
+        const update_order = await db.order.update(
+            {StateId: 5},
+            {where: {id: id}}
+        )
+
+        if (!update_order) {
+            return createError(400, 'Không thể cập nhật trạng thái đơn hàng!');
+        }
+
+        return {
+            message: 'Đơn hàng đã giao thành công!',
+            update_order,
+        }    
+    } catch (error) {
+        return error;   
+    }
+}
+
+export const update_state_oder2Service = async(id) =>{
+    try {
+        // Kiểm tra trạng thái của đơn hàng trước khi tạo shipment
+        const order = await db.order.findOne({ where: { id: id } });
+
+        if (!order || order.state !== 4) {
+            return createError(400, 'Đơn hàng chưa được giao cho shipper!');
+        }
+
+        const update_order = await db.order.update(
+            {StateId: 6},
+            {where: {id: id}}
+        )
+
+        if (!update_order) {
+            return createError(400, 'Không thể cập nhật trạng thái đơn hàng!');
+        }
+
+        return {
+            message: 'Giao hàng không thành công!',
+            update_order,
+        }    
+    } catch (error) {
+        return error;   
+    }
+}

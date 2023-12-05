@@ -19,6 +19,7 @@ import VoucherItem from "./VoucherItem.js";
 import Customer_VoucherItem from "./Customer_VoucherItem.js";
 import StoreRequest from "./StoreRequest.js";
 import ReportStore from "./ReportStore.js";
+import DetailShipper from "./DetailShipper.js";
 const sequelize = new Sequelize(
     configdb.DB,
     configdb.USER,
@@ -40,7 +41,7 @@ const sequelize = new Sequelize(
 const db = {}
 db.sequelize = sequelize
 db.Sequelize = Sequelize
-db
+// db
 db.customer_voucherItem = Customer_VoucherItem(sequelize)
 db.admin = Admin(sequelize)
 db.book = Book(sequelize)
@@ -59,7 +60,12 @@ db.review = Review(sequelize)
 db.voucher = Voucher(sequelize)
 db.voucherItem = VoucherItem(sequelize)
 db.storeRequest = StoreRequest(sequelize)
-db.reportStore = ReportStore(sequelize);
+db.reportStore = ReportStore(sequelize)
+db.detailShipper = DetailShipper(sequelize); 
+
+/*DetailShipper vs Shipper*/
+db.user.hasOne(db.detailShipper, {foreignKey : 'shipper_id'});
+db.detailShipper.belongsTo(db.user, {foreignKey: 'shipper_id'})
 
 /*reportStore vs customer*/
 db.user.hasMany(db.reportStore, {foreignKey : 'customer_id', as : 'reportByCustomer'});

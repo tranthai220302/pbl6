@@ -192,3 +192,28 @@ export const getRequestStoresService = async()=>{
         return error;
     }
 }
+
+export const ConfirmShipperService = async(shipper_id) =>{
+    try {
+        const check = await db.user.findOne({
+            where : {
+                [Op.and] : [
+                    {id : shipper_id},
+                    {RoleId : 1}
+                ]
+            }
+        })
+        if(!check) return createError(400, 'Không tìm thấy người dùng yêu cầu làm shipper')
+        
+        const updateShipper = await db.user.update(
+            {RoleId : 2},
+            {where : {id : shipper_id}}
+        )
+        if(updateShipper[0] == 0) return createError(400, 'Xác nhận không thành công!')
+        return{
+            messgae: 'Xác nhận thành công!'
+        }
+    } catch (error) {
+        return error;
+    }
+}
