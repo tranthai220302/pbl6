@@ -100,6 +100,25 @@ export const getCartByIdService = async(id, customerId) =>{
             include : [
                 {
                     model : db.book,
+                    include : [
+                        {
+                            model : db.category,
+                        },
+                        {
+                            model : db.author
+                        },
+                        {
+                            model : db.image
+                        },
+                        {
+                            model : db.user,
+                            include : [
+                                {
+                                    model : db.detailStore
+                                }
+                            ]
+                        }
+                    ] 
                 }
             ]
         });
@@ -118,7 +137,26 @@ export const getCartsService = async(customer_id) =>{
             },
             include : [
                 {
-                    model : db.book
+                    model : db.book,
+                    include : [
+                        {
+                            model : db.category,
+                        },
+                        {
+                            model : db.author
+                        },
+                        {
+                            model : db.image
+                        },
+                        {
+                            model : db.user,
+                            include : [
+                                {
+                                    model : db.detailStore
+                                }
+                            ]
+                        }
+                    ] 
                 }
             ]
         })

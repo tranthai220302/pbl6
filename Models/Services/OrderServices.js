@@ -58,7 +58,26 @@ export const getOrdersByCustomerService = async(customer_id) =>{
         const orders = await db.order.findAll({
             where : {
                 customer_id
-            }
+            },
+            include : [
+                {
+                    model : db.user,
+                    as : 'customer',
+                    attributes: { exclude: ['password'] },
+                },
+                {
+                    model : db.user,
+                    as : 'store',
+                    attributes: { exclude: ['password'] },
+                },
+                {
+                    model : db.state,
+                    attributes: ['status'],
+                },
+                {
+                    model : db.book,
+                },
+            ]
         })
         if(orders.length == 0) return createError(400, 'Bạn không có đơn hàng!')
         return orders;
@@ -78,12 +97,12 @@ export const getOrderByStoreService = async(store_id) =>{
                 {
                     model : db.user,
                     as : 'customer',
-                    attributes: ['firstName', 'lastName'],
+                    attributes: { exclude: ['password'] },
                 },
                 {
                     model : db.user,
                     as : 'store',
-                    attributes: ['firstName', 'lastName'],
+                    attributes: { exclude: ['password'] },
                 },
                 {
                     model : db.state,
@@ -91,7 +110,6 @@ export const getOrderByStoreService = async(store_id) =>{
                 },
                 {
                     model : db.book,
-                    attributes: ['name'],
                 },
             ]
         })

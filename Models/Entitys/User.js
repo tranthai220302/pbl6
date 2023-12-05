@@ -36,7 +36,7 @@ const User = (sequelize) => sequelize.define('User', {
       type: DataTypes.INTEGER
     },
     createdAt: {
-      type: DataTypes.DATEONLY, //
+      type: DataTypes.DATEONLY, 
       allowNull: false
     }
     
