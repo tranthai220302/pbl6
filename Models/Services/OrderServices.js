@@ -37,7 +37,7 @@ export const createOrderService = async(BookId, customer_id, quantity, isPayment
         console.log(priceVS)
         const kc = await distance(order.addressCustomer, store.address)
         if(kc instanceof Error) return kc;
-        const priceShip = parseInt((kc/1000)*5000);
+        const priceShip = parseInt((kc/1000)*2000);
         if(priceShip <= priceFS.price_free) priceFS.price_free = priceShip;
         order.total_price = currentTotal + priceShip - (priceVS.price_free + priceFS.price_free);
         order.priceStore = currentTotal - priceVS.price_free;
