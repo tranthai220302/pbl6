@@ -5,7 +5,7 @@
     align-items: center;
 }
 .modal{
-    background: transparent;
+    background: rgba(0, 0, 0, 0.117);
 }
 .card{
     display: flex;

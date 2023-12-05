@@ -1,0 +1,89 @@
+.container{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    gap: 10px;
+}
+
+.product{
+    background-color: #DFF4F6;
+    width: 40%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 5px;
+}
+.garph{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 60%;
+    border-radius: 5px;
+}
+.img_loading{
+    height: 50px;
+    display: flex;
+    margin: auto;
+    margin-top: 50px;
+}
+.up{
+    background-color: #DFF4F6;
+    height: 55%;
+    padding: 5px;
+    border-radius: 5px;
+}
+.down{
+    height: 45%;
+    display: flex;
+    gap: 5px;
+    border-radius: 5px;
+}
+.left{
+    width: 50%;
+    background-color: #DFF4F6;
+    border-radius: 5px;
+}
+.right{
+    width: 50%;
+    background-color: #DFF4F6;
+    border-radius: 5px;
+}
+.search{
+    font-size: 15px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    padding: 2px 3px;
+}
+.table1{
+    
+}
+.title{
+    font-size: 22px;
+    font-weight: 600;
+    border-bottom: 1px solid gray;
+}
+
+
+.table1{
+    width: 100%;
+}
+.body{
+    width: 100%;
+}
+tr{
+    text-align: center;
+}
+table{
+    width: 100%;
+}
+th{
+    text-align: center;
+}
+thead{
+    position: sticky;
+    top: -2px;
+    background-color: gray;
+    box-shadow: 0px 3px 8px 2px black;  
+}

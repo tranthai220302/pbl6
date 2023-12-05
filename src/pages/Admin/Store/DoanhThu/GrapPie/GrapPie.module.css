@@ -1,0 +1,19 @@
+.img_loading{
+    height: 50px;
+    display: flex;
+    margin: auto;
+    margin-top: 50px;
+}
+.chart{
+    padding: 5px;
+}
+.name_draw{
+    margin-bottom: 20px;
+    font-size: 15px;
+    font-weight: 500;
+    border-bottom: 1px solid gray;
+    padding: 0 0 2px 0;
+}
+.cc{
+
+}

@@ -7,7 +7,13 @@ import { faTrash, faEnvelope, faMobilePhone, faWarehouse, faPenToSquare, faCircl
 export default function ModalCustomer({customer, show, handleClose, product}) {
   return (
     <>
-    <Modal show={show} onHide={handleClose} className={styles.modal}>
+    <Modal 
+      show={show} 
+      onHide={handleClose} 
+      className={styles.modal}
+      backdrop={false}
+
+    >
         <Modal.Header closeButton>
           <Modal.Title>Thông tin cá nhân</Modal.Title>
         </Modal.Header>

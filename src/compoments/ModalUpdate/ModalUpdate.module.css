@@ -7,6 +7,9 @@
 .card{
     display: flex;
 }
+.cc{
+    background-color: rgba(0, 0, 0, 0.125);
+}
 .avatar_card{
     flex: 1;
     border-right: 1px solid black;

@@ -151,7 +151,10 @@ export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, ge
   }
   return (
     <>
-    <Modal show={showUpdate} onHide={handleCloseUpdate}>
+    <Modal show={showUpdate} onHide={handleCloseUpdate}
+            backdrop={false}
+            className={styles.cc}
+    >
         <Modal.Header closeButton>
           <Modal.Title>Chỉnh sửa thông tin cá nhân</Modal.Title>
         </Modal.Header>

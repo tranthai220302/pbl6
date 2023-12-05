@@ -1,0 +1,79 @@
+.card{
+  display: flex;
+  height: 100%;
+  background-color: #DFF4F6;
+}
+.body{
+  background-color: #DFF4F6;
+  padding: 0;
+}
+.store{
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.avatart{
+  background-color: red;
+  width: 640px;
+  height: 427px;
+}
+.img_store{
+  width: 100%;
+}
+.nameStore{
+  font-size: 26px;
+  font-weight: 600;
+  border-bottom: 1px solid gray;
+  margin-top: 10px;
+}
+.descStore{
+  margin-top: 10px;
+  width: 100%;
+  font-size: 15px;
+  font-style: italic;
+  padding: 0 20px;
+}
+.user{
+  flex: 1;
+  border-right: 1px solid gray;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center ;
+}
+.title{
+  font-size: 20px;
+  font-weight: 600;
+  width: 100%;
+  border-bottom: 1px solid gray;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  height: 40px;
+  color: gray;
+}
+.img_card{
+  border-radius: 50%;
+  height: 100px;
+}
+.infor_item{
+  display: flex;
+  align-items: center;
+  padding: 3px 6px;
+  gap: 20px;
+}
+.name_item{
+  flex: 4;
+}
+.infor_body{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.card_icon{
+  color:  #0cd7ea;
+  flex: 1;
+}

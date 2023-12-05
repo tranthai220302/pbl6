@@ -180,7 +180,7 @@ function Example({showExmaple, showCloseExample, id, isOrder, isVoucher}) {
           {!isOrder && !isVoucher && (
             <div className={styles.table1}>
             <table>
-            <thead>
+            <thead className={styles.thead}>
               <tr>
                 <th>Ảnh</th>
                 <th>Name</th>
