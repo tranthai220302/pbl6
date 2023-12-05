@@ -1,0 +1,93 @@
+.Purchase {
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 4px;
+    width: 72%;
+    margin: 20px 0;
+    height: fit-content;
+}
+
+.Purchase_Title {
+    background-color: #BEDDDD;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px 0 5px 20px;
+    vertical-align: middle;
+    border-radius: 4px 4px 0 0;
+}
+
+.Purchase_Sub_Title {
+    margin: 0px 20px;
+    border-bottom: 1px solid rgba(78, 165, 139, 0.34);
+}
+
+.Purchase_Sub_Title ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    margin: 0;
+}
+
+.Purchase_Sub_Title ul li:hover {
+    color: green;
+    cursor: pointer;
+}
+
+.Purchase_Product {
+    padding: 20px;
+}
+
+.Purchase_Product_Item {
+    
+}
+
+.Purchase_Product_Item td {
+    vertical-align: middle;
+}
+
+.Purchase_Product_Item img {
+    height: 100px;
+    width: 100px;
+}
+
+.Store_name {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.Store button {
+    padding: 2px 6px;
+    font-size: small;
+    margin-left: 10px;
+}
+
+.Store button span{
+    text-transform: none;
+}
+
+.Product_name {
+    font-size: 20px;
+}
+
+.Purchase_Product_Item {
+    border-bottom: 1px dashed #4EA58B;
+}
+
+.Purchase_Product_Item .old_price {
+    color: gray;
+    text-decoration: line-through;
+    font-weight: 300;
+    font-size: 12px;
+}
+
+.Purchase_Product_Item .new_price {
+    font-weight: 500;
+    color: #4EA58B;
+}
+
+.Purchase_Product_Item .status {
+    text-transform: uppercase;
+    font-weight: 500;
+    color: #4EA58B;
+}

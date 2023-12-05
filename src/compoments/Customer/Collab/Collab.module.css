@@ -1,0 +1,124 @@
+.Collab {
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 4px;
+    width: 72%;
+    margin: 20px 0;
+    height: fit-content;
+}
+
+.Collab_Title {
+    background-color: #BEDDDD;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px 0 5px 20px;
+    vertical-align: middle;
+    border-radius: 4px 4px 0 0;
+}
+
+.Collab_Content tr span{
+    padding-left: 20px;
+}
+
+.Collab_Content .btn {
+    display: flex;
+    justify-content: center;
+}
+
+.Collab_Content .btn button {
+    font-weight: 500;
+    margin: 10px;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2; /* Lớn hơn so với các phần tử khác */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+ .registerStoreForm {
+    background-color: white;
+    padding: 20px;
+    z-index: 3; /* Lớn hơn so với overlay */
+    display: grid;
+    width: 40%;
+  }
+
+ .registerStoreForm h3 {
+    text-align: center;
+    color: rgba(78, 165, 139, 0.863);
+  }
+  
+ .registerStoreForm input {
+    margin-bottom: 20px;
+  }
+
+ .registerStoreForm button {
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .btn_cancel {
+    border: 1px solid rgba(78, 165, 139, 0.863) !important;
+    background-color: rgba(78, 165, 139, 0.137) !important;
+    color: rgba(78, 165, 139, 0.863) !important;
+    margin-top: 20px;
+  }
+
+  .btnClose_space {
+    display: flex;
+    justify-content: end;
+  }
+  
+  .btnClose_icon {
+    font-size: 30px;
+    cursor: pointer;
+    color: rgba(78, 165, 139, 0.863);
+  }
+
+  .btnClose_icon:hover {
+    color: green;
+  }
+
+  .success_message {
+    display: flex;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #4caf50;
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    z-index: 9999; /* Đảm bảo thông báo nổi lên trên tất cả các phần tử khác */
+    align-items: center;
+    animation: slideIn 1s ease-out forwards, slideOut 1s ease-in 2s forwards;
+  }
+
+  @keyframes slideIn {
+    from {
+      right: -100%;
+    }
+    to {
+      right: 10px;
+    }
+  }
+  
+  @keyframes slideOut {
+    from {
+      right: 10px;
+    }
+    to {
+      right: -100%;
+    }
+  }
+
+  .success_message .message {
+    margin: 0 0 0 10px;
+  }
