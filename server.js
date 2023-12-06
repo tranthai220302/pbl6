@@ -24,11 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(express.json());
 app.use(cookieParser())
-const corsConfigurations = [
-  { origin: 'http://localhost:3000', credentials: true },
-  { origin: 'https://www.harumi.website', credentials: true },
-];
-app.use(cors(corsConfigurations));
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 const port = process.env.PORT
 //Connect database
 try {
