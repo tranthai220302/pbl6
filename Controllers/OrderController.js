@@ -156,11 +156,11 @@ export const createPaymentUrl = async(req, res, next) =>{
         let tmnCode =process.env.vnp_TmnCode
         let secretKey =process.env.vnp_HashSecret
         let vnpUrl =process.env.vnp_Url
-        let returnUrl = "http://localhost:8080/order"
+        let returnUrl = "http://localhost:8080/api/order/vnpay_return"
         let orderId = moment(date).format('DDHHmmss');
         let amount = req.body.amount;
         console.log(amount)
-        let bankCode =  "VNPAYQR";  
+        let bankCode =  "";  
         
         let locale = 'vn';
         if(locale === null || locale === ''){
@@ -211,9 +211,9 @@ function sortObject(obj) {
     }
     return sorted;
 }
+
 export const vpnayReturn = async(req, res, next) =>{
     try {
-        console.log('cc')
         let vnp_Params = req.query;
     
         let secureHash = vnp_Params['vnp_SecureHash'];
@@ -224,22 +224,17 @@ export const vpnayReturn = async(req, res, next) =>{
         vnp_Params = sortObject(vnp_Params);
         let tmnCode =process.env.vnp_TmnCode
         let secretKey =process.env.vnp_HashSecret
-    
-        let querystring = require('qs');
-        let signData = querystring.stringify(vnp_Params, { encode: false });
-        let crypto = require("crypto");     
+        let signData = querystring.stringify(vnp_Params, { encode: false });   
         let hmac = crypto.createHmac("sha512", secretKey);
         let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");     
     
-        if(secureHash === signed){
-            //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-    
-            res.render('success', {code: vnp_Params['vnp_ResponseCode']})
+        if(secureHash === signed){  
+            res.status(200).send('success')
         } else{
-            res.render('success', {code: '97'})
+            res.status(200).send('nosuccess')
         }
     } catch (error) {
-        return error;
+        next(error);
     }
 }
 
