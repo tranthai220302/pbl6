@@ -112,16 +112,20 @@ export const BookVoucherItemService = async(voucheritem_id, user_id) =>{
         return error;
     }
 }
+export const getVoucherItemCustomer = async(req, res, next) =>
+{
+    try {
+        if(req.idRole !== 1) return createError(400, 'Bạn không có quyền này!');
+        const customer_id = req.params.id;
+    } catch (error) {
+        
+    }
+}
 export const getVoucherItemByCustomer = async(customer_id, voucher_id, store_id, currentTotal) =>{
     try {
         const currentDate = new Date();
         const list_voucher = await db.voucherItem.findAll({
             include: [
-              {
-                model: db.user,
-                attributes: ['id'],
-                where: { id: customer_id },
-              },
               {
                 model: db.voucher,
                 attributes: ['type'],

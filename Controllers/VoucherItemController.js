@@ -101,10 +101,10 @@ export const BookVoucherItem = async(req, res, next) =>{
 }
 export const getVoucher_FreeShip = async(req, res, next) =>{
     try {
-        if(req.idRole !== 2 && req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'))
         const currentDate = new Date();
         const name = req.query.name;
         const store_id = req.params.id;
+        const isExpire = req.query.isExpire;
         const filter = {
             ...(req.query.name && {
                 name : {
@@ -112,7 +112,12 @@ export const getVoucher_FreeShip = async(req, res, next) =>{
                 }
             }),
             store_id,
-            VoucherId : 2
+            VoucherId : 2,
+            ...(isExpire && {
+                expiryDate : {
+                    [Op.lt] : currentDate
+                }
+            })
         }
         const vouchers = await getVoucher_FreeShipService(filter);
         if(vouchers instanceof Error) return next(vouchers);
