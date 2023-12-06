@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(cookieParser())
 const corsConfigurations = [
   { origin: 'http://localhost:3000', credentials: true },
-  { origin: 'https://www.harumi.website/', credentials: true },
+  { origin: 'https://www.harumi.website', credentials: true },
 ];
 app.use(cors(corsConfigurations));
 const port = process.env.PORT
