@@ -41,6 +41,7 @@ export const getUsersByQueryService = async(filter, idRole) =>{
           if (idRole == 2) {
             usersInclude.push({
               model: db.storeRequest,
+              as : 'DetailStore'
             });
           }
           

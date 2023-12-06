@@ -275,7 +275,7 @@ export const getBookIsOrderByStoreService = async(store_id, isHigh) => {
         })
         if(isHigh == 1){
             const filteredOb = Object.fromEntries(
-                Object.entries(ob).filter(([key, value]) => value > 5)
+                Object.entries(ob).filter(([key, value]) => value > 3)
             );
             const nameBook = Object.keys(filteredOb);
             const data = Object.values(filteredOb);

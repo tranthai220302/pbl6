@@ -158,13 +158,14 @@ export const satisticalByStoreService = async(store_id, month) =>{
         return error;
     }
 }
-export const totalPriceStoreService = async(store_id) =>{
+export const totalPriceStoreService = async(store_id, month) =>{
     try {
         const satistical = await db.order.findAll({
             where : {
                 [Op.and] : [
                     {store_id},
                     {isPayment : 1},
+                    Sequelize.literal(`MONTH(createdAt) = ${month}`),
                 ]
             }
         })
@@ -215,14 +216,12 @@ export const drawPrecentSatiscalService = async(month) =>{
         const category = []
         const store = await db.user.findAll({
             where : {
-                [Op.and] : [
-                    {RoleId : 2},
-                    Sequelize.literal(`MONTH(createdAt) = ${month}`),
-                ]
+                RoleId : 2
             },
         })
+        console.log(store)
         for (const item of store) {
-            const satistical = await totalPriceStoreService(item.id);
+            const satistical = await totalPriceStoreService(item.id, month);
             if(satistical instanceof Error) return satistical;
             satisticalStore.push(satistical);
             category.push(item.lastName + item.firstName)
