@@ -72,6 +72,12 @@ export const getOrdersByCustomerService = async(customer_id) =>{
                     model : db.user,
                     as : 'store',
                     attributes: { exclude: ['password'] },
+                    include : [
+                        {
+                            model : db.storeRequest,
+                            as : 'DetailStore'
+                        }
+                    ]
                 },
                 {
                     model : db.state,
@@ -106,6 +112,12 @@ export const getOrderByStoreService = async(store_id) =>{
                     model : db.user,
                     as : 'store',
                     attributes: { exclude: ['password'] },
+                    include : [
+                        {
+                            model : db.storeRequest,
+                            as : 'DetailStore'
+                        }
+                    ]
                 },
                 {
                     model : db.state,
