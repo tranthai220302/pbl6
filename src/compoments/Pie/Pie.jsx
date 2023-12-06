@@ -31,7 +31,7 @@ const Pie= ({admin, month}) => {
       newRequest.get(`/order/draw/${month}`,{
       }).then((res)=>{
         setData(res.data.store  )
-        console.log(res.data)
+        console.log(res.data) 
         setCategory(res.data.category)
         setIsLoading(false)
         setError(false)

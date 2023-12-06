@@ -78,7 +78,7 @@ export default function ReportPage() {
                 <tr key={customer.id}>
                 <td>{customer.storeByReport.firstName} {customer.storeByReport.lastName}</td>
                 <td>
-                    <button>
+                    <button>  
                     <FontAwesomeIcon icon={faCheck} className={styles.user_icon} onClick={()=>handelReport(customer.store_id)} />
                     </button>
                 </td>

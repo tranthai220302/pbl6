@@ -156,7 +156,7 @@ function AddBook({id,  getData}) {
   }, [])
   return (
     <>
-      <button onClick={handleShow} className={styles.btn}>Thêm Voucher</button>
+      <button onClick={handleShow} className={styles.btn}>Thêm Sách</button>
       <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>Thông tin Voucher FreeShip</Modal.Title>
