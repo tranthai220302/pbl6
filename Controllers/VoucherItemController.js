@@ -2,10 +2,11 @@ import { isDate } from "date-fns";
 import { 
     createVoucherItemService, 
     deleteVoucherItemService, 
-    getVoucherItemByStoreService, 
+    getVoucherItemByCustomerService, 
     updateVoucherItemService,
     BookVoucherItemService, 
     getVoucher_FreeShipService,
+    getVoucherItemCustomer,
     } 
 from "../Models/Services/VoucherItemService.js";
 import createError from "../ultis/createError.js";
@@ -33,20 +34,20 @@ export const createVoucherItem = async (req, res, next) =>{
     }
 }
 
-export const getVoucherItemByStore = async(req, res, next) =>{
+export const getVoucherItemByCustomer= async(req, res, next) =>{
     try {
-        const name = req.query.name;
-        const store_id = req.params.id;
+        const isExpire = req.query.isExpire;
         const filter = {
-            ...(req.query.name && {
-                name : {
-                    [Op.like] : `%${name}%`
+           ...(req.query.type && {
+            VoucherId : req.query.type == "freeship" ? 2 : req.query.type == "store" ? 1 : 0,
+           }),
+            ...(isExpire && {
+                expiryDate : {
+                    [Op.gte] : currentDate
                 }
-            }),
-            store_id,
-            VoucherId : 1
+            })
         }
-        const voucherItems = await getVoucherItemByStoreService(filter);
+        const voucherItems = await getVoucherItemCustomer(filter,req.id)
         if(voucherItems instanceof Error) return next(voucherItems);
         res.status(200).send(voucherItems);
     } catch (error) {
@@ -112,13 +113,14 @@ export const getVoucher_FreeShip = async(req, res, next) =>{
                 }
             }),
             store_id,
-            VoucherId : 2,
+            VoucherId : req.query.type == "freeship" ? 2 : req.query.type == "store" ? 1 : 0,
             ...(isExpire && {
                 expiryDate : {
-                    [Op.lt] : currentDate
+                    [Op.gte] : currentDate
                 }
             })
         }
+        console.log(filter)
         const vouchers = await getVoucher_FreeShipService(filter);
         if(vouchers instanceof Error) return next(vouchers);
         return res.status(200).send(vouchers);

@@ -8,6 +8,9 @@ const Category = (sequelize) => sequelize.define('Category', {
     name:{
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    img : {
+        type : DataTypes.STRING
     }
 })
 

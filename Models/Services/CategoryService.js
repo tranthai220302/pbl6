@@ -1,6 +1,6 @@
 import createError from "../../ultis/createError.js"
 import db from "../Entitys/index.js"
-export const createCategoryService = async(name)=>{
+export const createCategoryService = async(name, img)=>{
     try {
         const checkName = await db.category.findOne({
             where : {
@@ -9,7 +9,7 @@ export const createCategoryService = async(name)=>{
         })
         console.log(checkName)
         if(checkName) return createError(400, 'Danh mục này đã tồn tại!')
-        const category = await db.category.create({name})
+        const category = await db.category.create({name, img})
         if(!category) return createError(400, 'Thêm danh mục khong thành công!')
         return category;
     } catch (error) {

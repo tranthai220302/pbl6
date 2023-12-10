@@ -2,6 +2,7 @@ import express from 'express'
 import { 
     createBook, 
     deleteBook, 
+    getBookBoughtHigh, 
     getBookById, 
     getBookByOrderHigh, 
     getBookByQuery, 
@@ -22,4 +23,5 @@ routerBook.get('/item/:id', getBookById)
 routerBook.get('/store/:id', verifyjson, getBookByStore)
 routerBook.get('/bookHigh', verifyjson, getBookByOrderHigh)
 routerBook.get('/bookIsOrder/:id/:isHigh', verifyjson, getBookIsOrderByStore)
+routerBook.get('/orderHigh', getBookBoughtHigh)
 export default routerBook;

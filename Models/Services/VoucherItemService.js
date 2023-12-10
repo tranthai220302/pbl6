@@ -1,3 +1,4 @@
+
 import createError from "../../ultis/createError.js";
 import db from "../Entitys/index.js";
 import { Op, where } from "sequelize";
@@ -17,14 +18,14 @@ export const createVoucherItemService = async (data) =>{
     }
 }
 
-export const getVoucherItemByStoreService = async(filter) =>{
+export const getVoucherItemByCustomerService = async(filter) =>{
     try {
         const voucherItems = await db.voucherItem.findAll({
             where: {
                 [Op.and] : filter
             },
             include : {
-                model : db.voucher
+                
             }
         })
         if(voucherItems.length == 0) return createError(400, 'Không có voucher!');
@@ -33,6 +34,7 @@ export const getVoucherItemByStoreService = async(filter) =>{
         return error;
     }
 }
+
 export const updateVoucherItemService = async(data, id) =>{
     try {
         console.log(data)
@@ -106,21 +108,39 @@ export const BookVoucherItemService = async(voucheritem_id, user_id) =>{
         await voucherItem.decrement('quantity');
         return {
             status: true,
-            message: 'Sưu tầm thành công!'
+            message: 'Sưu tầm thành công!',
+            voucherItem
         };
     } catch (error) {
         return error;
     }
 }
-export const getVoucherItemCustomer = async(req, res, next) =>
-{
+export const getVoucherItemCustomer = async (filter, user_id) => {
     try {
-        if(req.idRole !== 1) return createError(400, 'Bạn không có quyền này!');
-        const customer_id = req.params.id;
+        const voucherId = await db.customer_voucherItem.findAll({
+            where : {
+                user_id
+            }
+        })
+        const voucherAr = [];
+        for(const item of voucherId){
+            const v = await db.voucherItem.findOne({
+                where : {
+                    [Op.and] : [
+                        {id : item.voucherItem_id},
+                        filter
+                    ]
+                }
+            })
+            if(v){voucherAr.push(v)}
+        }
+        return voucherAr;
     } catch (error) {
-        
+        console.error('Lỗi:', error);
+        return createError(500, 'Đã có lỗi xảy ra');
     }
 }
+
 export const getVoucherItemByCustomer = async(customer_id, voucher_id, store_id, currentTotal) =>{
     try {
         const currentDate = new Date();
@@ -176,10 +196,16 @@ export const getVoucher_FreeShipService = async(filter) =>{
     try {
         const voucher_freeShip = await db.voucherItem.findAll({
             where : {
-                [Op.and] : [filter]
-            }
+                [Op.and] : [filter],
+            },
+            include : [
+                {
+                    model : db.voucher,
+                    attributes : ['type']
+                }
+            ]
         })
-        if(voucher_freeShip.length == 0) return createError(400, 'Không có voucher FreeShip')
+        if(voucher_freeShip.length == 0) return createError(400, 'Không có voucher ')
         return voucher_freeShip;
     } catch (error) {
         return error;

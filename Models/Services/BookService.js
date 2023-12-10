@@ -260,7 +260,12 @@ export const getBookByOrderHighService = async() =>{
 export const getBookIsOrderByStoreService = async(store_id, isHigh) => {
     try {
         const orders = await db.order.findAll({
-            where : {store_id},
+            where : {
+                [Op.and] : [
+                    {store_id},
+                    {isPayment : true}
+                ]
+            },
             include : [
                 {
                     model : db.book,
@@ -290,6 +295,24 @@ export const getBookIsOrderByStoreService = async(store_id, isHigh) => {
             nameBook,
             data,
         };
+    } catch (error) {
+        return error;
+    }
+}
+export const getBookBoughtHighService = async() =>{
+    try {
+        const book = await db.book.findAll({
+                order: [['purchases', 'DESC']],
+                limit: 10
+        })
+        return book;
+    } catch (error) {
+        return error;
+    }
+}
+export const getBookFlashSaleService = async() =>{
+    try {
+
     } catch (error) {
         return error;
     }

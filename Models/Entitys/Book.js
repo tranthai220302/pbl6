@@ -17,12 +17,24 @@ const Book = (sequelize) => sequelize.define('Book', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    priceSale : {
+        type: DataTypes.FLOAT,
+        defaultValue : 0
+    },
     sales_number:{
         type: DataTypes.INTEGER,
     },
     publication_date:{
         type: DataTypes.DATE,
         allowNull: false,
+    },
+    purchases : {
+        type : DataTypes.INTEGER,
+        defaultValue : 0
+    },
+    isFlashSale : {
+        type : DataTypes.BOOLEAN,
+        defaultValue : false
     }
 })
 

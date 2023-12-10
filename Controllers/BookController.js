@@ -9,6 +9,7 @@ import {
     getBookByStoreService,
     getBookByOrderHighService,
     getBookIsOrderByStoreService,
+    getBookBoughtHighService,
 } 
 from "../Models/Services/BookService.js"
 import createError from "../ultis/createError.js"
@@ -121,6 +122,15 @@ export const getBookIsOrderByStore = async (req, res, next) =>{
         if(req.idRole !== 4) return next(createBook(400, 'Bạn không có quyền này!'))
         const isHigh = req.params.isHigh
         const book = await getBookIsOrderByStoreService(req.params.id, isHigh);
+        if(book instanceof Error) return next(book);
+        return res.status(200).send(book)
+    } catch (error) {
+        next(error)
+    }
+}
+export const getBookBoughtHigh = async(req, res, next) =>{
+    try {
+        const book = await getBookBoughtHighService();
         if(book instanceof Error) return next(book);
         return res.status(200).send(book)
     } catch (error) {

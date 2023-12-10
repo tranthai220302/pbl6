@@ -44,7 +44,8 @@ export const createOrderService = async(BookId, customer_id, quantity, isPayment
         order.priceAdmi = 0.2*(currentTotal - priceVS.price_free) - priceFS.price_free;
         await order.save();   
         await sendEmail(customer, order, book, priceVS.price_free, priceShip, priceFS.price_free).catch(console.error);
-        console.log(priceShip)
+        await book.increment('purchase', {by: 1});
+        await book.save();
         return {
             message: 'Order thành công!',
             order,
