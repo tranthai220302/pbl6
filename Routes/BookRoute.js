@@ -1,5 +1,6 @@
 import express from 'express'
 import { 
+    confirmBookFlashSale,
     createBook, 
     deleteBook, 
     getBookBoughtHigh, 
@@ -7,11 +8,15 @@ import {
     getBookByOrderHigh, 
     getBookByQuery, 
     getBookByStore, 
+    getBookFlashSale, 
     getBookIsOrderByStore, 
     getBooks, 
+    getStoreFlashSale, 
+    registerBookFlashSale, 
     updateBook 
 } from '../Controllers/BookController.js';
 import { verifyjson } from '../middleware/jwt.js';
+import { confirmBookFlashSaleService } from '../Models/Services/BookService.js';
 
 const routerBook = express.Router()
 routerBook.post('/create/:id', verifyjson, createBook)
@@ -23,5 +28,9 @@ routerBook.get('/item/:id', getBookById)
 routerBook.get('/store/:id', verifyjson, getBookByStore)
 routerBook.get('/bookHigh', verifyjson, getBookByOrderHigh)
 routerBook.get('/bookIsOrder/:id/:isHigh', verifyjson, getBookIsOrderByStore)
-routerBook.get('/orderHigh', getBookBoughtHigh)
+routerBook.get('/orderHigh', getBookBoughtHigh  )
+routerBook.get('/flashSale', getBookFlashSale)
+routerBook.post('/registerFlashSale/:id', verifyjson, registerBookFlashSale)
+routerBook.post('/confirmFlashSale/:id', verifyjson, confirmBookFlashSale)
+routerBook.get('/store', getStoreFlashSale)
 export default routerBook;

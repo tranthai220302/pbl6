@@ -17,7 +17,7 @@ const Book = (sequelize) => sequelize.define('Book', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    priceSale : {
+    percentDiscount : {
         type: DataTypes.FLOAT,
         defaultValue : 0
     },
@@ -35,6 +35,14 @@ const Book = (sequelize) => sequelize.define('Book', {
     isFlashSale : {
         type : DataTypes.BOOLEAN,
         defaultValue : false
+    },
+    timeFlashSale : {
+        type : DataTypes.STRING,
+        defaultValue : '0'
+    },
+    dateFlashSale : {
+        type : DataTypes.DATE,
+        defaultValue : 0
     }
 })
 

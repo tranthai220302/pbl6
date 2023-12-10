@@ -10,6 +10,10 @@ import {
     getBookByOrderHighService,
     getBookIsOrderByStoreService,
     getBookBoughtHighService,
+    registerBookFlashSaleSeervice,
+    confirmBookFlashSaleService,
+    getBookFlashSaleService,
+    getStoreFlashSaleService,
 } 
 from "../Models/Services/BookService.js"
 import createError from "../ultis/createError.js"
@@ -135,5 +139,50 @@ export const getBookBoughtHigh = async(req, res, next) =>{
         return res.status(200).send(book)
     } catch (error) {
         next(error)
+    }
+}
+export const getBookFlashSale = async(req, res, next) =>{
+    try {
+        const time = req.query.time;
+        const date = new Date();
+        const book = await getBookFlashSaleService(time, date);
+        if(book instanceof Error) return next(book);
+        return res.status(200).send(book)
+    } catch (error) {
+        next(error)
+    }
+}
+export const registerBookFlashSale = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'));
+        const id = req.body.id;
+        const store_id = req.params.id;
+        const date = req.body.date;
+        const registerBook = await registerBookFlashSaleSeervice(store_id, req.body.time, id, date);
+        if(registerBook instanceof Error) return next(registerBook);
+        return res.status(200).send(registerBook)
+    } catch (error) {
+        next(error);
+    }
+}
+export const confirmBookFlashSale = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
+        const id = req.body.id;
+        const store_id = req.params.id;
+        const confirmBook = await confirmBookFlashSaleService(store_id, id);
+        if(confirmBook instanceof Error) return next(confirmBook);
+        return res.status(200).send(confirmBook);
+    } catch (error) {
+        next(error);
+    }
+}
+export const getStoreFlashSale = async(req, res, next) =>{
+    try {
+        const store = await getStoreFlashSaleService();
+        if(store instanceof Error) return next(store);
+        res.status(200).send(store);
+    } catch (error) {
+        next(error);
     }
 }
