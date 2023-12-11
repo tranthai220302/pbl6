@@ -16,8 +16,9 @@
 .navbar_main_img {
     margin-top: 20px;
     width: 100%;
-    height: 340px;
+    /* height: 340px; */
     justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .navbar_child_img {
@@ -31,8 +32,11 @@
 
 .navbar_child_img img{
     height: 200px;
+    width: calc(100%/4);
+    border: 2px solid #DFF4F6;
     /* margin: 5px; */
     /* width: calc(100%/3); */
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .menu {
@@ -43,8 +47,8 @@
     justify-content: space-between;
     height: 120px;
     background-color: white;
-    border-radius: 4px;
     padding: 20px;
+    border-radius: 4px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
@@ -78,6 +82,10 @@
     border-radius: 4px 4px 0 0;
 }
 
+.home_item .title span {
+    display: flex;
+}
+
 .flashsale_content {
     display: flex;
     flex-direction: row;
@@ -103,6 +111,14 @@
     font-size: 14px;
     color: gray;
     text-decoration: line-through;
+}
+
+.percentDiscount {
+    background-color: #B31C1C;
+    color: white;
+    margin-left: 10px;
+    padding: 0 10px;
+    border-radius: 4px;
 }
 
 .home_item .btn_home_item {

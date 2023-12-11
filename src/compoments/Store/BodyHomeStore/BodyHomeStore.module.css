@@ -1,0 +1,45 @@
+.BodyHomeStore {
+    width: 72%;
+}
+
+.BodyHomeStore_Item {
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 4px;
+    margin: 20px 0;
+    height: fit-content;
+}
+
+.BodyHomeStore_Item:not(:first-child) {
+    margin-top: 20px;
+}
+
+.BodyHomeStore .BodyHomeStore_Title {
+    background-color: #BEDDDD;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px 0 5px 20px;
+    vertical-align: middle;
+    border-radius: 4px 4px 0 0;
+}
+
+.BodyHomeStore_Content table th {
+    padding-left: 20px;
+}
+
+.NeedWork_Item {
+    display: grid;
+    text-align: center;
+}
+
+.NeedWork_Item:hover {
+    cursor: pointer;
+    color: green;
+}
+
+.NeedWork_Item .number {
+    font-weight: 700;
+}
+
+
+

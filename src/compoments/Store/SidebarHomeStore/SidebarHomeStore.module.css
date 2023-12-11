@@ -1,0 +1,41 @@
+.SideBar {
+    background-color: white;
+    width: 25%;
+    border-radius: 4px;
+    padding: 16px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    margin: 20px 0;
+}
+
+.SideBar_item {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 0;
+}
+
+.SideBar_item ul {
+    list-style: none;
+    padding-left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+}
+
+.SideBar_item li:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.SideBar_item li:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: green;
+}
+
+.SideBar_item span {
+    margin-left: 10px;
+    font-weight: 500;
+    font-size: 20px;
+}
+
