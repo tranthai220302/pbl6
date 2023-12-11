@@ -157,7 +157,7 @@ export const registerBookFlashSale = async(req, res, next) =>{
         if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'));
         const id = req.body.id;
         const store_id = req.params.id;
-        const date = req.body.date;
+        const date = new Date();
         const registerBook = await registerBookFlashSaleSeervice(store_id, req.body.time, id, date);
         if(registerBook instanceof Error) return next(registerBook);
         return res.status(200).send(registerBook)
