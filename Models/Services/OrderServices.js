@@ -10,7 +10,7 @@ import Sequelize from "sequelize";
 export const priceVoucherStore = async()=>{
 
 }
-export const createOrderService = async(BookId, customer_id, quantity, isPayment, addressCustomer) =>{
+export const createOrderService = async(BookId, customer_id, quantity, addressCustomer, priceShip, priceFreeShip, priceFreeVoucher, total, idVoucher) =>{
     try {
         if(!addressCustomer) return createError(400, 'Vui lòng nhập địa chỉ!')
         const book = await getBookByIdService(BookId)
@@ -19,40 +19,81 @@ export const createOrderService = async(BookId, customer_id, quantity, isPayment
         const customer = await getUserByIdService(customer_id)
         const store = await getUserByIdService(store_id)
         const order = await db.order.create({   
-            total_price : quantity*(book.price),
+            total_price : total,
             customer_id,
             BookId,
             store_id: book.store_id,
-            isPayment,
+            isPayment : 0,
             StateId: 1,
             quantity : quantity,
             priceStore : quantity*(book.price),
             addressCustomer,
-            addressStore : store.address
+            addressStore : store.address,
+            priceFreeShip,
+            priceShip : priceShip,
+            priceFreeVoucher,
+            priceStore : total*0.8,
+            priceAdmi : total*0.2
         })
-        if(!order) return createError(400, 'Order không thành công!')
-        var currentTotal = order.total_price;
-        const priceVS = await priceVoucherStoreByCustomer(customer_id, 1, store_id, currentTotal);
-        const priceFS = await priceVoucherStoreByCustomer(customer_id, 2, store_id, currentTotal);
-        console.log(priceVS)
-        const kc = await distance(order.addressCustomer, store.address)
-        if(kc instanceof Error) return kc;
-        const priceShip = parseInt((kc/1000)*2000);
-        if(priceShip <= priceFS.price_free) priceFS.price_free = priceShip;
-        order.total_price = currentTotal + priceShip - (priceVS.price_free + priceFS.price_free);
-        order.priceStore = currentTotal - priceVS.price_free;
-        order.priceAdmi = 0.2*(currentTotal - priceVS.price_free) - priceFS.price_free;
-        await order.save();   
-        await sendEmail(customer, order, book, priceVS.price_free, priceShip, priceFS.price_free).catch(console.error);
-        await book.increment('purchase', {by: 1});
+        if(idVoucher.length > 0){
+            const delete_FreeShip = await db.customer_voucherItem.destroy({
+                where : {
+                    [Op.and] : [
+                        {voucherItem_id : idVoucher},
+                        {user_id : customer_id}
+                    ]
+                }
+            })
+            if(delete_FreeShip === 0) return createError(400, 'Order không thành công!')
+        }
+        if(!order) return createError(400, 'Order không thành công!')  
+        await sendEmail(customer, order, book, priceFreeVoucher, priceShip, priceFreeShip).catch(console.error);
+        await book.increment('purchases', {by: 1});
         await book.save();
         return {
             message: 'Order thành công!',
             order,
-            vouchersStore: priceVS.voucher,
-            FreeShip: priceFS.voucher,
-            priceShip: priceShip
         }
+    } catch (error) {
+        return error;
+    }
+}
+export const createOrderPaymentOnlieService = async (total, quantity, addressCustomer,  BookId, customer_id, priceShip, priceFreeShip, priceFreeVoucher, idVoucher) =>
+{
+    try {
+        if(!addressCustomer) return createError(400, 'Vui lòng nhập địa chỉ!')
+        const book = await getBookByIdService(BookId)
+        const store_id = book.store_id;
+        const store = await getUserByIdService(store_id)
+        const order = await db.order.create({   
+            total_price : total,
+            customer_id,
+            BookId,
+            store_id: book.store_id,
+            isPayment : 1,
+            StateId: 1,
+            quantity : quantity,
+            priceStore : total*0.8,
+            priceAdmi : total*0.2,
+            addressCustomer,
+            addressStore : store.address,
+            priceFreeShip,
+            priceShip : priceShip,
+            priceFreeVoucher,
+        })
+        if(idVoucher.length > 0){
+            const delete_FreeShip = await db.customer_voucherItem.destroy({
+                where : {
+                    [Op.and] : [
+                        {voucherItem_id : idVoucher},
+                        {user_id : customer_id}
+                    ]
+                }
+            })
+            if(delete_FreeShip === 0) return createError(400, 'Order không thành công!')
+        }
+        if(!order) return createError(400, 'Order không thành công!');
+        return order;
     } catch (error) {
         return error;
     }
@@ -384,3 +425,32 @@ export const revenuaAdminByDateSerVice = async(date) =>{
     }
 }
 
+export const confirmOrderByStoreService = async(id, store_id) =>{
+    try {
+        const checkOrder = await db.order.findOne({
+            where : {
+                [Op.and] : [
+                    {id},
+                    {StateId : 2}
+                ]
+            }
+        })
+        if(checkOrder) return createError(400, 'Bạn đã xác nhận đơn hàng này!')
+        const orderUpdate = await db.order.update({
+            StateId : 2
+        }, {
+            where : {
+                [Op.and] : [
+                    {id},
+                    {store_id}
+                ]
+            }
+        })
+        if(orderUpdate[0] === 0) return createError(400, 'Xác nhân đơn hàng không thành công!');
+        return {
+            message : 'Xác nhận thành công!'
+        }
+    } catch (error) {
+        return error;
+    }
+}

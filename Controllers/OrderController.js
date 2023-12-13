@@ -9,10 +9,11 @@ import {
     getNumOrderByDateByStoreService,
     getNumOrderBy7DateService,
     revenueByAdminService,
-    revenuaAdminByDateSerVice
+    revenuaAdminByDateSerVice,
+    createOrderPaymentOnlieService
 } 
-
 from "../Models/Services/OrderServices.js";
+import { getBookByIdService } from "../Models/Services/BookService.js";
 import { ConfirmStoreService, getUserByIdService } from "../Models/Services/UserService.js";
 import createError from "../ultis/createError.js";
 import dotenv  from 'dotenv'
@@ -27,8 +28,7 @@ export const createOrder = async (req, res, next) =>{
     try {
         if(req.idRole !== 1) return next(createError(400, 'Bạn không có quyền này!'))
         const quantity = req.body.quantity;
-        const isPayment = req.body.isPayment
-        const order = await createOrderService(req.params.idBook, req.id, quantity, isPayment, req.body.addressCus);
+        const order = await createOrderService(req.params.idBook, req.id, quantity, req.body.addressCus, req.body.priceShip, req.body.priceFreeShip, req.body.priceFreeVoucher, req.body.total, req.body.idVoucher);
         if(order instanceof Error) return next(order)
         res.status(200).send(order);
     } catch (error) {
@@ -124,14 +124,17 @@ export const priceShipController = async(req, res, next) =>{
         const address = req.body.addressCus;
         const currentTotal = req.body.total;
         const customer_id = req.id;
-        const store_id = req.params.id;
+        const BookId = req.params.id;
+        const book = await getBookByIdService(BookId)
+        if(!book) return next(createError(400, 'Không tìm thấy sách!'))
+        const store_id = book.store_id;
         const store = await getUserByIdService(store_id);
         const dis =  await distance(address, store.address);
         const priceShip = parseInt((dis/1000)*2000);
         const priceVS = await priceVoucherStoreByCustomer(customer_id, 1, store_id, currentTotal);
         const priceFS = await priceVoucherStoreByCustomer(customer_id, 2, store_id, currentTotal);
+        if(priceShip <= priceFS.price_free) priceFS.price_free = priceShip;
         const total = parseInt(currentTotal) + priceShip - parseInt((priceVS.price_free + priceFS.price_free))
-        console.log(currentTotal + priceShip)
         return res.status(200).send({
             priceShip,
             priceFS,
@@ -142,6 +145,7 @@ export const priceShipController = async(req, res, next) =>{
         next(error)   
     }
 }
+let data = {}
 export const createPaymentUrl = async(req, res, next) =>{
     try {
         process.env.TZ = 'Asia/Ho_Chi_Minh';
@@ -156,9 +160,9 @@ export const createPaymentUrl = async(req, res, next) =>{
         let tmnCode =process.env.vnp_TmnCode
         let secretKey =process.env.vnp_HashSecret
         let vnpUrl =process.env.vnp_Url
-        let returnUrl = "http://localhost:8080/api/order/vnpay_return"
+        let amount = req.body.total;
+        let returnUrl = `http://localhost:8080/api/order/vnpay_return`;
         let orderId = moment(date).format('DDHHmmss');
-        let amount = req.body.amount;
         console.log(amount)
         let bankCode =  "";  
         
@@ -180,6 +184,7 @@ export const createPaymentUrl = async(req, res, next) =>{
         vnp_Params['vnp_ReturnUrl'] = returnUrl;
         vnp_Params['vnp_IpAddr'] = ipAddr;
         vnp_Params['vnp_CreateDate'] = createDate;
+
         if(bankCode !== null && bankCode !== ''){
             vnp_Params['vnp_BankCode'] = bankCode;
         }
@@ -189,6 +194,17 @@ export const createPaymentUrl = async(req, res, next) =>{
         let signData = querystring.stringify(vnp_Params, { encode: false });   
         let hmac = crypto.createHmac("sha512", secretKey);
         let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex"); 
+        data = {
+            total: amount,
+            quantity: req.body.quantity,
+            addressCustomer: req.body.addressCus,
+            BookId: req.body.BookId,
+            customer_id: req.id,
+            priceShip: req.body.priceShip,
+            priceFreeShip: req.body.priceFreeShip,
+            priceFreeVoucher: req.body.priceFreeVoucher,
+            idVoucher: req.body.idVoucher
+        };
         vnp_Params['vnp_SecureHash'] = signed;
         vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
         res.status(200).send(vnpUrl)
@@ -215,7 +231,7 @@ function sortObject(obj) {
 export const vpnayReturn = async(req, res, next) =>{
     try {
         let vnp_Params = req.query;
-    
+        console.log(vnp_Params)
         let secureHash = vnp_Params['vnp_SecureHash'];
     
         delete vnp_Params['vnp_SecureHash'];
@@ -226,13 +242,22 @@ export const vpnayReturn = async(req, res, next) =>{
         let secretKey =process.env.vnp_HashSecret
         let signData = querystring.stringify(vnp_Params, { encode: false });   
         let hmac = crypto.createHmac("sha512", secretKey);
-        let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");     
-    
-        if(secureHash === signed){  
-            res.status(200).send('success')
-        } else{
-            res.status(200).send('nosuccess')
-        }
+        let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");   
+        const order = await createOrderPaymentOnlieService(
+            data?.total,
+            data?.quantity,
+            data?.addressCustomer,
+            data?.BookId,
+            data?.customer_id,
+            data?.priceShip,
+            data?.priceFreeShip,
+            data?.priceFreeVoucher,
+            data?.idVoucher
+        )
+        if(order instanceof Error) return next(order);
+        return res.status(200).send({
+            message : 'Order thành công!'
+        });
     } catch (error) {
         next(error);
     }

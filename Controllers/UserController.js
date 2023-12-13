@@ -12,6 +12,7 @@ import {
 import { Op } from "sequelize";
 import createError from "../ultis/createError.js";
 import { isToday, nextDay } from "date-fns";
+import { confirmOrderByStoreService } from "../Models/Services/OrderServices.js";
 
 export const updateUser = async(req, res, next) =>{
     try {
@@ -129,5 +130,16 @@ export const getRequestStores = async(req, res, next) =>{
         res.status(200).send(listRequest)
     } catch (error) {
         next(error)
+    }
+}
+export const confirmOrderByStore = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'));
+        const idOrder = req.params.id;
+        const confirm = await confirmOrderByStoreService(idOrder, req.id);
+        if(confirm instanceof Error) return next(confirm);
+        res.status(200).send(confirm);
+    } catch (error) {
+        next(error);
     }
 }

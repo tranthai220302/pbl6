@@ -26,6 +26,15 @@ const Order = (sequelize) => sequelize.define('Order', {
     },
     addressStore : {
         type: DataTypes.STRING
+    },
+    priceFreeShip : {
+        type : DataTypes.INTEGER
+    },
+    priceFreeVoucher : {
+        type : DataTypes.INTEGER
+    },
+    priceShip : {
+        type : DataTypes.INTEGER
     }
 })
 
