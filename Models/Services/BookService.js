@@ -319,7 +319,27 @@ export const getBookFlashSaleService = async(time, date) =>{
                     {timeFlashSale : time},
                     Sequelize.literal(`DATE(dateFlashSale) = '${date.toISOString().split('T')[0]}'`)
                 ]
-            }
+            },
+            include : [
+                {
+                    model : db.category,
+                },
+                {
+                    model : db.author
+                },
+                {
+                    model : db.image
+                },
+                {
+                    model : db.user,
+                    include : [
+                        {
+                            model : db.storeRequest,
+                            as : "DetailStore"
+                        }
+                    ]
+                }
+            ]
         })
         if(book.length == 0) return createError(400, 'Sự kiện Flash Sale không có sách !');
         return book;
