@@ -14,6 +14,7 @@ import {
     confirmBookFlashSaleService,
     getBookFlashSaleService,
     getStoreFlashSaleService,
+    getBookWaitConfirmFlashSaleService,
 } 
 from "../Models/Services/BookService.js"
 import createError from "../ultis/createError.js"
@@ -179,9 +180,20 @@ export const confirmBookFlashSale = async(req, res, next) =>{
 }
 export const getStoreFlashSale = async(req, res, next) =>{
     try {
-        const store = await getStoreFlashSaleService();
+        const date = new Date()
+        const store = await getStoreFlashSaleService(req.query.time, date);
         if(store instanceof Error) return next(store);
         res.status(200).send(store);
+    } catch (error) {
+        next(error);
+    }
+}
+export const getBookWaitConfirmFlashSale = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'))
+        const book = await getBookWaitConfirmFlashSaleService(req.params.id);
+        if(book instanceof Error) return next(book);
+        res.status(200).send(book)
     } catch (error) {
         next(error);
     }

@@ -107,6 +107,7 @@ export const getBookByQueryService = async(filter, category, author) =>{
             include : [
                 {
                     model : db.category,
+                    where : category
                 },
                 {
                     model : db.author
@@ -335,12 +336,21 @@ export const registerBookFlashSaleSeervice = async(store_id, time, id, date) =>{
         const checkBook = await db.book.findAll({
             where : {
                 [Op.and] : [
-                    {timeFlashSale : time},
-                    Sequelize.literal(`DATE(dateFlashSale) = '${date.toISOString().split('T')[0]}'`)
+                    { timeFlashSale: { [Op.not]: 0 } }, 
+                    {isFlashSale : 1}
                 ]
             }
         })
-        if(checkBook.length > 0) return createError(400, 'Bạn đã đăng ký FlashSale rồi!')
+        if(checkBook.length > 0) return createError(400, 'Sự kiện của bạn đang diễn ra và bạn không được đăng ký tới khi kết thúc!')
+        const checkBook1 = await db.book.findAll({
+            where : {
+                [Op.and] : [
+                    { timeFlashSale: { [Op.not]: 0 } }, 
+                    {isFlashSale : 0}
+                ]
+            }
+        })
+        if(checkBook1.length > 0) return createError(400, 'Yêu cầu của bạn đang chờ admin phê duyệt!')
         const updateBook = await db.book.update(
             {
                 timeFlashSale : time,
@@ -387,20 +397,41 @@ export const confirmBookFlashSaleService = async(store_id, id) =>{
         return error;
     }
 }
-export const getStoreFlashSaleService = async()=>{
+export const getStoreFlashSaleService = async(time, date)=>{
     try {
-        const user = db.user.findAll({
+        const user = await db.user.findAll({
             include : [
                 {
                     model : db.book,
                     where : {
-                        isFlashSale : 1
+                        [Op.and] : [
+                            {isFlashSale : 0},
+                            {timeFlashSale : time},
+                            Sequelize.literal(`DATE(dateFlashSale) = '${date.toISOString().split('T')[0]}'`)
+                        ]
                     }
                 }
             ]
         })
+        if(user.length === 0) return createError(400, 'Không có cửa hàng đăng ký sự kiện ')
         return user;
     } catch (error) {
         return error;
+    }
+}
+export const getBookWaitConfirmFlashSaleService = async(idStore) =>{
+    try {
+        const book = await db.book.findAll({
+            where : {
+                [Op.and] : [
+                    {store_id : idStore},
+                    {isFlashSale : 0}
+                ]
+            }
+        })   
+        if(book.length === 0) return createError(400, 'Không có sách!')  
+        return book;   
+    } catch (error) {
+        
     }
 }
