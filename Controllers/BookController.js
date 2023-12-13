@@ -70,10 +70,15 @@ export const getBookByQuery= async(req, res, next) =>{
             ...(q.desc && {desc : {
                 [Op.like] : `%${q.desc}%`
             }}),
-            ...(q.price && {price : {
-                [Op.lt] : q.price
-            }})
+            ...(q.priceMin && q.priceMax && {price : {
+                [Op.and] : [
+                    {[Op.gte] : q.priceMin},
+                    {[Op.lte] : q.priceMax}
+                ]
+            }}),
         }
+        console.log(filter)
+        console.log(q.priceMin)
         const category = {
             ...(q.category && {name : {
                 [Op.like]: `%${q.category}%`,

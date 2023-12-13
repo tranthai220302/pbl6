@@ -110,7 +110,8 @@ export const getBookByQueryService = async(filter, category, author) =>{
                     where : category
                 },
                 {
-                    model : db.author
+                    model : db.author,
+                    where : author
                 },
                 {
                     model : db.image
@@ -173,15 +174,12 @@ export const getBookByIdService = async(id) =>{
 }   
 export const getBookByStoreService = async(id, name)=>{
     try {
+        console.log(name)
+        console.log(id)
         const book = await db.book.findAll({
             where: {
                 [Op.and] : [
                     {store_id : id},
-                    {
-                        name : {
-                            [Op.like] : `%${name}%`
-                        }
-                    }
                 ]
             },
             include : [
