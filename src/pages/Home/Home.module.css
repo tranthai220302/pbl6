@@ -197,5 +197,14 @@
     font-weight: 500;
 }
 
+.current_price {
+    background-color: white;
+    color: white;
+    margin-left: 10px;
+    padding: 0 10px;
+    border-radius: 4px;
+}
+
+
 
 

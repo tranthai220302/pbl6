@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import Chat from '../Chat/Chat'
 import styles from './Home.module.css'
 import newRequest from '../../ults/NewRequest'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import navbar from '../../assets/img/welcom.png'
 import CountdownTimer from '../../compoments/CountdownTimer/CountdownTimer';
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
   const [data, setData] = useState([]);
   const [datacat, setDatacat] = useState([]);
   const [datafsale, setDatafsale] = useState([]);
+  const { value } = useParams();
 
   const getData = ()=>{
     setIsPending(true);
@@ -64,15 +66,29 @@ export default function Home() {
     getCategory();
     getFlashSale();
   }, [])
-  const sortedData = [...data].sort((a, b) => b.sales_number - a.sales_number);
-  const sortedpercentDiscount = [...sortedData].sort((a, b) => b.percentDiscount - a.percentDiscount);
+  const sortedData = [...data].sort((a, b) => b.purchases - a.purchases);
+  const sortedpercentDiscount = [...datafsale].sort((a, b) => b.percentDiscount - a.percentDiscount);
   const top5Products = sortedData.slice(0, 5);
   const top5percentDiscount = sortedpercentDiscount.slice(0, 5);
+
+  const navigate = useNavigate();
+
+  // Hàm xử lý khi click vào button Xem thêm
+  const handleXemThemClick = (value, event) => {
+    event.preventDefault();
+    navigate(`/home/more?value=${value}`);
+  };
+
+  // Hàm xử lý khi click vào sách
+  const handleBookClick = (id, event) => {
+    event.preventDefault();
+    navigate(`/productinformation?id=${id}`);
+  };
 
   return (
     <div className={styles.home}>
       <div className={styles.navbar}>
-        <img className={styles.navbar_main_img} src="https://img.freepik.com/free-vector/trendy-welcome-text-banner-event-invitation-hiring-campaign_1017-43278.jpg?w=1800&t=st=1702176946~exp=1702177546~hmac=e578864806fa13accdda605f3f9101966eccee944a2f2befafaa8f3631b41b37" alt="" />
+        <img className={styles.navbar_main_img} src={navbar} alt="" />
         <div className={styles.navbar_child_img}>
           <img src="https://nhomin.com.vn/wp-content/uploads/2020/11/thiet-ke-bo-cuc-cuon-sach.jpeg" alt="" />
           <img src="https://dichvuphotoshop.net/wp-content/uploads/2021/03/thiet-ke-bia-sach.jpg" alt="" />
@@ -88,19 +104,20 @@ export default function Home() {
         <div className={styles.flashsale_content}>
           {/* Hiện 5 sản phẩm có lượt sale cao nhất */}
           {datafsale && top5percentDiscount.map((value) => (
-            <div className={`${styles.flashsale_item} ${styles.product}`}>
+            <div onClick={(e) => handleBookClick(value.id, e)} className={`${styles.flashsale_item} ${styles.product}`}>
               {/* Lấy 1 ảnh đầu tiên */}
               <img src={value.Images[0].filename} alt='' />
               <span>{value.name}</span>
-              <b>{value.price}</b>
+              <b>{(value.price * (1 - value.percentDiscount)).toFixed(0)}đ</b>
               <div>
-                <span className={styles.old_price}>90.000đ</span>
+                <span className={styles.old_price}>{value.price}đ</span>
                 <span className={styles.percentDiscount}>{value.percentDiscount}%</span>
               </div>
+              <span>Đã bán: {value.purchases}</span>
             </div>
           ))}
         </div>
-        <button className={styles.btn_home_item}>
+        <button className={styles.btn_home_item} onClick={(e) => handleXemThemClick('1', e)}>
           <span>Xem thêm</span>
         </button>
       </div>
@@ -124,19 +141,34 @@ export default function Home() {
         <div className={styles.hotproduct_content}>
           <div className={styles.hotproduct_content_line}>
             {top5Products.map((item) => (
-              <div className={`${styles.hotproduct_item} ${styles.product}`} key={item.id}>
+              <div onClick={(e) => handleBookClick(item.id, e)} className={`${styles.hotproduct_item} ${styles.product}`} key={item.id}>
                 <img src={item.Images[0].filename} alt='' />
                 <span>{item.name}</span>
-                <b>{item.price}đ</b>
-                <span className={styles.old_price}>90.000đ</span>
+                {item.percentDiscount > 0 ? (
+                  <div>
+                    <b>{(item.price * (1 - item.percentDiscount)).toFixed(0)}đ</b>
+                    <div>
+                      <span className={styles.old_price}>{item.price}đ</span>
+                      <span className={styles.percentDiscount}>{item.percentDiscount*100}%</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <b>{item.price}đ</b>
+                    <div>
+                      <span className={styles.current_price}></span>
+                    </div>
+                  </div>
+                )}
+                <span>Đã bán: {item.purchases}</span>
                 <button>
-                  Thêm vào giỏ hàng
+                  Mua ngay
                 </button>
               </div>
             ))}
           </div>  
         </div>
-        <button className={styles.btn_home_item}>
+        <button className={styles.btn_home_item} onClick={(e) => handleXemThemClick('2', e)}>
           <span>Xem thêm</span>
         </button>
       </div>

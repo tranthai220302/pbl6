@@ -23,17 +23,17 @@ const CountdownTimer = () => {
 
     // Thời gian bắt đầu và kết thúc buổi chiều
     const targetTimeAfternoonStart = new Date(now);
-    targetTimeAfternoonStart.setHours(16, 0, 0, 0);
+    targetTimeAfternoonStart.setHours(21, 0, 0, 0);
 
     const targetTimeAfternoonEnd = new Date(now);
-    targetTimeAfternoonEnd.setHours(18, 0, 0, 0);
+    targetTimeAfternoonEnd.setHours(22, 0, 0, 0);
 
     if (now < targetTimeMorningStart) {
-      return { time: 0, period: 'Đã kết thúc!' };
+      return { time: 0, period: 'Bắt đầu lúc 09:00!' };
     } else if (now < targetTimeMorningEnd) {
       return { time: Math.floor((targetTimeMorningEnd - now) / 1000), period: 'Buổi sáng' };
     } else if (now < targetTimeAfternoonStart) {
-      return { time: 0, period: 'Đã kết thúc!' };
+      return { time: 0, period: 'Bắt đầu lúc 21:00!' };
     } else if (now < targetTimeAfternoonEnd) {
       return { time: Math.floor((targetTimeAfternoonEnd - now) / 1000), period: 'Buổi chiều' };
     } else {

@@ -3,7 +3,7 @@ import styles from './Header.module.css'
 import { useNavigate } from "react-router-dom";
 import logo from '../../assets/img/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faCartShopping, faBell, faSearch, faBook} from '@fortawesome/free-solid-svg-icons';
+import { faUser, faCartShopping, faBell, faSearch, faBook, faHouse} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
 export default function Header({setOpenChat}) {
@@ -48,6 +48,12 @@ export default function Header({setOpenChat}) {
             </div>
             <div className={styles.right}>
               <ul className={styles.list_item}>
+                <li className={styles.item}>
+                  <Link to="/">
+                    <FontAwesomeIcon icon={faHouse}/>
+                    Trang chủ
+                  </Link>
+                </li>
                 <li className={styles.item}>
                   <Link to="/booklist">
                     <FontAwesomeIcon icon={faBook}/>

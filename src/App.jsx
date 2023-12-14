@@ -13,6 +13,7 @@ import './App.css'
 import Header from './compoments/Header/Header';
 import Footer from './compoments/Footer/Footer';
 import Home from './pages/Home/Home';
+import HomeDetail from './pages/Customer/HomeDetail/HomeDetail';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Chat from './pages/Chat/Chat';
@@ -64,6 +65,10 @@ const App = () => {
         {
           path: '/',
           element : <Home/>
+        },
+        {
+          path: '/home/more',
+          element : <HomeDetail/>
         },
         {
           path : '/login',

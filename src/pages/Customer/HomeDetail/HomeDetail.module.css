@@ -1,0 +1,106 @@
+.HomeDetail {
+    padding: 0 calc(100vw/15);
+    display: flex;
+    flex-direction: column;
+    background-color: #DFF4F6;
+}
+
+.home_item {
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 4px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.BtnBack {
+    color: #4EA58B;
+    margin-top: 20px;
+}
+
+.BtnBack:hover, .Back:hover {
+    cursor: pointer;
+    color: green;
+}
+
+.Back {
+    list-style: none;
+    text-decoration: none;
+    color: #4EA58B;
+    font-weight: 500;
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+.home_item .title {
+    background-color: #BEDDDD;
+    height: 50px;
+    font-size: 30px;
+    font-weight: bold;
+    padding-left: 20px;
+    vertical-align: middle;
+    border-radius: 4px 4px 0 0;
+}
+
+.home_item .title span {
+    display: flex;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 20px;
+    width: 100%;
+    gap: 20px;
+}
+
+.productContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+.product {
+    display: flex;
+    flex-direction: column; /* Hiển thị các phần tử theo chiều dọc */
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.product img {
+    height: 190px;
+    width: 100%;
+}
+
+.old_price {
+    font-size: 14px;
+    color: gray;
+    text-decoration: line-through;
+}
+
+.percentDiscount {
+    background-color: #B31C1C;
+    color: white;
+    margin-left: 10px;
+    padding: 0 10px;
+    border-radius: 4px;
+}
+
+.product button {
+    border-radius: 24px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 10px auto;
+    font-weight: 500;
+}
+
+.current_price {
+    background-color: white;
+    color: white;
+    margin-left: 10px;
+    padding: 0 10px;
+    border-radius: 4px;
+}
