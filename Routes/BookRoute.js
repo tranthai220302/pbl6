@@ -3,6 +3,7 @@ import {
     confirmBookFlashSale,
     createBook, 
     deleteBook, 
+    getAuthorSearch, 
     getBookBoughtHigh, 
     getBookById, 
     getBookByOrderHigh, 
@@ -11,6 +12,8 @@ import {
     getBookFlashSale, 
     getBookIsOrderByStore, 
     getBooks, 
+    getLanguages, 
+    getNhaXB, 
     getStoreFlashSale, 
     registerBookFlashSale, 
     updateBook 
@@ -33,4 +36,7 @@ routerBook.get('/flashSale', getBookFlashSale)
 routerBook.post('/registerFlashSale/:id', verifyjson, registerBookFlashSale)
 routerBook.post('/confirmFlashSale/:id', verifyjson, confirmBookFlashSale)
 routerBook.get('/store', getStoreFlashSale)
+routerBook.get('/list/nhaXB', getNhaXB)
+routerBook.get('/list/languages', getLanguages)
+routerBook.get('/list/author', getAuthorSearch)
 export default routerBook;

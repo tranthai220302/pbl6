@@ -15,6 +15,9 @@ import {
     getBookFlashSaleService,
     getStoreFlashSaleService,
     getBookWaitConfirmFlashSaleService,
+    getNhaXBService,
+    getLanguagesService,
+    getAuthorSearchServices,
 } 
 from "../Models/Services/BookService.js"
 import createError from "../ultis/createError.js"
@@ -23,7 +26,7 @@ export const createBook = async (req, res, next) =>{
     try {
         if(req.idRole !== 2 && req.idRole !==4) return next(createError(400, 'Bạn không có quyền này!'))
         const data = req.body;
-        const book = await createBookService(req.params.id, data.name, data.desc, data.price, data.sales_number, data.publication_date, data.author_id, data.categorys, data.images)
+        const book = await createBookService(req.params.id, data.name, data.desc, data.price, data.sales_number, data.publication_date, data.author_id, data.categorys, data.images, data.nhaXB, data.languages, data.weight, data.size, data.numPage)
         if(book instanceof Error) return next(book)
         return res.status(200).send(book)
     } catch (error) {
@@ -75,6 +78,12 @@ export const getBookByQuery= async(req, res, next) =>{
                     {[Op.gte] : q.priceMin},
                     {[Op.lte] : q.priceMax}
                 ]
+            }}),
+            ...(q.nhaXB && {nhaXB : {   
+                [Op.like] : `%${q.nhaXB}%`
+            }}),
+            ...(q.languages && {languages : {
+                [Op.like] : `%${q.languages}%`
             }}),
         }
         console.log(filter)
@@ -201,5 +210,29 @@ export const getBookWaitConfirmFlashSale = async(req, res, next) =>{
         res.status(200).send(book)
     } catch (error) {
         next(error);
+    }
+}
+export const getNhaXB = async(req, res, next) => {
+    try {
+        const listNXH = await getNhaXBService();
+        res.status(200).send(listNXH)
+    } catch (error) {
+        next(error)
+    }
+}
+export const getLanguages = async(req, res, next) =>{
+    try {
+        const listLanguage = await getLanguagesService();
+        res.status(200).send(listLanguage)
+    } catch (error) {
+        next(error)
+    }
+}
+export const getAuthorSearch = async(req, res, next) => {
+    try {
+        const authors = await getAuthorSearchServices();
+        res.status(200).send(authors)
+    } catch (error) {
+        next(error)
     }
 }

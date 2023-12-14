@@ -198,7 +198,7 @@ export const createPaymentUrl = async(req, res, next) =>{
             total: amount,
             quantity: req.body.quantity,
             addressCustomer: req.body.addressCus,
-            BookId: req.body.BookId,
+            BookId: req.params.id,
             customer_id: req.id,
             priceShip: req.body.priceShip,
             priceFreeShip: req.body.priceFreeShip,

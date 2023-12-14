@@ -1,8 +1,9 @@
 import createError from "../../ultis/createError.js";
+import sendEmail from "../../ultis/sendEmail.js";
 import db from "../Entitys/index.js";
 import { Op, where } from 'sequelize';
 import Sequelize from "sequelize";
-export const createBookService = async (store_id, name, desc, price, sales_number, publication_date, author_id, categorys, images) =>{
+export const createBookService = async (store_id, name, desc, price, sales_number, publication_date, author_id, categorys, images, nhaXB, languages, weight, size, numPage) =>{
     try {
         const checkBook = await db.book.findOne({
             where : {
@@ -17,7 +18,12 @@ export const createBookService = async (store_id, name, desc, price, sales_numbe
             sales_number,
             publication_date,
             store_id,
-            author_id
+            author_id,
+            nhaXB,
+            languages,
+            weight,
+            size,
+            numPage
         })
         if(!book) return createError(400, 'Thêm sách không thành công!')
           for (const image of images) {
@@ -450,6 +456,65 @@ export const getBookWaitConfirmFlashSaleService = async(idStore) =>{
         if(book.length === 0) return createError(400, 'Không có sách!')  
         return book;   
     } catch (error) {
-        
+        return error
+    }
+}
+export const getNhaXBService = async()=>{
+    try {
+        const uniquePublishers = await db.book.findAll({
+            where : {
+                nhaXB : {
+                    [Op.not] : null
+                }
+            },
+            attributes: [
+              [Sequelize.fn('DISTINCT', Sequelize.col('nhaXB')), 'nhaXB'],
+            ],
+            raw: true,
+        });
+        const arrNXB = [];
+        uniquePublishers.map((item)=>{
+            arrNXB.push(item.nhaXB)
+        })
+        return arrNXB;
+    } catch (error) {
+        return error;
+    }
+}
+export const getLanguagesService = async() =>{
+    try {
+        const languages = await db.book.findAll({
+            where : {
+                languages : {
+                    [Op.not] : null,
+                }
+            },
+            attributes : [
+                [Sequelize.fn('DISTINCT',Sequelize.col('languages')), 'languages']
+            ]
+        })
+        const arrLan = [];
+        languages.map((item) =>{
+            arrLan.push(item.languages)
+        })
+        return arrLan;
+    } catch (error) {
+        return error;
+    }
+}
+export const getAuthorSearchServices = async() => {
+    try {
+        const authors = await db.author.findAll({
+            attributes : [
+                [Sequelize.fn('DISTINCT',Sequelize.col('name')), 'name']
+            ]
+        })
+        const arrAuthor = [];
+        authors.map((item)=>{
+            arrAuthor.push(item.name)
+        })
+        return arrAuthor;
+    } catch (error) {
+        return error;
     }
 }

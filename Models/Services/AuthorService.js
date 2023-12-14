@@ -5,7 +5,12 @@ import { Op } from "sequelize";
 export const createAuthorService = async(name, address, date_birth, date_death, store_id) =>{
     try {
         const checkName = await db.author.findOne({
-            where : {name}
+            where : {
+                [Op.and] : [
+                    {name},
+                    {store_id}
+                ]
+            }
         })
         if(checkName) return createError(400, 'Tác giả đã tồn tại!')
         const author = await db.author.create({

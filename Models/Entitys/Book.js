@@ -43,6 +43,21 @@ const Book = (sequelize) => sequelize.define('Book', {
     dateFlashSale : {
         type : DataTypes.DATE,
         defaultValue : 0
+    },
+    nhaXB : {
+        type : DataTypes.STRING,
+    },
+    languages : {
+        type : DataTypes.STRING
+    },
+    weight : {
+        type : DataTypes.STRING
+    },
+    size: {
+        type : DataTypes.STRING
+    },
+    numPage :{
+        type: DataTypes.INTEGER
     }
 })
 
