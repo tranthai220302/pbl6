@@ -19,6 +19,7 @@ import routerCategory from "./Routes/CategoryRoute.js";
 import { Server } from "socket.io";
 import routerReportStore from "./Routes/ReportStoreRoute.js";
 import routerShippemt from "./Routes/ShippementRoute.js";
+import routerReportShipper from "./Routes/ReportShipperRoute.js";
 dotenv.config()
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -55,6 +56,7 @@ app.use('/api/chat', routerChat)
 app.use('/api/category', routerCategory)
 app.use('/api/report', routerReportStore)
 app.use('/api/shippemt',routerShippemt)
+app.use('/api/reportShipper',routerReportShipper)
 app.use((err, req, res, next)=>{
   const errorStatus = err.status || 500;
   const errorMessage = err.message || "Something went wrong!";

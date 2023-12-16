@@ -8,7 +8,10 @@ import {
     getUserById, 
     getUsersByQuery, 
     sendRequireStore, 
-    updateUser 
+    updateUser,
+    ConfirmShipper,
+    getRequestShippers,
+    sendRequireShipper 
 } from '../Controllers/UserController.js';
 import { verifyjson } from '../middleware/jwt.js';
 
@@ -22,4 +25,7 @@ routerUser.get('/userByAge', verifyjson, getPrecentCustomerByAge)
 routerUser.post('/openStore', verifyjson, sendRequireStore)
 routerUser.post('/confirm/:id', verifyjson, ConfirmStore)
 routerUser.get('/listRequest', verifyjson, getRequestStores)
+routerUser.post('/registerShipper', verifyjson, sendRequireShipper)
+routerUser.post('/confirmShipper/:id', verifyjson, ConfirmShipper)
+routerUser.get('/listRequestShipper', verifyjson, getRequestShippers)
 export default routerUser;

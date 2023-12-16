@@ -20,8 +20,9 @@ import Customer_VoucherItem from "./Customer_VoucherItem.js";
 import StoreRequest from "./StoreRequest.js";
 import ReportStore from "./ReportStore.js";
 import DetailStore from "./DetailStore.js";
-
 import DetailShipper from "./DetailShipper.js";
+import ShipperRequest from "./ShipperRequest.js";
+import ReportShipper from "./ReportShipper.js";
 const sequelize = new Sequelize(
     configdb.DB,
     configdb.USER,
@@ -64,18 +65,20 @@ db.review = Review(sequelize)
 db.voucher = Voucher(sequelize)
 db.voucherItem = VoucherItem(sequelize)
 db.storeRequest = StoreRequest(sequelize)
-
 db.reportStore = ReportStore(sequelize)
-db.detailShipper = DetailShipper(sequelize); 
-
-/*DetailShipper vs Shipper*/
-db.user.hasOne(db.detailShipper, {foreignKey : 'shipper_id'});
-db.detailShipper.belongsTo(db.user, {foreignKey: 'shipper_id'})
-
+db.detailShipper = DetailShipper(sequelize)
+db.shipperRequest = ShipperRequest(sequelize)
+db.reportShipper = ReportShipper(sequelize)
 
 /*shipper vs deetailShipper*/
 db.user.hasOne(db.detailShipper, {foreignKey : 'shipper_id'});
 db.detailShipper.belongsTo(db.user, {foreignKey : 'shipper_id'})
+/*reportShipper vs customer*/
+db.user.hasMany(db.reportShipper, {foreignKey : 'customer_id', as : 'reportShipperByCustomer'});
+db.reportShipper.belongsTo(db.user, {foreignKey: 'customer_id', as : 'customerReportShipper'})
+/*reportShipper vs shipper*/
+db.user.hasMany(db.reportShipper, {foreignKey : 'shipper_id', as : 'reportByShipper'});
+db.reportShipper.belongsTo(db.user, {foreignKey: 'shipper_id', as : 'shipperByReport'})
 /*store vs detailStore*/
 db.user.hasOne(db.detailStore, {foreignKey : 'store_id'});
 db.detailStore.belongsTo(db.user, {foreignKey : 'store_id'})
@@ -119,6 +122,10 @@ db.book.hasOne(db.cart, {
 /*User vs RequestStore*/
 db.user.hasOne(db.storeRequest, {foreignKey : 'customer_id'});
 db.storeRequest.belongsTo(db.storeRequest, {foreignKey : 'customer_id'});
+/*User vs RequestShipper*/
+db.user.hasOne(db.shipperRequest, {foreignKey : 'customer_id'});
+db.shipperRequest.belongsTo(db.shipperRequest, {foreignKey : 'customer_id'});
+
 /*__Chat__*/
 //chat vs customer
 db.chat.belongsTo(db.user, { as: 'Participant1', foreignKey: 'customer_id' });

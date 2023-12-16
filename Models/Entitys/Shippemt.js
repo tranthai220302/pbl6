@@ -6,10 +6,16 @@ const Shippemt = (sequelize) => sequelize.define('Shippemt', {
         autoIncrement: true
     },
     start_address: {
-        type: DataTypes.INTEGER
+        type: DataTypes.STRING
     },
     end_address:{
         type: DataTypes.STRING
+    },
+    distance: {
+        type: DataTypes.FLOAT
+    },
+    priceShip: {
+        type: DataTypes.FLOAT
     }
 })
 

@@ -201,26 +201,76 @@ export const getRequestStoresService = async()=>{
     }
 }
 
-export const ConfirmShipperService = async(shipper_id) =>{
+export const ConfirmShipperService = async(idCustomer) =>{
     try {
         const check = await db.user.findOne({
             where : {
                 [Op.and] : [
-                    {id : shipper_id},
+                    {id : idCustomer},
                     {RoleId : 1}
                 ]
             }
         })
         if(!check) return createError(400, 'Không tìm thấy người dùng yêu cầu làm shipper')
-        
+        const updateRequest = await db.shipperRequest.update({
+            isConfirm : true
+        },{where : {customer_id : idCustomer}});
+        if(updateRequest[0] == 0) return createError(400, 'Xác nhận không thành công1!');
         const updateShipper = await db.user.update(
-            {RoleId : 2},
-            {where : {id : shipper_id}}
+            {RoleId : 3},
+            {where : {id : idCustomer}}
         )
+
         if(updateShipper[0] == 0) return createError(400, 'Xác nhận không thành công!')
+
+        const detailShipper = await db.shipperRequest.findOne({
+            where : {
+                customer_id: idCustomer
+            }
+        })
+
+        const createDetailShipper = await db.detailShipper.create({
+            drivingLience: detailShipper.drivingLience,
+            numMobike: detailShipper.numMobike,
+            shipper_id: idCustomer
+        })
         return{
-            messgae: 'Xác nhận thành công!'
+            messgae: 'Xác nhận thành công!',
+            createDetailShipper
         }
+    } catch (error) {
+        return error;
+    }
+}
+
+export const sendRequireShipperService = async(filter)=>{
+    try {
+        const checkRequire = await db.shipperRequest.findOne({
+            where : {customer_id : filter.customer_id}
+        })
+        if(checkRequire) return createError(400, 'Bạn đã gửi yêu cầu rồi !')
+        const checkNumMobike = await db.shipperRequest.findOne({
+            where : {
+                numMobike :filter.numMobike
+            }
+        })
+        if(checkNumMobike) return createError(400, 'Biển số xe đã tồn tại!')
+        const createRequire = await db.shipperRequest.create(filter);
+        if(!createRequire) return createError(400,'Gửi yêu cầu không thành công!');
+        return createRequire;
+    } catch (error) {
+        return error;
+    }
+} 
+export const getRequestShippersService = async()=>{
+    try {
+        const listRequest = await db.shipperRequest.findAll({
+            where : {
+                isConfirm : false
+            }
+        })
+        if(listRequest.length == 0) return createError(400, 'Không có yêu cầu!');
+        return listRequest;
     } catch (error) {
         return error;
     }
