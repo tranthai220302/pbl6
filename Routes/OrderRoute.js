@@ -1,4 +1,5 @@
 import express from 'express'
+
 import { 
     createOrder,
     deleteOrder,
@@ -13,6 +14,9 @@ import {
 
     getNumOrderBy7Date,
     revenueByAdmin,
+    createPaymentUrl,
+    vpnayReturn,
+    priceShipController,
 } from '../Controllers/OrderController.js';
 import { verifyjson } from '../middleware/jwt.js';
 
@@ -30,5 +34,8 @@ routerOrder.get('/draw/:month', verifyjson, drawPrecentSatiscal)
 routerOrder.post('/revenue/:id', verifyjson, revenueStoreByMonth)
 routerOrder.get('/numOrder7date/:id', verifyjson, getNumOrderBy7Date)
 routerOrder.post('/revenueAdmin', verifyjson, revenueByAdmin)
+routerOrder.post('/detailOrder/:id', verifyjson, priceShipController)
+routerOrder.post('/create_payment_url/:id',verifyjson, createPaymentUrl);
+routerOrder.get('/vnpay_return', vpnayReturn);
 
 export default routerOrder;

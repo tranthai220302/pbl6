@@ -10,44 +10,90 @@ import Sequelize from "sequelize";
 export const priceVoucherStore = async()=>{
 
 }
-export const createOrderService = async(BookId, customer_id, quantity, isPayment) =>{
+export const createOrderService = async(BookId, customer_id, quantity, addressCustomer, priceShip, priceFreeShip, priceFreeVoucher, total, idVoucher) =>{
     try {
+        if(!addressCustomer) return createError(400, 'Vui lòng nhập địa chỉ!')
         const book = await getBookByIdService(BookId)
         console.log(quantity)
         const store_id = book.store_id;
         const customer = await getUserByIdService(customer_id)
         const store = await getUserByIdService(store_id)
-        const order = await db.order.create({
-            total_price : quantity*(book.price),
+        const order = await db.order.create({   
+            total_price : total,
             customer_id,
             BookId,
             store_id: book.store_id,
-            isPayment,
+            isPayment : 0,
             StateId: 1,
             quantity : quantity,
-            priceStore : quantity*(book.price)
+            priceStore : quantity*(book.price),
+            addressCustomer,
+            addressStore : store.address,
+            priceFreeShip,
+            priceShip : priceShip,
+            priceFreeVoucher,
+            priceStore : total*0.8,
+            priceAdmi : total*0.2
         })
-        if(!order) return createError(400, 'Order không thành công!')
-        var currentTotal = order.total_price;
-        const priceVS = await priceVoucherStoreByCustomer(customer_id, 1, store_id, currentTotal);
-        const priceFS = await priceVoucherStoreByCustomer(customer_id, 2, store_id, currentTotal);
-        console.log(priceVS)
-        const kc = await distance(customer.address, store.address)
-        if(kc instanceof Error) return kc;
-        const priceShip = parseInt((kc/1000)*5000);
-        if(priceShip <= priceFS.price_free) priceFS.price_free = priceShip;
-        order.total_price = currentTotal + priceShip - (priceVS.price_free + priceFS.price_free);
-        order.priceStore = currentTotal - priceVS.price_free;
-        order.priceAdmi = 0.2*(currentTotal - priceVS.price_free) - priceFS.price_free;
-        await order.save();   
-        await sendEmail(customer, order, book, priceVS.price_free, priceShip, priceFS.price_free).catch(console.error);
-        console.log(priceShip)
-        return {
-                                           
-            vouchersStore: priceVS.voucher,
-            FreeShip: priceFS.voucher,
-            priceShip: priceShip
+        if(idVoucher.length > 0){
+            const delete_FreeShip = await db.customer_voucherItem.destroy({
+                where : {
+                    [Op.and] : [
+                        {voucherItem_id : idVoucher},
+                        {user_id : customer_id}
+                    ]
+                }
+            })
+            if(delete_FreeShip === 0) return createError(400, 'Order không thành công!')
         }
+        if(!order) return createError(400, 'Order không thành công!')  
+        await sendEmail(customer, order, book, priceFreeVoucher, priceShip, priceFreeShip).catch(console.error);
+        await book.increment('purchases', {by: 1});
+        await book.save();
+        return {
+            message: 'Order thành công!',
+            order,
+        }
+    } catch (error) {
+        return error;
+    }
+}
+export const createOrderPaymentOnlieService = async (total, quantity, addressCustomer,  BookId, customer_id, priceShip, priceFreeShip, priceFreeVoucher, idVoucher) =>
+{
+    try {
+        if(!addressCustomer) return createError(400, 'Vui lòng nhập địa chỉ!')
+        const book = await getBookByIdService(BookId)
+        const store_id = book.store_id;
+        const store = await getUserByIdService(store_id)
+        const order = await db.order.create({   
+            total_price : total,
+            customer_id,
+            BookId,
+            store_id: book.store_id,
+            isPayment : 1,
+            StateId: 1,
+            quantity : quantity,
+            priceStore : total*0.8,
+            priceAdmi : total*0.2,
+            addressCustomer,
+            addressStore : store.address,
+            priceFreeShip,
+            priceShip : priceShip,
+            priceFreeVoucher,
+        })
+        if(idVoucher.length > 0){
+            const delete_FreeShip = await db.customer_voucherItem.destroy({
+                where : {
+                    [Op.and] : [
+                        {voucherItem_id : idVoucher},
+                        {user_id : customer_id}
+                    ]
+                }
+            })
+            if(delete_FreeShip === 0) return createError(400, 'Order không thành công!')
+        }
+        if(!order) return createError(400, 'Order không thành công!');
+        return order;
     } catch (error) {
         return error;
     }
@@ -68,6 +114,12 @@ export const getOrdersByCustomerService = async(customer_id) =>{
                     model : db.user,
                     as : 'store',
                     attributes: { exclude: ['password'] },
+                    include : [
+                        {
+                            model : db.storeRequest,
+                            as : 'DetailStore'
+                        }
+                    ]
                 },
                 {
                     model : db.state,
@@ -102,6 +154,12 @@ export const getOrderByStoreService = async(store_id) =>{
                     model : db.user,
                     as : 'store',
                     attributes: { exclude: ['password'] },
+                    include : [
+                        {
+                            model : db.storeRequest,
+                            as : 'DetailStore'
+                        }
+                    ]
                 },
                 {
                     model : db.state,
@@ -154,13 +212,14 @@ export const satisticalByStoreService = async(store_id, month) =>{
         return error;
     }
 }
-export const totalPriceStoreService = async(store_id) =>{
+export const totalPriceStoreService = async(store_id, month) =>{
     try {
         const satistical = await db.order.findAll({
             where : {
                 [Op.and] : [
                     {store_id},
                     {isPayment : 1},
+                    Sequelize.literal(`MONTH(createdAt) = ${month}`),
                 ]
             }
         })
@@ -211,14 +270,12 @@ export const drawPrecentSatiscalService = async(month) =>{
         const category = []
         const store = await db.user.findAll({
             where : {
-                [Op.and] : [
-                    {RoleId : 2},
-                    Sequelize.literal(`MONTH(createdAt) = ${month}`),
-                ]
+                RoleId : 2
             },
         })
+        console.log(store)
         for (const item of store) {
-            const satistical = await totalPriceStoreService(item.id);
+            const satistical = await totalPriceStoreService(item.id, month);
             if(satistical instanceof Error) return satistical;
             satisticalStore.push(satistical);
             category.push(item.lastName + item.firstName)
@@ -368,6 +425,7 @@ export const revenuaAdminByDateSerVice = async(date) =>{
     }
 }
 
+<<<<<<< HEAD
 export const update_state_oderService = async(id) =>{
     try {
         
@@ -419,5 +477,34 @@ export const update_state_oder2Service = async(id) =>{
         }    
     } catch (error) {
         return error;   
+=======
+export const confirmOrderByStoreService = async(id, store_id) =>{
+    try {
+        const checkOrder = await db.order.findOne({
+            where : {
+                [Op.and] : [
+                    {id},
+                    {StateId : 2}
+                ]
+            }
+        })
+        if(checkOrder) return createError(400, 'Bạn đã xác nhận đơn hàng này!')
+        const orderUpdate = await db.order.update({
+            StateId : 2
+        }, {
+            where : {
+                [Op.and] : [
+                    {id},
+                    {store_id}
+                ]
+            }
+        })
+        if(orderUpdate[0] === 0) return createError(400, 'Xác nhân đơn hàng không thành công!');
+        return {
+            message : 'Xác nhận thành công!'
+        }
+    } catch (error) {
+        return error;
+>>>>>>> 515930adad11595e4ffebe4f054cf6cc19b7459c
     }
 }

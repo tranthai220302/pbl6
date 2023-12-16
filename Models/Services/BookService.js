@@ -1,8 +1,9 @@
 import createError from "../../ultis/createError.js";
+import sendEmail from "../../ultis/sendEmail.js";
 import db from "../Entitys/index.js";
 import { Op, where } from 'sequelize';
 import Sequelize from "sequelize";
-export const createBookService = async (store_id, name, desc, price, sales_number, publication_date, author_id, categorys, images) =>{
+export const createBookService = async (store_id, name, desc, price, sales_number, publication_date, author_id, categorys, images, nhaXB, languages, weight, size, numPage) =>{
     try {
         const checkBook = await db.book.findOne({
             where : {
@@ -17,7 +18,12 @@ export const createBookService = async (store_id, name, desc, price, sales_numbe
             sales_number,
             publication_date,
             store_id,
-            author_id
+            author_id,
+            nhaXB,
+            languages,
+            weight,
+            size,
+            numPage
         })
         if(!book) return createError(400, 'Thêm sách không thành công!')
           for (const image of images) {
@@ -88,7 +94,8 @@ export const getBooksService = async() =>{
                     model : db.user,
                     include : [
                         {
-                            model : db.detailStore
+                            model : db.storeRequest,
+                            as : "DetailStore"
                         }
                     ]
                 }
@@ -106,9 +113,11 @@ export const getBookByQueryService = async(filter, category, author) =>{
             include : [
                 {
                     model : db.category,
+                    where : category
                 },
                 {
-                    model : db.author
+                    model : db.author,
+                    where : author
                 },
                 {
                     model : db.image
@@ -117,7 +126,8 @@ export const getBookByQueryService = async(filter, category, author) =>{
                     model : db.user,
                     include : [
                         {
-                            model : db.detailStore
+                            model : db.storeRequest,
+                            as : "DetailStore"
                         }
                     ]
                 }
@@ -155,7 +165,8 @@ export const getBookByIdService = async(id) =>{
                     model : db.user,
                     include : [
                         {
-                            model : db.detailStore
+                            model : db.storeRequest,
+                            as : "DetailStore"
                         }
                     ]
                 }
@@ -169,15 +180,12 @@ export const getBookByIdService = async(id) =>{
 }   
 export const getBookByStoreService = async(id, name)=>{
     try {
+        console.log(name)
+        console.log(id)
         const book = await db.book.findAll({
             where: {
                 [Op.and] : [
                     {store_id : id},
-                    {
-                        name : {
-                            [Op.like] : `%${name}%`
-                        }
-                    }
                 ]
             },
             include : [
@@ -194,7 +202,8 @@ export const getBookByStoreService = async(id, name)=>{
                     model : db.user,
                     include : [
                         {
-                            model : db.detailStore
+                            model : db.storeRequest,
+                            as : "DetailStore"
                         }
                     ]
                 }
@@ -256,7 +265,12 @@ export const getBookByOrderHighService = async() =>{
 export const getBookIsOrderByStoreService = async(store_id, isHigh) => {
     try {
         const orders = await db.order.findAll({
-            where : {store_id},
+            where : {
+                [Op.and] : [
+                    {store_id},
+                    {isPayment : true}
+                ]
+            },
             include : [
                 {
                     model : db.book,
@@ -271,7 +285,7 @@ export const getBookIsOrderByStoreService = async(store_id, isHigh) => {
         })
         if(isHigh == 1){
             const filteredOb = Object.fromEntries(
-                Object.entries(ob).filter(([key, value]) => value > 5)
+                Object.entries(ob).filter(([key, value]) => value > 3)
             );
             const nameBook = Object.keys(filteredOb);
             const data = Object.values(filteredOb);
@@ -286,6 +300,220 @@ export const getBookIsOrderByStoreService = async(store_id, isHigh) => {
             nameBook,
             data,
         };
+    } catch (error) {
+        return error;
+    }
+}
+export const getBookBoughtHighService = async() =>{
+    try {
+        const book = await db.book.findAll({
+                order: [['purchases', 'DESC']],
+                limit: 10
+        })
+        return book;
+    } catch (error) {
+        return error;
+    }
+}
+export const getBookFlashSaleService = async(time, date) =>{
+    try {
+        if(!time) return createError(400, 'Không tìm thấy thời gian Flash Sale')
+        const book = await db.book.findAll({
+            where : {
+                [Op.and] : [
+                    {isFlashSale : 1},
+                    {timeFlashSale : time},
+                    Sequelize.literal(`DATE(dateFlashSale) = '${date.toISOString().split('T')[0]}'`)
+                ]
+            },
+            include : [
+                {
+                    model : db.category,
+                },
+                {
+                    model : db.author
+                },
+                {
+                    model : db.image
+                },
+                {
+                    model : db.user,
+                    include : [
+                        {
+                            model : db.storeRequest,
+                            as : "DetailStore"
+                        }
+                    ]
+                }
+            ]
+        })
+        if(book.length == 0) return createError(400, 'Sự kiện Flash Sale không có sách !');
+        return book;
+    } catch (error) {
+        return error;
+    }
+}
+export const registerBookFlashSaleSeervice = async(store_id, time, id, date) =>{
+    try {
+        if(!time) return createError(400, 'Không tìm thấy thời gian sự kiện !')
+        console.log(date)
+        const checkBook = await db.book.findAll({
+            where : {
+                [Op.and] : [
+                    { timeFlashSale: { [Op.not]: 0 } }, 
+                    {isFlashSale : 1}
+                ]
+            }
+        })
+        if(checkBook.length > 0) return createError(400, 'Sự kiện của bạn đang diễn ra và bạn không được đăng ký tới khi kết thúc!')
+        const checkBook1 = await db.book.findAll({
+            where : {
+                [Op.and] : [
+                    { timeFlashSale: { [Op.not]: 0 } }, 
+                    {isFlashSale : 0}
+                ]
+            }
+        })
+        if(checkBook1.length > 0) return createError(400, 'Yêu cầu của bạn đang chờ admin phê duyệt!')
+        const updateBook = await db.book.update(
+            {
+                timeFlashSale : time,
+                dateFlashSale : date
+            },
+            {
+                where : {
+                    [Op.and] : [
+                        {store_id},
+                        {id : id}
+
+                    ]
+                }
+            }
+        )
+        if(updateBook[0] === 0) return createError(400, 'Cập nhật không thành công!');
+        return {
+            message : 'Đăng ký sự kiện Flash Sale thành công!'
+        }
+    } catch (error) {
+        return error;
+    }
+}
+export const confirmBookFlashSaleService = async(store_id, id) =>{
+    try {
+        const updateBook = await db.book.update(
+            {
+                isFlashSale : 1
+            },
+            {
+                where : {
+                    [Op.and] : [
+                        {store_id},
+                        {id : id}
+                    ]
+                }
+            }
+        )
+        if(updateBook[0] == 0) return createError(400, 'Xác nhận không thành công!');
+        return {
+            message : 'Xác nhận thành công!'
+        }
+    } catch (error) {
+        return error;
+    }
+}
+export const getStoreFlashSaleService = async(time, date)=>{
+    try {
+        const user = await db.user.findAll({
+            include : [
+                {
+                    model : db.book,
+                    where : {
+                        [Op.and] : [
+                            {isFlashSale : 0},
+                            {timeFlashSale : time},
+                            Sequelize.literal(`DATE(dateFlashSale) = '${date.toISOString().split('T')[0]}'`)
+                        ]
+                    }
+                }
+            ]
+        })
+        if(user.length === 0) return createError(400, 'Không có cửa hàng đăng ký sự kiện ')
+        return user;
+    } catch (error) {
+        return error;
+    }
+}
+export const getBookWaitConfirmFlashSaleService = async(idStore) =>{
+    try {
+        const book = await db.book.findAll({
+            where : {
+                [Op.and] : [
+                    {store_id : idStore},
+                    {isFlashSale : 0}
+                ]
+            }
+        })   
+        if(book.length === 0) return createError(400, 'Không có sách!')  
+        return book;   
+    } catch (error) {
+        return error
+    }
+}
+export const getNhaXBService = async()=>{
+    try {
+        const uniquePublishers = await db.book.findAll({
+            where : {
+                nhaXB : {
+                    [Op.not] : null
+                }
+            },
+            attributes: [
+              [Sequelize.fn('DISTINCT', Sequelize.col('nhaXB')), 'nhaXB'],
+            ],
+            raw: true,
+        });
+        const arrNXB = [];
+        uniquePublishers.map((item)=>{
+            arrNXB.push(item.nhaXB)
+        })
+        return arrNXB;
+    } catch (error) {
+        return error;
+    }
+}
+export const getLanguagesService = async() =>{
+    try {
+        const languages = await db.book.findAll({
+            where : {
+                languages : {
+                    [Op.not] : null,
+                }
+            },
+            attributes : [
+                [Sequelize.fn('DISTINCT',Sequelize.col('languages')), 'languages']
+            ]
+        })
+        const arrLan = [];
+        languages.map((item) =>{
+            arrLan.push(item.languages)
+        })
+        return arrLan;
+    } catch (error) {
+        return error;
+    }
+}
+export const getAuthorSearchServices = async() => {
+    try {
+        const authors = await db.author.findAll({
+            attributes : [
+                [Sequelize.fn('DISTINCT',Sequelize.col('name')), 'name']
+            ]
+        })
+        const arrAuthor = [];
+        authors.map((item)=>{
+            arrAuthor.push(item.name)
+        })
+        return arrAuthor;
     } catch (error) {
         return error;
     }

@@ -114,7 +114,8 @@ export const getCartByIdService = async(id, customerId) =>{
                             model : db.user,
                             include : [
                                 {
-                                    model : db.detailStore
+                                    model : db.storeRequest,
+                                    as : "DetailStore"
                                 }
                             ]
                         }
@@ -152,7 +153,8 @@ export const getCartsService = async(customer_id) =>{
                             model : db.user,
                             include : [
                                 {
-                                    model : db.detailStore
+                                    model : db.storeRequest,
+                                    as : "DetailStore"
                                 }
                             ]
                         }

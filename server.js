@@ -20,6 +20,9 @@ import { Server } from "socket.io";
 import routerReportStore from "./Routes/ReportStoreRoute.js";
 import routerShippemt from "./Routes/ShippementRoute.js";
 import routerReportShipper from "./Routes/ReportShipperRoute.js";
+
+import cron from 'node-cron'
+
 dotenv.config()
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -35,6 +38,21 @@ try {
   } catch (error) {
     console.error('Unable to connect to the database:', error);
 }
+//setupFlashSale
+cron.schedule('0 0 * * *', async () => {
+  const currentDate = new Date();
+
+  const expiredBooks = await db.book.update({
+      isFlashSale : 1,
+      timeFlashSale : '0',
+      dateFlashSale : '0000-00-00'
+  },{
+      where: {
+          dateFlashSale: { [Op.lt]: currentDate }
+      }
+  });
+  console.log('Đã cập nhật sách đã hết hạn FlashSale.');
+});
 // await db.sequelize.sync({
 //     alter: true,
 //     logging : ()=>{}

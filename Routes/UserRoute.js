@@ -1,6 +1,7 @@
 import express from 'express'
 import { 
     ConfirmStore,
+    confirmOrderByStore,
     deleteUser, 
     getPrecentCustomerByAge, 
     getPrecentCustomerNew, 
@@ -25,7 +26,6 @@ routerUser.get('/userByAge', verifyjson, getPrecentCustomerByAge)
 routerUser.post('/openStore', verifyjson, sendRequireStore)
 routerUser.post('/confirm/:id', verifyjson, ConfirmStore)
 routerUser.get('/listRequest', verifyjson, getRequestStores)
-routerUser.post('/registerShipper', verifyjson, sendRequireShipper)
-routerUser.post('/confirmShipper/:id', verifyjson, ConfirmShipper)
-routerUser.get('/listRequestShipper', verifyjson, getRequestShippers)
+routerUser.post('/confirmOrder/:id', verifyjson, confirmOrderByStore)
+
 export default routerUser;

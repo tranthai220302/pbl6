@@ -7,7 +7,7 @@ export const createCategory = async(req, res, next)=>{
         console.log(req.idRole)
         if(req.idRole !==2 && req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'))
         const name = req.body.name;
-        const category = await createCategoryService(name);
+        const category = await createCategoryService(name, req.body.img);
         if(category instanceof Error) return next(category);
         res.status(200).send(category);
     } catch (error) {
