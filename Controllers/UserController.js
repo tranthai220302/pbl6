@@ -7,7 +7,10 @@ import {
     getPrecentCustomerByAgeService,
     ConfirmStoreService,
     sendRequireStoreService,
-    getRequestStoresService
+    getRequestStoresService,
+    ConfirmShipperService,
+    getRequestShippersService,
+    sendRequireShipperService
 } from "../Models/Services/UserService.js";
 import { Op } from "sequelize";
 import createError from "../ultis/createError.js";
@@ -133,6 +136,44 @@ export const getRequestStores = async(req, res, next) =>{
     }
 }
 
+export const ConfirmShipper = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này !'));
+        const confirm = await ConfirmShipperService(req.params.id);
+        if(confirm instanceof Error) next(confirm);
+        res.status(200).send(confirm)
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+export const sendRequireShipper = async(req, res, next) =>{
+    try {
+        if(req.idRole != 1) return next(createError(400, 'Bạn không có quyền này!'))
+        const filter = {
+            ...(req.body.drivingLience && {drivingLience : req.body.drivingLience}),
+            ...(req.body.numMobike && {numMobike : req.body.numMobike}),
+            ...(req.id && {customer_id : req.id}),
+            isConfirm : false
+        }
+        const sendRequire = await sendRequireShipperService(filter);
+        if(filter instanceof Error) next(filter);
+        res.status(200).send(sendRequire)
+    } catch (error) {
+        next(error)
+    }
+}
+export const getRequestShippers = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
+        const listRequest = await getRequestShippersService();
+        if(listRequest instanceof Error) return next(listRequest);
+        res.status(200).send(listRequest)
+    } catch (error) {
+        next(error)
+    }
+}
 export const confirmOrderByStore = async(req, res, next) =>{
     try {
         if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'));

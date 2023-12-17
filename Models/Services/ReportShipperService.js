@@ -11,7 +11,7 @@ export const createReportShipperService = async(filter) =>{
                 ]
             }
         })
-        if(checkReport) return createError(400, 'Bạn đã báo cáo cửa hàng này rồi!')
+        if(checkReport) return createError(400, 'Bạn đã báo cáo shipper này rồi!')
         const report = await db.reportShipper.create(filter);
         if(!report) return createError(400, 'Báo cáo không thành công!');
         return {
@@ -41,7 +41,7 @@ export const getReportByShipperService = async(shipper_id) =>{
 }
 export const shipperReportByCustomerService = async() =>{
     try {
-        const shipper = await db.reportStore.findAll({
+        const shipper = await db.reportShipper.findAll({
             attributes: ['shipper_id'],
             include: [
               {

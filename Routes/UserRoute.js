@@ -27,5 +27,8 @@ routerUser.post('/openStore', verifyjson, sendRequireStore)
 routerUser.post('/confirm/:id', verifyjson, ConfirmStore)
 routerUser.get('/listRequest', verifyjson, getRequestStores)
 routerUser.post('/confirmOrder/:id', verifyjson, confirmOrderByStore)
+routerUser.post('/registerShipper', verifyjson, sendRequireShipper)
+routerUser.post('/confirmShipper/:id', verifyjson, ConfirmShipper)
+routerUser.get('/listRequestShipper', verifyjson, getRequestShippers)
 
 export default routerUser;

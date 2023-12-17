@@ -42,7 +42,6 @@ const sequelize = new Sequelize(
 );
 const db = {}
 db.sequelize = sequelize
-db.Sequelize = Sequelize
 
 db.customer_voucherItem = Customer_VoucherItem(sequelize)
 db.admin = Admin(sequelize)

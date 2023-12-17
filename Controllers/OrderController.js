@@ -7,9 +7,6 @@ import {
     getOrdersByCustomerService, 
     satistical7StoreHighService,
 
-    update_state_oder2Service,
-    update_state_oderService,
-
     getNumOrderByDateByStoreService,
     getNumOrderBy7DateService,
     revenueByAdminService,
@@ -93,18 +90,6 @@ export const drawPrecentSatiscal = async(req, res, next) =>{
     }
 }
 
-export const update_state_oder = async(req, res, next) => {
-    try{
-        const shipperId = req.id;
-
-        if(!shipperId) return next(createError(400, 'Bạn không giao đơn hàng này!'))
-        const order = await update_state_oderService(req.params.id);
-        if(order instanceof Error) return next(order);
-        res.status(200).send(order);
-    } catch (error) {
-        next(error)
-    }
-}
 
 export const revenueStoreByMonth = async(req, res, next) =>{
     try {
@@ -140,19 +125,6 @@ export const revenueByAdmin = async(req, res, next) =>{
     }
 }
 
-
-export const update_state_oder_2 = async(req, res, next) => {
-    try{
-        const shipperId = req.id;
-
-        if(!shipperId) return next(createError(400, 'Bạn không giao đơn hàng này!'))
-        const order = await update_state_oder2Service(req.params.id);
-        if(order instanceof Error) return next(order);
-        res.status(200).send(order);
-    } catch (error) {
-        next(error)
-    }
-}
 export const priceShipController = async(req, res, next) =>{
     try {
         if(req.idRole !== 1) return next(createError(400, 'Bạn không có quyền này!'));
