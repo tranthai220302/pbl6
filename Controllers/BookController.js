@@ -26,7 +26,7 @@ export const createBook = async (req, res, next) =>{
     try {
         if(req.idRole !== 2 && req.idRole !==4) return next(createError(400, 'Bạn không có quyền này!'))
         const data = req.body;
-        const book = await createBookService(req.params.id, data.name, data.desc, data.price, data.sales_number, data.publication_date, data.author_id, data.categorys, data.images, data.nhaXB, data.languages, data.weight, data.size, data.numPage)
+        const book = await createBookService(req.params.id, data.name, data.desc, data.price, data.sales_number, data.publication_date, data.author_id, data.categorys, data.images, data.nhaXB, data.languages, data.weight, data.size, data.numPage, data.percentDiscount)
         if(book instanceof Error) return next(book)
         return res.status(200).send(book)
     } catch (error) {

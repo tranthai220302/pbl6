@@ -193,7 +193,14 @@ export const getRequestStoresService = async()=>{
         const listRequest = await db.storeRequest.findAll({
             where : {
                 isConfirm : false
-            }
+            },
+            include : [
+                {
+                    model : db.user,
+                    as : 'userStore',
+                    attributes : {exclude : ['password']}
+                }
+            ]
         })
         if(listRequest.length == 0) return createError(400, 'Không có yêu cầu!');
         return listRequest;
@@ -213,6 +220,7 @@ export const ConfirmShipperService = async(idCustomer) =>{
             }
         })
         if(!check) return createError(400, 'Không tìm thấy người dùng yêu cầu làm shipper')
+
         const updateRequest = await db.shipperRequest.update({
             isConfirm : true
         },{where : {customer_id : idCustomer}});
@@ -274,5 +282,34 @@ export const getRequestShippersService = async()=>{
         return listRequest;
     } catch (error) {
         return error;
+    }
+}
+
+export const getNumberAdminService = async(req, res, next) =>{
+    try {
+        const customer = await db.user.count({
+            where : {
+                RoleId : 1
+            }
+        })
+        const store = await db.user.count({
+            where : {
+                RoleId : 2
+            }
+        })
+        const shipper = await db.user.count({
+            where : {
+                RoleId : 3
+            }
+        })
+        const book = await db.book.count()
+        return {
+            customer,
+            store,
+            shipper,
+            book
+        }
+    } catch (error) {
+        return error;   
     }
 }

@@ -3,6 +3,7 @@ import {
     ConfirmStore,
     confirmOrderByStore,
     deleteUser, 
+    getNumberAdmin, 
     getPrecentCustomerByAge, 
     getPrecentCustomerNew, 
     getRequestStores, 
@@ -10,11 +11,12 @@ import {
     getUsersByQuery, 
     sendRequireStore, 
     updateUser,
+    sendRequireShipper,
     ConfirmShipper,
-    getRequestShippers,
-    sendRequireShipper 
+    getRequestShippers
 } from '../Controllers/UserController.js';
 import { verifyjson } from '../middleware/jwt.js';
+import { revenuaMonthByAdmin } from '../Controllers/OrderController.js';
 
 const routerUser = express.Router()
 routerUser.put('/edit/:id',verifyjson, updateUser)
@@ -30,5 +32,7 @@ routerUser.post('/confirmOrder/:id', verifyjson, confirmOrderByStore)
 routerUser.post('/registerShipper', verifyjson, sendRequireShipper)
 routerUser.post('/confirmShipper/:id', verifyjson, ConfirmShipper)
 routerUser.get('/listRequestShipper', verifyjson, getRequestShippers)
+routerUser.get('/number', verifyjson, getNumberAdmin)
+routerUser.post('/revenuaAdminByMonth', verifyjson, revenuaMonthByAdmin)
 
 export default routerUser;

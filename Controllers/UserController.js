@@ -10,12 +10,14 @@ import {
     getRequestStoresService,
     ConfirmShipperService,
     getRequestShippersService,
-    sendRequireShipperService
+    sendRequireShipperService,
+    getNumberAdminService
+
 } from "../Models/Services/UserService.js";
 import { Op } from "sequelize";
 import createError from "../ultis/createError.js";
 import { isToday, nextDay } from "date-fns";
-import { confirmOrderByStoreService } from "../Models/Services/OrderServices.js";
+import { confirmOrderByStoreService, revenuaMonthByAdminService } from "../Models/Services/OrderServices.js";
 
 export const updateUser = async(req, res, next) =>{
     try {
@@ -115,6 +117,7 @@ export const sendRequireStore = async(req, res, next) =>{
         const filter = {
             ...(req.body.nameStore && {nameStore : req.body.nameStore}),
             ...(req.body.descStore && {descStore : req.body.descStore}),
+            ...(req.body.img && {avatar : req.body.img}),
             ...(req.id && {customer_id : req.id}),
             isConfirm : false
         }
@@ -183,5 +186,25 @@ export const confirmOrderByStore = async(req, res, next) =>{
         res.status(200).send(confirm);
     } catch (error) {
         next(error);
+    }
+}
+export const getNumberAdmin = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'))
+        const number = await getNumberAdminService();
+        if(number instanceof Error) return next(number)
+        return res.status(200).send(number)
+    } catch (error) {
+        next(error);
+    }
+}
+export const revenuaAdminByMonth = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
+        const data = await revenuaMonthByAdminService(req.body.month);
+        if(data instanceof Error) return next(data);
+        res.status(200).send(data)
+    } catch (error) {
+        next(error);   
     }
 }
