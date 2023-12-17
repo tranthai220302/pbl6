@@ -3,7 +3,7 @@ import sendEmail from "../../ultis/sendEmail.js";
 import db from "../Entitys/index.js";
 import { Op, where } from 'sequelize';
 import Sequelize from "sequelize";
-export const createBookService = async (store_id, name, desc, price, sales_number, publication_date, author_id, categorys, images, nhaXB, languages, weight, size, numPage) =>{
+export const createBookService = async (store_id, name, desc, price, sales_number, publication_date, author_id, categorys, images, nhaXB, languages, weight, size, numPage,percentDiscount) =>{
     try {
         const checkBook = await db.book.findOne({
             where : {
@@ -23,7 +23,8 @@ export const createBookService = async (store_id, name, desc, price, sales_numbe
             languages,
             weight,
             size,
-            numPage
+            numPage,
+            percentDiscount
         })
         if(!book) return createError(400, 'Thêm sách không thành công!')
           for (const image of images) {

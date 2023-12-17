@@ -396,29 +396,31 @@ export const revenueByAdminService = async(month) =>{
         return error;
     }
 }
-export const revenuaAdminByDateSerVice = async(date) =>{
+export const revenuaAdminByDateSerVice = async(date, month, year) =>{
     try {
-        if(date instanceof Date){
-            console.log(date)
-            console.log('ccccc')
-            const revenuaAdmin = await db.order.sum('priceAdmi',{
+        if(month < 13 && month > 1){
+            let revenuaAdmin = await db.order.sum('priceAdmi',{
                 where : {
                     [Op.and] : [
                         {isPayment : 1},
                         Sequelize.literal(`
-                        DAY(createdAt) = ${date.getDate()} AND
-                        MONTH(createdAt) = ${date.getMonth()+1} AND
-                        YEAR(createdAt) = ${date.getFullYear()}
+                        DAY(createdAt) = ${date} AND
+                        MONTH(createdAt) = ${month} AND
+                        YEAR(createdAt) = ${year}
                         `),
                         { priceAdmi: { [Op.not]: null } } 
                     ]
                 }
             })
+            if(revenuaAdmin){
+                return {
+                    doanhthu : revenuaAdmin
+                };   
+            }
             return {
-                doanhthu : revenuaAdmin
+                doanhthu : 0
             };
         }
-        console.log(date)
         return createError(400, 'Dữ liệu không hợp lệ!')
     } catch (error) {
         return error;
@@ -452,5 +454,34 @@ export const confirmOrderByStoreService = async(id, store_id) =>{
         }
     } catch (error) {
         return error;
+    }
+}
+export const revenuaMonthByAdminService = async (month) =>{
+    try {
+        try {
+            const date = new Date()
+            const currentDate = new Date(date.getFullYear(), month, 0);
+            const numDate = currentDate.getDate();
+            const data = [];
+            const dateTitle = []
+            if(month > 0 && month  < 13){
+                for(let i = 1; i <= numDate; i++){
+                    const totalByDate = await revenuaAdminByDateSerVice(i, month, date.getFullYear());
+                    data.push(totalByDate.doanhthu);
+                    const dateT = new Date(date.getFullYear(), month-1, i)
+                    console.log(dateT)
+                    dateTitle.push(dateT)
+                }
+                return {
+                    data,
+                    dateTitle
+                }
+            }
+            return createError(400, 'Tháng không chính xác!')
+        } catch (error) {
+            return error;
+        }
+    } catch (error) {
+        
     }
 }

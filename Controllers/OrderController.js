@@ -10,7 +10,8 @@ import {
     getNumOrderBy7DateService,
     revenueByAdminService,
     revenuaAdminByDateSerVice,
-    createOrderPaymentOnlieService
+    createOrderPaymentOnlieService,
+    revenuaMonthByAdminService
 } 
 from "../Models/Services/OrderServices.js";
 import { getBookByIdService } from "../Models/Services/BookService.js";
@@ -262,4 +263,13 @@ export const vpnayReturn = async(req, res, next) =>{
         next(error);
     }
 }
-
+export const revenuaMonthByAdmin = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
+        const data = await revenuaMonthByAdminService(req.body.month);
+        if(data instanceof Error) next(data);
+        res.status(200).send(data)
+    } catch (error) {
+        next(error)
+    }
+}
