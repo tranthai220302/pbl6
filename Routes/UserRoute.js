@@ -11,9 +11,6 @@ import {
     getUsersByQuery, 
     sendRequireStore, 
     updateUser,
-    ConfirmShipper,
-    getRequestShippers,
-    sendRequireShipper 
 } from '../Controllers/UserController.js';
 import { verifyjson } from '../middleware/jwt.js';
 import { revenuaMonthByAdmin } from '../Controllers/OrderController.js';
@@ -29,4 +26,6 @@ routerUser.post('/openStore', verifyjson, sendRequireStore)
 routerUser.post('/confirm/:id', verifyjson, ConfirmStore)
 routerUser.get('/listRequest', verifyjson, getRequestStores)
 routerUser.post('/confirmOrder/:id', verifyjson, confirmOrderByStore)
+routerUser.get('/number', verifyjson, getNumberAdmin)
+routerUser.post('/revenuaAdminByMonth', verifyjson, revenuaMonthByAdmin)
 export default routerUser;

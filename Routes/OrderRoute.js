@@ -9,8 +9,6 @@ import {
     getOrdersByCustomer,
     satistical7StoreHigh,
 
-    update_state_oder,
-    update_state_oder_2,
 
     getNumOrderBy7Date,
     revenueByAdmin,
@@ -27,8 +25,8 @@ routerOrder.get('/store/:id',verifyjson, getOdrderByStore)
 routerOrder.delete('/delete/:id', verifyjson, deleteOrder)
 routerOrder.get('/satistical/:month', verifyjson, satistical7StoreHigh)
 
-routerOrder.put('/state-successful/:id',verifyjson, update_state_oder)
-routerOrder.put('/state-failed/:id',verifyjson, update_state_oder_2)
+// routerOrder.put('/state-successful/:id',verifyjson, update_state_oder)
+// routerOrder.put('/state-failed/:id',verifyjson, update_state_oder_2)
 
 routerOrder.get('/draw/:month', verifyjson, drawPrecentSatiscal)
 routerOrder.post('/revenue/:id', verifyjson, revenueStoreByMonth)
