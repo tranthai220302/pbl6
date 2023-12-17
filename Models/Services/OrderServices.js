@@ -1,6 +1,6 @@
 import db from "../Entitys/index.js";
 import createError from "../../ultis/createError.js";
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 import sendEmail from "../../ultis/sendEmail.js";
 import { priceVoucherStoreByCustomer} from "./VoucherItemService.js";
 import { distance } from "../../ultis/distance.js";
@@ -454,6 +454,7 @@ export const confirmOrderByStoreService = async(id, store_id) =>{
         }
     } catch (error) {
         return error;
+
     }
 }
 export const revenuaMonthByAdminService = async (month) =>{

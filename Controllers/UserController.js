@@ -134,6 +134,7 @@ export const getRequestStores = async(req, res, next) =>{
         next(error)
     }
 }
+
 export const confirmOrderByStore = async(req, res, next) =>{
     try {
         if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'));

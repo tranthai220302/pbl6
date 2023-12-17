@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes } from "sequelize";
-const DetailShipper = (sequelize) => sequelize.define('DetailShipper', {
+const ShipperRequest = (sequelize) => sequelize.define('ShipperRequest', {
     id:{
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -9,11 +9,12 @@ const DetailShipper = (sequelize) => sequelize.define('DetailShipper', {
         type: DataTypes.STRING,
     },
     numMobike : {
-        type: DataTypes.STRING,
+        type : DataTypes.STRING,
+    },
+    isConfirm : {
+        type: DataTypes.BOOLEAN
     }
-
-
 })
 
 
-export default DetailShipper;
+export default ShipperRequest;

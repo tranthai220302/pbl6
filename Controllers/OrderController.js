@@ -6,12 +6,16 @@ import {
     getOrderByStoreService, 
     getOrdersByCustomerService, 
     satistical7StoreHighService,
+
+    update_state_oder2Service,
+    update_state_oderService,
+
     getNumOrderByDateByStoreService,
     getNumOrderBy7DateService,
     revenueByAdminService,
+
     revenuaAdminByDateSerVice,
-    createOrderPaymentOnlieService,
-    revenuaMonthByAdminService
+    createOrderPaymentOnlieService
 } 
 from "../Models/Services/OrderServices.js";
 import { getBookByIdService } from "../Models/Services/BookService.js";
@@ -87,6 +91,20 @@ export const drawPrecentSatiscal = async(req, res, next) =>{
         next(error)
     }
 }
+
+export const update_state_oder = async(req, res, next) => {
+    try{
+        const shipperId = req.id;
+
+        if(!shipperId) return next(createError(400, 'Bạn không giao đơn hàng này!'))
+        const order = await update_state_oderService(req.params.id);
+        if(order instanceof Error) return next(order);
+        res.status(200).send(order);
+    } catch (error) {
+        next(error)
+    }
+}
+
 export const revenueStoreByMonth = async(req, res, next) =>{
     try {
         if(req.idRole !== 4) return createError(400, 'Bạn không có quyền này!');
@@ -115,6 +133,21 @@ export const revenueByAdmin = async(req, res, next) =>{
         else doanhhthu = await revenuaAdminByDateSerVice(req.body.date)
         if(doanhhthu instanceof Error) return next(doanhhthu);
         return res.status(200).send(doanhhthu)
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+export const update_state_oder_2 = async(req, res, next) => {
+    try{
+        const shipperId = req.id;
+
+        if(!shipperId) return next(createError(400, 'Bạn không giao đơn hàng này!'))
+        const order = await update_state_oder2Service(req.params.id);
+        if(order instanceof Error) return next(order);
+        res.status(200).send(order);
     } catch (error) {
         next(error)
     }

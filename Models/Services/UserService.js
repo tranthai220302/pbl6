@@ -208,32 +208,3 @@ export const getRequestStoresService = async()=>{
         return error;
     }
 }
-export const getNumberAdminService = async() =>
-{
-    try {
-        const customer = await db.user.count({
-            where : {
-                RoleId : 1
-            }
-        })
-        const store = await db.user.count({
-            where : {
-                RoleId : 2
-            }
-        })
-        const shipper = await db.user.count({
-            where : {
-                RoleId : 3
-            }
-        })
-        const book = await db.book.count();
-        return {
-            customer,
-            store,
-            shipper,
-            book
-        }
-    } catch (error) {
-        return error;
-    }
-}
