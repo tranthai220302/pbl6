@@ -20,11 +20,17 @@ import { Server } from "socket.io";
 import routerReportStore from "./Routes/ReportStoreRoute.js";
 import routerShippemt from "./Routes/ShippementRoute.js";
 import routerReportShipper from "./Routes/ReportShipperRoute.js";
-
+import path from "path";
 import cron from 'node-cron'
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 dotenv.config()
 const app = express();
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(express.json());

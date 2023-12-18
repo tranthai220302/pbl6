@@ -13,7 +13,8 @@ import {
     updateUser,
     sendRequireShipper,
     ConfirmShipper,
-    getRequestShippers
+    getRequestShippers,
+    cancleRequestStore
 } from '../Controllers/UserController.js';
 import { verifyjson } from '../middleware/jwt.js';
 import { revenuaMonthByAdmin } from '../Controllers/OrderController.js';
@@ -34,5 +35,6 @@ routerUser.post('/confirmShipper/:id', verifyjson, ConfirmShipper)
 routerUser.get('/listRequestShipper', verifyjson, getRequestShippers)
 routerUser.get('/number', verifyjson, getNumberAdmin)
 routerUser.post('/revenuaAdminByMonth', verifyjson, revenuaMonthByAdmin)
+routerUser.post('/cancleRequestStore/:id', verifyjson, cancleRequestStore)
 
 export default routerUser;

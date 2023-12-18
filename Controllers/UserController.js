@@ -11,7 +11,8 @@ import {
     ConfirmShipperService,
     getRequestShippersService,
     sendRequireShipperService,
-    getNumberAdminService
+    getNumberAdminService,
+    cancleRequestStoreService
 
 } from "../Models/Services/UserService.js";
 import { Op } from "sequelize";
@@ -206,5 +207,15 @@ export const revenuaAdminByMonth = async(req, res, next) =>{
         res.status(200).send(data)
     } catch (error) {
         next(error);   
+    }
+}
+export const cancleRequestStore = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
+        const data = await cancleRequestStoreService(req.params.id, req.body.message);
+        if(data instanceof Error) return next(data);
+        res.status(200).send(data);
+    } catch (error) {
+        next(error)
     }
 }

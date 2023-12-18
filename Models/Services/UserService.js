@@ -2,7 +2,8 @@ import db from "../Entitys/index.js";
 import { Op, where } from "sequelize";
 import createError from "../../ultis/createError.js";
 import Sequelize from "sequelize";
-import {format} from 'date-fns'
+import {addYears, format} from 'date-fns'
+import sendRequestByEmail from "../../ultis/senRequestByEmail.js";
 
 export const updateUserService = async (data, id) =>{
     try {
@@ -308,6 +309,24 @@ export const getNumberAdminService = async(req, res, next) =>{
             store,
             shipper,
             book
+        }
+    } catch (error) {
+        return error;   
+    }
+}
+export const cancleRequestStoreService = async(customer_id, message) =>{
+    try {
+        const cancel = await db.storeRequest.destroy({
+            where : {
+                customer_id
+            }
+        })
+        if(cancel === 0) return createError(400, 'Từ chối không thành công!')
+        const user = await db.user.findByPk(customer_id);
+        if(!user) return createError(400, 'Không tìm thấy người dùng !');
+        sendRequestByEmail(user, message)
+        return {
+            message : 'Từ chối thành công'
         }
     } catch (error) {
         return error;   

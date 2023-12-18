@@ -144,6 +144,16 @@ export const getVoucherItemCustomer = async (filter, user_id) => {
 export const getVoucherItemByCustomer = async(customer_id, voucher_id, store_id, currentTotal) =>{
     try {
         const currentDate = new Date();
+
+        const list_voucher1 = await db.customer_voucherItem.findAll({
+            where : {
+                user_id : customer_id
+            }
+        })
+        const id = [];
+        list_voucher1.map((item)=>{
+            id.push(item.voucherItem_id);
+        })
         const list_voucher = await db.voucherItem.findAll({
             include: [
               {
@@ -154,6 +164,7 @@ export const getVoucherItemByCustomer = async(customer_id, voucher_id, store_id,
             ],
             where: {
               [Op.and]: [
+                {id : id},
                 { store_id },
                 { expiryDate: { [Op.gte]: currentDate } },
                 { codition: { [Op.lte]: currentTotal } },

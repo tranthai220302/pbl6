@@ -140,6 +140,7 @@ export const priceShipController = async(req, res, next) =>{
         const priceVS = await priceVoucherStoreByCustomer(customer_id, 1, store_id, currentTotal);
         const priceFS = await priceVoucherStoreByCustomer(customer_id, 2, store_id, currentTotal);
         if(priceShip <= priceFS.price_free) priceFS.price_free = priceShip;
+
         const total = parseInt(currentTotal) + priceShip - parseInt((priceVS.price_free + priceFS.price_free))
         return res.status(200).send({
             priceShip,
@@ -261,9 +262,7 @@ export const vpnayReturn = async(req, res, next) =>{
             data?.idVoucher
         )
         if(order instanceof Error) return next(order);
-        return res.status(200).send({
-            message : 'Order thành công!'
-        });
+        res.render('success', {code: vnp_Params['vnp_ResponseCode']})
     } catch (error) {
         next(error);
     }
