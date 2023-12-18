@@ -3,8 +3,8 @@ import styles from './ProductInf.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faMessage, faStore, faPlus} from '@fortawesome/free-solid-svg-icons';
 import newRequest from '../../ults/NewRequest'
-import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom'
 import { useQuantity } from '../../Context/QuantityProvider';
 export default function ProductInf() {
     const [book, setBook] = useState();
@@ -32,7 +32,24 @@ export default function ProductInf() {
           console.error('Error fetching book details:', error);
         }
       };
-
+      const navigate = useNavigate();
+      const OrderBook = async (id,quantity)=>{
+        await newRequest.post(`/cart/create/${id}`,{"quantity": quantity}, {
+        }).then(
+          (res) => {
+            console.log(res.data)
+            alert('Đã thêm vào giỏ hàng');
+          }
+        ).catch((error)=>{
+            alert('Lỗi');
+        })
+      }
+      const BuyBook = async  (id,quantity, event) => {
+        event.preventDefault();
+        await OrderBook(id,quantity);
+        navigate(`/cart`, { state: { id } });
+      };
+      
     useEffect(() => {
         fetchData();
       }, [id]);
@@ -105,17 +122,17 @@ export default function ProductInf() {
                                 <div className={styles.Quantity_title}>
                                     <span>Số lượng</span>
                                 </div>
-                                <input type="number" onChange={(e)=>{handleQuantityChange(e)}}/>
+                                <input type="number" defaultValue={1} onChange={(e)=>{handleQuantityChange(e)}}/>
                             </div>
                             <div className={styles.product_add_box}>
                                 <div className={styles.add_cart}>
-                                    <button className={styles.btn}>
+                                    <button className={styles.btn} onClick={()=>OrderBook(id,quantity)}>
                                         <FontAwesomeIcon icon={faCartShopping}/>
                                         <span>Thêm vào giỏ hàng</span>
                                     </button>
                                 </div>
                                 <div className={styles.buy_product}>
-                                    <Link to = {`/order/${book.id}`}><button className={styles.btn}>Mua ngay</button></Link>
+                                    <button className={styles.btn} onClick={(e)=>{BuyBook(id,quantity,e)}}>Mua ngay</button>
                                 </div>
                             </div>
                         </div>

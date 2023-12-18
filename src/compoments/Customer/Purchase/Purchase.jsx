@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styles from './Purchase.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage, faStore, faTableList, faTicket, faLink, faKey} from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
+import newRequest from '../../../ults/NewRequest'
 
 export default function Purchase() {
     const [selectedFilter, setSelectedFilter] = useState('all');
@@ -17,7 +17,8 @@ export default function Purchase() {
     const fetchPurchases = async () => {
         setIsPending(true);
         try {
-        const res = await axios.get('/order/customer'); // Replace with your API endpoint
+        const res = await newRequest.get('/order/customer'); // Replace with your API endpoint
+        console.log(res)
         setData(res.data);
         setIsPending(false);
         setError(null);
@@ -94,13 +95,13 @@ export default function Purchase() {
                                     </button>
                                 </div>
                                 <span className={styles.Product_name}>
-                                    Nhật ký trong tù
+                                    {purchase.Book.name}
                                 </span>
                                 <div className={styles.Product_count}>
                                     <span>
                                         Số lượng: 
                                     </span>
-                                    <span>1</span>
+                                    <span>{purchase.quantity}</span>
                                 </div>
                             </td>
                             <td className={styles.price}>
@@ -108,11 +109,11 @@ export default function Purchase() {
                                     150.000đ
                                 </div>
                                 <div className={styles.new_price}>
-                                    90.000đ
+                                    {purchase.total_price}
                                 </div>
                             </td>
                             <td>
-                                <span className={styles.status}>HOÀN THÀNH</span>
+                                <span className={styles.status}>{purchase.State.status}</span>
                             </td>
                         </table>
                     </div>

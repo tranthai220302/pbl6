@@ -5,6 +5,7 @@ import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import newRequest from '../../ults/NewRequest';
 import { useQuantity } from '../../Context/QuantityProvider';
+import { useLocation } from 'react-router-dom';
 
 export default function Cart() {
   const [error, setError] = useState(null);
@@ -14,11 +15,23 @@ export default function Cart() {
   const [selectedItems, setSelectedItems] = useState([]);
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const [totalPrice, setTotalPrice] = useState("");
-  const getData = async () => {
+  const location = useLocation();
+  const { id } = location.state || "";
+
+  const fetchData = async () => {
     setIsPending(true);
     try {
+      console.log(id)
       const res = await newRequest.get('/cart');
       setData(res.data);
+      if (id) {
+        console.log("s",id)
+        const bookToSelect = res.data.find((book) => book.BookId === parseInt(id, 10));
+        console.log(bookToSelect)
+        if (bookToSelect) {
+          handleCheckboxChange(bookToSelect.id);
+        }
+      }
       setIsPending(false);
       setError(false);
     } catch (error) {
@@ -26,6 +39,7 @@ export default function Cart() {
       setIsPending(false);
     }
   };
+  
 
   const DeleteCart = async (id) => {
     setIsPending(true);
@@ -33,7 +47,7 @@ export default function Cart() {
       await newRequest.delete(`/cart/delete/${id}`);
       setIsPending(false);
       setError(false);
-      getData();
+      fetchData();
     } catch (error) {
       setError(error.response.data);
       setIsPending(false);
@@ -53,8 +67,8 @@ export default function Cart() {
   };
 
   useEffect(() => {
-    getData();
-  }, [selectedItems]);
+    fetchData();
+  }, [id]);
 
   useEffect(() => {
     const total = calculateTotalPrice();

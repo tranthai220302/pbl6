@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import newRequest from '../../ults/NewRequest';
 import { useEffect } from 'react';
 
+
 export default function ListBookDetail({admin, category,price_min,price_max,author, languages, nhaXB}) {
     const [data, setData] = useState('');
     const [error, setError] = useState('');
@@ -13,6 +14,7 @@ export default function ListBookDetail({admin, category,price_min,price_max,auth
     // const [category, setCategory] = useState(null);
     const [isPending, setIsPending] = useState(true);
     const [datacat, setDatacat] = useState([]);
+    const navigate = useNavigate();
     useEffect(()=>{
       console.log(category)
       console.log(price_min)
@@ -21,6 +23,11 @@ export default function ListBookDetail({admin, category,price_min,price_max,auth
       console.log(languages)
       console.log(nhaXB)
     }, [category])
+    const handleBookClick = (id, event) => {
+      event.preventDefault();
+      navigate(`/productinformation?id=${id}`);
+    };
+
 
     // const getDataByCategory = ()=>{
     //   setIsPending(true);
@@ -55,9 +62,9 @@ export default function ListBookDetail({admin, category,price_min,price_max,auth
     //     setIsPending(false)
     //   })
     // }
-    const getData = ()=>{
+    const getData = async ()=>{
       setIsPending(true);
-      newRequest.get(`/book/search?category=${category}&priceMin=${price_min}&priceMax=${price_max}&author=${author}&languages=${languages}&nhaXB=${nhaXB}`, {
+      await newRequest.get(`/book/search?category=${category}&priceMin=${price_min}&priceMax=${price_max}&author=${author}&languages=${languages}&nhaXB=${nhaXB}`, {
       }).then(
         (res) => {
           setData(res.data)
@@ -80,7 +87,7 @@ export default function ListBookDetail({admin, category,price_min,price_max,auth
         <div className={styles.background}>
           <div className={styles.booklist}>
           {data && !error && data.map((item)=>(
-              <div className={styles.book_item} key={item.id} >
+              <div className={styles.book_item} key={item.id}  onClick={(e) => handleBookClick(item.id, e)} >
                 <img src={item.Images[0].filename} alt="" />
                 <div className={styles.line}>
                   <span>
