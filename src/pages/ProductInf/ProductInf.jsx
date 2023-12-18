@@ -3,8 +3,9 @@ import styles from './ProductInf.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faMessage, faStore, faPlus} from '@fortawesome/free-solid-svg-icons';
 import newRequest from '../../ults/NewRequest'
+import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-
+import { useQuantity } from '../../Context/QuantityProvider';
 export default function ProductInf() {
     const [book, setBook] = useState();
     const [selectedImage, setSelectedImage] = useState();
@@ -12,7 +13,14 @@ export default function ProductInf() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
-    
+    const { quantity, updateQuantity, address, updateAddress } = useQuantity();
+    const handleQuantityChange = (event) => {
+      const newQuantity = parseInt(event.target.value, 10);
+      updateQuantity(newQuantity);
+    };
+    const handleAdressChange = (event) => {
+        updateAddress(event.target.value);
+      };
     const fetchData = async () => {
         try {
           console.log('Fetching data for book with id:', id);
@@ -91,13 +99,13 @@ export default function ProductInf() {
                                 <div className={styles.address_title}>
                                     <span>Địa chỉ nhận hàng</span>  
                                 </div>
-                                <input type="text" placeholder='Chọn địa chỉ nhận hàng'/>
+                                <input type="text" placeholder='Chọn địa chỉ nhận hàng' onChange={(e)=>{handleAdressChange(e)}} defaultValue={address}/>
                             </div>
                             <div className={styles.Quantity}>
                                 <div className={styles.Quantity_title}>
                                     <span>Số lượng</span>
                                 </div>
-                                <input type="number" />
+                                <input type="number" onChange={(e)=>{handleQuantityChange(e)}}/>
                             </div>
                             <div className={styles.product_add_box}>
                                 <div className={styles.add_cart}>
@@ -107,7 +115,7 @@ export default function ProductInf() {
                                     </button>
                                 </div>
                                 <div className={styles.buy_product}>
-                                    <button className={styles.btn}>Mua ngay</button>
+                                    <Link to = {`/order/${book.id}`}><button className={styles.btn}>Mua ngay</button></Link>
                                 </div>
                             </div>
                         </div>

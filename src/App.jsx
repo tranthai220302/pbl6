@@ -33,6 +33,8 @@ import SliderMenu from './compoments/SliderMenu/SliderMenu';
 import ReportPage from './pages/Admin/ReportPage/ReportPage';
 import Satistical from './pages/Admin/Satistical/Satistical';
 import Voucher from './pages/Admin/Voucher/Vouher';
+import Order from './pages/Order/Order';
+import { QuantityProvider } from './Context/QuantityProvider';
 const queryClient = new QueryClient()
 const App = () => {
   const [openChat, setOpenChat] = useState(false)
@@ -45,16 +47,18 @@ const App = () => {
 
     console.log(isAdminPage)
     return (
-      <QueryClientProvider client={queryClient}>
-        <div className="app">
-          {!isAdminPage && !isLoginPage && !isRegisterPage && (<Header setOpenChat={setOpenChat} />)}
-          {isAdminPage && <SliderMenu />}
-          {openChat && (<Chat setOpenChat={setOpenChat} />)}
-          <Outlet/>
-          {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
-          <ToastContainer />
-        </div>
-      </QueryClientProvider>
+      <QuantityProvider>
+          <QueryClientProvider client={queryClient}>
+          <div className="app">
+            {!isAdminPage && !isLoginPage && !isRegisterPage && (<Header setOpenChat={setOpenChat} />)}
+            {isAdminPage && <SliderMenu />}
+            {openChat && (<Chat setOpenChat={setOpenChat} />)}
+            <Outlet/>
+            {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
+            <ToastContainer />
+          </div>
+        </QueryClientProvider>
+      </QuantityProvider>
     )
   }
   const router = createBrowserRouter([
@@ -89,6 +93,10 @@ const App = () => {
         {
           path: '/cart',
           element: <Cart/>
+        },
+        {
+          path: '/order/:id',
+          element: <Order />
         },
         {
           path: '/profile',

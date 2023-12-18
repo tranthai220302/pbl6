@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import newRequest from '../../ults/NewRequest';
+import { useQuantity } from '../../Context/QuantityProvider';
 
 export default function Cart() {
   const [error, setError] = useState(null);
@@ -13,7 +14,6 @@ export default function Cart() {
   const [selectedItems, setSelectedItems] = useState([]);
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const [totalPrice, setTotalPrice] = useState("");
-
   const getData = async () => {
     setIsPending(true);
     try {
