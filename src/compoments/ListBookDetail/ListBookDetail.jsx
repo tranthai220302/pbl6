@@ -77,15 +77,17 @@ export default function ListBookDetail({admin, category,price_min,price_max,auth
   },[price_min,price_max,category,author,languages,nhaXB])
     return(
         
-        <div className={styles.ListBookDetail}>
-          <div>
+        <div className={styles.background}>
+          <div className={styles.booklist}>
           {data && !error && data.map((item)=>(
-              <div className={`${styles.hotproduct_item} ${styles.product}`} key={item.id}>
+              <div className={styles.book_item} key={item.id} >
                 <img src={item.Images[0].filename} alt="" />
                 <div className={styles.line}>
                   <span>
                       {item.name}                   
                   </span>
+                </div>
+                <div className={styles.line}>
                   <b>
                       {item.price}đ
                   </b>

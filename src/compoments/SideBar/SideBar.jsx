@@ -111,11 +111,12 @@ export default function SideBar({ category, setCategory, price_min, setPrice_min
                 <form>
                     {datacate && datacate.map((value) => (
                             <li>
-                                <input type="radio" name="category" onClick={() => handleCategory(value.name)}/>
-                                <lable>{value.name}</lable>
+                                <input type="radio" name="category" id={value.id} onClick={() => handleCategory(value.name)}/>
+                                <lable >{value.name}</lable>
                             </li>
                     ))}          
-                    <input type="reset" value='Clear' onClick={() => handleCategory('')}/>     
+                    <input type="radio" name='category' id='all' onClick={() => handleCategory('')}/>
+                    <label htmlFor="all">Tất cả</label>     
                 </form>
                 
                 </ul>
@@ -153,7 +154,8 @@ export default function SideBar({ category, setCategory, price_min, setPrice_min
                         <input type="radio" name='price' id="700000"/>
                         <label for="700000">từ 700,000đ trở lên</label>
                     </li>
-                    <input type="reset" value='Clear' onClick={() => {handlePrice_min('') ; handlePrice_max('')}}/> 
+                    <input type="radio" id='allprice' name='price' onClick={() => {handlePrice_min('') ; handlePrice_max('')}}/> 
+                    <label htmlFor="allprice">Tất cả</label> 
                     </form>
 
                 </ul>
@@ -166,11 +168,12 @@ export default function SideBar({ category, setCategory, price_min, setPrice_min
                 <form>
                     {dataAuth && dataAuth.map((value) => (
                             <li>
-                                <input type="radio" name="auth" onClick={() => handleAuthor(value)}/>
+                                <input type="radio" name="author" onClick={() => handleAuthor(value)}/>
                                 <lable>{value}</lable>
                             </li>
                     ))}
-                    <input type='reset' value='Clear' onClick={() => handleAuthor('')}></input>
+                    <input type='radio' id='allauthor' name='author' onClick={() => handleAuthor('')}></input>
+                    <label htmlFor="allauthor">Tất cả</label>
                 </form>
                 </ul>
             </div>
@@ -187,7 +190,8 @@ export default function SideBar({ category, setCategory, price_min, setPrice_min
                             </li>
 
                     ))}
-                    <input type='reset' value='Clear' onClick={() => handleAuthor('')}></input>
+                    <input type='radio'id='alllanguages' name='languages' onClick={() => handleLanguages('')}></input>
+                    <label htmlFor="alllanguages">Tất cả</label>
 
                 </form>
                 </ul>
@@ -204,7 +208,8 @@ export default function SideBar({ category, setCategory, price_min, setPrice_min
                                 <lable>{value}</lable>
                             </li>
                     ))}
-                    <input type='reset' value='Clear' onClick={() => handleNhaXB('')}></input>
+                    <input type='radio' name='nhaXB' id='allnhaXB' onClick={() => handleNhaXB('')}></input>
+                    <label htmlFor="allnhaXB">Tất cả</label>
                 </form>
                 </ul>
             </div>

@@ -28,10 +28,10 @@
     margin: 0;
 }
 
-.SideBar_item li:hover {
+/* .SideBar_item li:hover {
     cursor: pointer;
     text-decoration: underline;
-}
+} */
 
 .SideBar_item li input {
     margin-right: 10px;
