@@ -9,6 +9,8 @@ import axios from 'axios';
 import ModalCustomer from '../../../compoments/Modal/Modal';
 import ModalUpdate from '../../../compoments/ModalUpdate/ModalUpdate';
 import newRequest from '../../../ults/NewRequest';
+import { Navbar } from 'react-bootstrap';
+import NavbarAdmin from '../NavbarAdmin/NavbarAdmin';
 export default function Customer() {
   const [selectedCustomer, setSelectedCustomer] = useState(null); 
   const [selectedCustomerUpdate, setSelectedCustomerUpdate] = useState(null); 
@@ -63,16 +65,7 @@ export default function Customer() {
   return (
     <div className={styles.container}>
         <div className={styles.customer}>
-          <div className={styles.navbar}>
-            <div className={styles.search}>
-              <input type="text"className={styles.search_input} onChange={(e)=>{setName(e.target.value)}} onKeyPress={handleKeyPress} />
-              <FontAwesomeIcon icon={faSearch} className={styles.search_icon} onClick={()=>{handleclick(name)}} />
-            </div>
-            <div className={styles.user}>
-              <FontAwesomeIcon icon={faBell} className={styles.notify_icon} />
-              <img className={styles.avatar} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHt1mwK4Kb4YVuHYIO5PUWrvcVgbYaW-Sb3g&usqp=CAU" alt="" />
-            </div>
-          </div>
+          <NavbarAdmin />
           <div className={styles.content}>
             <div className={styles.list}>
               <div className={styles.table1}>
