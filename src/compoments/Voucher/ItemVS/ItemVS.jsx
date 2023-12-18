@@ -4,7 +4,7 @@ import { format, parseISO } from 'date-fns';
 import newRequest from '../../../ults/NewRequest';
 import { toast } from 'react-toastify';
 export default function ItemVS({ voucher}) {
-    const [error, setError] = useState(null);
+    const [errr, setError] = useState(null);
     const [isPending, setIsPending] = useState(true);
     const handleBookVoucher = async(id) =>{
         setIsPending(true);
