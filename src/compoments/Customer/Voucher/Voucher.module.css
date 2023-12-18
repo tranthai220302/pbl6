@@ -1,4 +1,4 @@
-.Purchase {
+.Voucher {
     background-color: white;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     border-radius: 4px;
@@ -7,7 +7,7 @@
     height: fit-content;
 }
 
-.Purchase_Title {
+.Voucher_Title {
     background-color: #BEDDDD;
     font-size: 20px;
     font-weight: bold;
@@ -16,38 +16,37 @@
     border-radius: 4px 4px 0 0;
 }
 
-.Purchase_Sub_Title {
+.Voucher_Sub_Title {
     margin: 0px 20px;
     border-bottom: 1px solid rgba(78, 165, 139, 0.34);
 }
 
-.Purchase_Sub_Title ul {
+.Voucher_Sub_Title ul {
     list-style: none;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     padding: 6px 0;
     margin: 0;
-    font-size: small;
 }
 
-.Purchase_Sub_Title ul li:hover {
+.Voucher_Sub_Title ul li:hover {
     color: green;
     cursor: pointer;
 }
 
-.Purchase_Product {
+.Voucher_Product {
     padding: 20px;
 }
 
-.Purchase_Product_Item {
+.Voucher_Product_Item {
     
 }
 
-.Purchase_Product_Item td {
+.Voucher_Product_Item td {
     vertical-align: middle;
 }
 
-.Purchase_Product_Item img {
+.Voucher_Product_Item img {
     height: 100px;
     width: 100px;
 }
@@ -71,23 +70,23 @@
     font-size: 20px;
 }
 
-.Purchase_Product_Item {
+.Voucher_Product_Item {
     border-bottom: 1px dashed #4EA58B;
 }
 
-.Purchase_Product_Item .old_price {
+.Voucher_Product_Item .old_price {
     color: gray;
     text-decoration: line-through;
     font-weight: 300;
     font-size: 12px;
 }
 
-.Purchase_Product_Item .new_price {
+.Voucher_Product_Item .new_price {
     font-weight: 500;
     color: #4EA58B;
 }
 
-.Purchase_Product_Item .status {
+.Voucher_Product_Item .status {
     text-transform: uppercase;
     font-weight: 500;
     color: #4EA58B;
