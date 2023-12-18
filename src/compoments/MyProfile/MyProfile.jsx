@@ -2,49 +2,64 @@ import React, { useState } from 'react'
 import styles from './MyProfile.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserEdit, faUser, faTableList, faTicket, faLink, faKey} from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 export default function MyProfile() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     return(
         <div className={styles.MyProfile}>
-            <div className={styles.MyProfile_Title}>
-                Thông tin cá nhân
-            </div>
-            <div className={styles.MyProfile_Content}>
-                <table>
-                    <colgroup>
-                        <col width='30%'/>
-                        <col />
-                    </colgroup>
-                    <tr>
-                        <th>Tên đăng nhập</th>
-                        <td>khanhlinhne</td>
-                    </tr>
-                    <tr>
-                        <th>Họ và tên</th>
-                        <td>Trương Thị Khánh Linh</td>
-                    </tr>
-                    <tr>
-                        <th>Email</th>
-                        <td>khanhlinhak20lqd@gmail.com</td>
-                    </tr>
-                    <tr>
-                        <th>Số điện thoại</th>
-                        <td>0384616499</td>
-                    </tr>
-                    <tr>
-                        <th>Giới tính</th>
-                        <td>Nữ</td>
-                    </tr>
-                    <tr>
-                        <th>Ngày sinh</th>
-                        <td>02/08/2002</td>
-                    </tr>
-                    <tr>
-                        <th>Địa chỉ</th>
-                        <td>K16/06 Ngô Sĩ Liên - Hòa Khánh - Liên Chiểu - Đà Nẵng</td>
-                    </tr>
-                </table>
-            </div>
+            {
+                currentUser ? (
+                    <div>
+                        <div className={styles.MyProfile_Title}>
+                            Thông tin cá nhân
+                        </div>
+                        <div className={styles.MyProfile_Content}>
+                            <table>
+                                <colgroup>
+                                    <col width='30%'/>
+                                    <col />
+                                </colgroup>
+                                <tr>
+                                    <th>Tên đăng nhập</th>
+                                    <td>{currentUser.username}</td>
+                                </tr>
+                                <tr>
+                                    <th>Họ và tên</th>
+                                    <td>{currentUser.firstName + ' ' + currentUser.lastName}</td>
+                                </tr>
+                                <tr>
+                                    <th>Email</th>
+                                    <td>{currentUser.email}</td>
+                                </tr>
+                                <tr>
+                                    <th>Số điện thoại</th>
+                                    <td>{currentUser.phone}</td>
+                                </tr>
+                                <tr>
+                                    <th>Giới tính</th>
+                                    <td>Nữ</td>
+                                </tr>
+                                <tr>
+                                    <th>Ngày sinh</th>
+                                    <td>02/08/2002</td>
+                                </tr>
+                                <tr>
+                                    <th>Địa chỉ</th>
+                                    <td>{currentUser.address}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                ) : (
+                    <div className={styles.notlogin}>
+                        <span className={styles.Notification}>
+                            Bạn cần đăng nhập để truy cập!
+                        </span>
+                        <Link to="/login">Đăng nhập</Link>
+                    </div>
+                )
+            }
         </div>
     )
 }

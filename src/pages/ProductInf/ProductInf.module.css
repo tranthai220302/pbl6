@@ -36,17 +36,21 @@
     display: flex;
     flex-direction: column;
     padding-bottom: 4px;
-    justify-content: space-between;
+    justify-content: flex-start;
     max-height: 400px; /* Chiều cao tối đa của toàn bộ thumbnail */
     overflow: hidden; 
     width: 20%;
 }
 
-.product_thumbnail img {
+.product_thumbnail .img_thumb {
     height: 20%;
-    width: 100%;
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    width: 100%;margin: 4px 0;
     object-fit: cover; /* Chỉnh ảnh để nó phủ đầy đủ không gian của phần tử cha */
+}
+
+.img_thumb:hover {
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
 .product_img {
@@ -182,7 +186,7 @@
     font-weight: 500;
 }
 
-.product_view_info, .product_description {
+.product_view_info, .product_description, .Store_Inf {
     background-color: white;
     border-radius: 4px;
     padding: 20px;
@@ -202,6 +206,53 @@ table, th, td {
     border: none !important;
 }
 
+.avt_store img {
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.Store_Inf {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+}
+
+.Store_Content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.Store_name {
+    font-weight: bold;
+    font-size: 16px;
+    margin-left: 10px;
+    text-transform: uppercase;
+}
+
+.Store button {
+    width: 100px;
+    padding: 4px 6px;
+    font-size: small;
+    margin-left: 10px;
+
+}
+
+.Store button span{
+    text-transform: none;
+    padding-left: 6px;
+}
+
+.Store_Des {
+    border-left: solid 1px #4EA58B;
+}
+
+.Store_Des td {
+    padding-left: 20px;
+}
+
 .product_description {
     margin-bottom: 20px;
 }
+

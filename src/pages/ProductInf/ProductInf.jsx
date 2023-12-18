@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import styles from './ProductInf.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faStar, faMinus, faPlus} from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faMessage, faStore, faPlus} from '@fortawesome/free-solid-svg-icons';
 import newRequest from '../../ults/NewRequest'
 import { useLocation } from 'react-router-dom';
 
 export default function ProductInf() {
     const [book, setBook] = useState();
+    const [selectedImage, setSelectedImage] = useState();
+
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
@@ -17,6 +19,7 @@ export default function ProductInf() {
           const response = await newRequest.get(`/book/item/${id}`);
           console.log('API response:', response.data);
           setBook(response.data);
+          setSelectedImage(response.data.Images && response.data.Images[0]);
         } catch (error) {
           console.error('Error fetching book details:', error);
         }
@@ -26,6 +29,13 @@ export default function ProductInf() {
         fetchData();
       }, [id]);
 
+      const handleThumbnailHover = (image) => {
+        setSelectedImage(image);
+      };
+
+    // Đọc thông tin người dùng từ Local Storage
+    const storedUserData = localStorage.getItem('user');
+
     return(
         <div>
             {
@@ -34,12 +44,12 @@ export default function ProductInf() {
                         <div className={styles.product_essential_media}>
                             <div className={styles.product_view_img}>
                                 <div className={styles.product_thumbnail}>
-                                    {book.images && book.images.map((image, index) => (
-                                        <img key={index} src={image} alt={`Image ${index + 1}`} />
+                                    {book.Images && book.Images.map((image, index) => (
+                                        <img className={styles.img_thumb} key={index} src={image.filename} alt={`Image ${index + 1}`} onMouseOver={() => handleThumbnailHover(image)}/>
                                     ))}
                                 </div>
                                 <div className={styles.product_img}>
-                                    <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQwoxFWLL03uShvAkvXTe6rTZTC1yqIzxReaxoPkYqsQnsgTY2n" alt="" />
+                                    <img src={selectedImage.filename} alt="" />
                                 </div>
                             </div>
                         </div>
@@ -49,7 +59,7 @@ export default function ProductInf() {
                                 <div className={styles.line}>
                                     <div className={`${styles.product_view_sa_supplier} ${styles.col1}`}>
                                         <span>Nhà xuất bản: </span>
-                                        <a href="">FIRST NEWS</a>
+                                        <a href="">{book.nhaXB}</a>
                                     </div>
                                     <div className={styles.product_view_sa_sub}>
                                         <span>Tác giả: </span>
@@ -102,6 +112,44 @@ export default function ProductInf() {
                             </div>
                         </div>
                     </div>
+                    <div className={styles.Store_Inf}>
+                        <div className={styles.avt_store}>
+                            <img src={book.User.DetailStore.avatar} alt="" />
+                        </div>
+                        <div className={styles.Store_Content}>
+                            <div className={styles.Store_name}>
+                                <span>
+                                    {book.User.DetailStore.nameStore}
+                                </span>
+                            </div>
+                            <div className={styles.Store}>
+                                <button>
+                                    <FontAwesomeIcon icon={faMessage}/>
+                                    <span>Chat</span>
+                                </button>
+                                <button>
+                                    <FontAwesomeIcon icon={faStore}/>
+                                    <span>Xem Store</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div className={styles.Store_Des}>
+                            <table>
+                                <colgroup>
+                                    <col/>
+                                    <col/>
+                                </colgroup>
+                                <tr>
+                                    <td>Đánh giá: 149</td>
+                                    <td>Sản phẩm: 150</td>
+                                </tr>
+                                <tr>
+                                    <td>Tham gia từ: 11/11/2021</td>
+                                    <td>Người theo dõi: 32</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                     <div className={styles.product_view_info}>
                         <h3 className={styles.info_title}>
                             Thông tin sản phẩm
@@ -119,7 +167,7 @@ export default function ProductInf() {
                                     </tr>
                                     <tr>
                                         <th>NXB</th>
-                                        <td>NXB Tổng hợp TPHCM</td>
+                                        <td>{book.nhaXB}</td>
                                     </tr>
                                     <tr>
                                         <th>Năm xuất bản</th>
@@ -127,23 +175,19 @@ export default function ProductInf() {
                                     </tr>
                                     <tr>
                                         <th>Ngôn ngữ</th>
-                                        <td>Tiếng Việt</td>
+                                        <td>{book.languages}</td>
                                     </tr>
                                     <tr>
                                         <th>Trọng lượng (gram)</th>
-                                        <td>420</td>
+                                        <td>{book.weight}</td>
                                     </tr>
                                     <tr>
                                         <th>Kích thước bao bì</th>
-                                        <td>20.5 x 14.5cm</td>
+                                        <td>{book.size}</td>
                                     </tr>
                                     <tr>
                                         <th>Số trang</th>
-                                        <td>416</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Hình thức</th>
-                                        <td>Bìa mềm</td>
+                                        <td>{book.numPage}</td>
                                     </tr>
                                 </tbody>
                             </table>

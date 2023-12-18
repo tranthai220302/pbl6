@@ -9,19 +9,15 @@ import { Link } from 'react-router-dom';
 export default function Header({setOpenChat}) {
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
+  const [userData, setUserData] = useState();
   // const [openchat, setOpenchay] = useState(false);
   const navigate = useNavigate();
+  const currentUser = localStorage.getItem("currentUser")
   
-  console.log(user)
-
-  const [isLoggedIn, setLoggedIn] = useState(true);
-
-  const handleLogin = () => {
-    setLoggedIn(true);
-  };
-
+  
   const handleLogout = () => {
-    setLoggedIn(false);
+    localStorage.removeItem('currentUser');
+    setUserData(null);
   };
 
   return (
@@ -76,7 +72,7 @@ export default function Header({setOpenChat}) {
                   <FontAwesomeIcon icon={faUser}/>
                   Tài khoản
                   <div className={styles.acc_dropdown}>
-                    {isLoggedIn ? (
+                    {currentUser ? (
                       <>
                       <Link to='/profile'>Tài khoản của tôi</Link>
                       <Link>Đơn mua</Link>
@@ -84,7 +80,7 @@ export default function Header({setOpenChat}) {
                       </>
                     ) : (
                       <>
-                        <Link to="/login" onClick={handleLogin}>Đăng nhập</Link>
+                        <Link to="/login">Đăng nhập</Link>
                         <Link to="/register">Đăng ký</Link>
                       </>
                     )}

@@ -45,6 +45,7 @@ export default function Login() {
             value={username} // Thêm giá trị vào trường nhập liệu
             onChange={(e) => setUsername(e.target.value)} // Cập nhật giá trị vào state
             placeholder="Nhập tên tài khoản"
+            required
           />
         </div>
         <div className={styles.item}>

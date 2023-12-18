@@ -20,3 +20,27 @@
     padding-left: 20px;
 }
 
+.notlogin {
+    background-color: #DFF4F6;
+    padding: 0 calc(100vw/15);
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notlogin .Notification, .notlogin a {
+    font-weight: 500;
+    font-size: xx-large;
+    text-decoration: none;
+}
+
+.notlogin a {
+    color: #4EA58B;
+    margin-left: 20px
+}
+
+.notlogin a:hover {
+    color: green;
+}
+

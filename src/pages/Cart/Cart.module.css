@@ -43,6 +43,26 @@ button:hover {
    margin: 10px;
 }
 
+.customer_info .title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 20px;
+}
+
+.icon_edit:hover, .icon_trash:hover {
+    color: green;
+    cursor: pointer;
+}
+
+.product_cart_content tr {
+    border-bottom: 1px dashed #4EA58B;
+}
+
+.product_cart_content {
+    padding: 0 20px 20px 20px;
+}
+
 td, th {
     text-align: left !important;
 }
@@ -51,22 +71,12 @@ th {
     font-weight: 500;
 }
 
-.item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 20px;
-    height: 100px;
-    padding: 20px;
-    justify-content: space-between;
-}
-
 .checkbox {
     border: 1px solid #4EA58B;
 }
 
 .item img {
-    height: 100%;
+    height: 80px;
 }
 
 .product_name {
@@ -89,6 +99,7 @@ th {
 .count {
     height: 50%;
     width: 80px;
+    text-align: center;
 }
 
 .right {
@@ -134,4 +145,36 @@ form input {
 
 .btn button {
     width: 50%;
+}
+
+.notlogin {
+    background-color: #DFF4F6;
+    padding: 0 calc(100vw/15);
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notlogin .Notification, .notlogin a {
+    font-weight: 500;
+    font-size: xx-large;
+    text-decoration: none;
+}
+
+.notlogin a {
+    color: #4EA58B;
+    margin-left: 20px
+}
+
+.notlogin a:hover {
+    color: green;
+}
+
+.percentDiscount {
+    background-color: #B31C1C;
+    color: white;
+    margin-left: 10px;
+    padding: 0 10px;
+    border-radius: 4px;
 }
