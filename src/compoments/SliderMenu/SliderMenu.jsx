@@ -24,7 +24,9 @@ export default function SliderMenu({seOpen}) {
     <div className={styles.sidebar_menu}>
         <div className={styles.sidebar_header}>
             <div className={styles.logo}>
+                <Link to = '/admin/home'>
                 <img className={styles.img_logo} src={logo} alt="" />
+                </Link>
             </div>
         </div>
     <div className={styles.main_menu}>

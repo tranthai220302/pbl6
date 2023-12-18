@@ -22,16 +22,19 @@ function AddBook({id,  getData}) {
   const [file, setFile] = useState([]);
   const [bookInfo, setBookInfo] = useState({
     name: '',
-    desc : '',
-    price : '',
+    desc: '',
+    price: '',
     publication_date: '',
-    sales_number : '',
-    author_id : '',
-    store_id : id,
-    images : '',
-    categorys : selectedCategories,
-    images : file
-  })
+    sales_number: '',
+    author_id: '',
+    store_id: id,
+    nhaXB: '',
+    languages: '',
+    weight: 0,
+    size: '',
+    numPage: 0,
+    percentDiscount: 0,
+  });
   const handleCategoryChange = (event) => {
     const categoryId = parseInt(event.target.value);
     const isChecked = event.target.checked;
@@ -49,7 +52,7 @@ function AddBook({id,  getData}) {
     setBookInfo((prev)=>(
       {
         ...prev,
-        [name]: name === 'sales_number' ? parseInt(value, 10) : name === 'author_id' ? parseInt(value, 10): name == 'price' ?  parseInt(value, 10) : value,
+        [name]: name === 'sales_number' ? parseInt(value, 10) : name === 'author_id' ? parseInt(value, 10): name == 'price' ?  parseInt(value, 10) :  name === 'numPage' ? parseInt(value, 10) : name === 'percentDiscount' ? parseInt(value, 10)/100 : value ,
       }
     ))
   }
@@ -68,23 +71,22 @@ function AddBook({id,  getData}) {
   }
   const handleCreateBook = async() => {
     setIsPending(true)
-    const requiredFields = ['name', 'desc', 'price', 'publication_date', 'sales_number', 'author_id', 'categorys'];
+    const requiredFields = ['name', 'desc', 'price', 'publication_date', 'sales_number', 'author_id', 'categorys', 'nhaXB', 'percentDiscount', 'languages', 'size', 'weight', 'numPage'];
 
     const isFormValid = requiredFields.every((field) => {
       return bookInfo[field] !== '';
     });
     const imgUrl = await imagesUrl();
     console.log(imgUrl)
-    setBookInfo((prev)=>({
-      ...prev,
-      categorys : selectedCategories,
-      images : imgUrl
-    }))
-    console.log(bookInfo)
+    console.log(selectedCategories)
+    const bookPost = bookInfo;
+    bookPost.categorys = selectedCategories;
+    bookPost.images = imgUrl
+    console.log(bookPost)
     if (isFormValid) {
       setIsPending(true);
       newRequest
-        .post(`/book/create/${id}`, bookInfo)
+        .post(`/book/create/${id}`, bookPost)
         .then((res) => {
           getData('');
           toast.success('Thêm sách thành công!', {
@@ -103,7 +105,11 @@ function AddBook({id,  getData}) {
             sales_number : '',
             author_id : '',
             store_id : id,
-            images : '',
+            nhaXB: '',
+            languages: '',
+            weight: 0,
+            size: '',
+            numPage: 0,
             categorys : '',
             images : ''
           })
@@ -111,6 +117,7 @@ function AddBook({id,  getData}) {
         })
         .catch((error) => {
           setError(error.response.data);
+          console.log(error.response.data)
           setIsPending(false);
           toast.error(error.response.data, {
             position: toast.POSITION.TOP_RIGHT,
@@ -157,24 +164,37 @@ function AddBook({id,  getData}) {
   return (
     <>
       <button onClick={handleShow} className={styles.btn}>Thêm Sách</button>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} fullscreen={true}>
       <Modal.Header closeButton>
-        <Modal.Title>Thông tin Voucher FreeShip</Modal.Title>
+        <Modal.Title>Nhập thông tin của sách</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {isPending && (<img src='https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height={20} width={450} />)}
         <div className={styles.container}>
-            <div className={styles.item}>
+          <div className={styles.left}>
+          <div className={styles.item}>
                 <span className={styles.name_item}>Name</span>
                 <input type="text" className={styles.input_item} placeholder='Nhập name sách' name='name' onChange={(e)=>handleSetFilterBook(e)} required/>
             </div>
             <div className={styles.item}>
                 <span className={styles.name_item}>Nội dung</span>
-                <textarea name="desc" id="" cols="30" rows="10" onChange={(e)=>handleSetFilterBook(e)} className={styles.input_item}></textarea>
+                <textarea name="desc" id="" cols="30" rows="13" onChange={(e)=>handleSetFilterBook(e)} className={styles.input_item}></textarea>
             </div>
             <div className={styles.item}>
-                <span className={styles.name_item}>Giá</span>
-                <input type="text" className={styles.input_item} placeholder='Nhập giá sách' name='price' onChange={(e)=>handleSetFilterBook(e)} required/>
+                <span className={styles.name_item}>Thể loại</span>
+                <div className={styles.value_book}>
+                      {isPendingCate && (<div>........</div>)}
+                      {!isPendingCate  && category && category.map((item, i) =>(
+                        <label key={i} className={styles.item_valuebook}>
+                          <input
+                            type="checkbox"
+                            value={item.id}
+                            onChange={handleCategoryChange}
+                          />  
+                          {item.name}
+                        </label>
+                      ))}
+                    </div>
             </div>
             <div className={styles.item}>
                 <span className={styles.name_item}>Tác giả</span>
@@ -187,35 +207,60 @@ function AddBook({id,  getData}) {
                   }
                 </select>
             </div>
+          </div>
+          <div className={styles.right}>
             <div className={styles.item}>
-                <span className={styles.name_item}>Thể loại</span>
-                <div className={styles.value_book}>
-                      {isPendingCate && (<div>........</div>)}
-                      {error && (<div>{error}</div>)}
-                      {!isPendingCate && !error && category && category.map((item, i) =>(
-                        <label key={i}>
-                          <input
-                            type="checkbox"
-                            value={item.id}
-                            onChange={handleCategoryChange}
-                          />  
-                          {item.name}
-                        </label>
-                      ))}
-                    </div>
+                <span className={styles.name_item}>Giá</span>
+                <input type="text" className={styles.input_item} placeholder='Nhập giá sách' name='price' onChange={(e)=>handleSetFilterBook(e)} required/>
             </div>
             <div className={styles.item}>
-                <span className={styles.name_item}>Số lượng</span>
-                <input type="text" className={styles.input_item} placeholder='Nhập số lượng' name= 'sales_number' onChange={(e)=>handleSetFilterBook(e)} required/>
-            </div>
-            <div className={styles.item}>
-                <span className={styles.name_item}>Ngày xuất bản</span>
-                <input type="date" className={styles.input_item} placeholder='Nhập giá sách' name='publication_date' onChange={(e)=>handleSetFilterBook(e)} required/>
+                <span className={styles.name_item}>Phần trăm giảm giá </span>
+                <input type="text" className={styles.input_item} placeholder='Nhập phần trăm giảm giá (%)' name='percentDiscount' onChange={(e)=>handleSetFilterBook(e)} required/>
             </div>
             <div className={styles.item}>
                 <span className={styles.name_item}>Ảnh</span>
                 <input type="file" className={styles.input_item} placeholder='Nhập số lượng' name= 'sales_number' onChange={(e)=>setFile(e.target.files)} required multiple/>
             </div>
+            <div className={styles.item}>
+                <span className={styles.name_item}>Nhà xuất bản</span>
+                <input type="text" className={styles.input_item} placeholder='Nhập nhà xuất bản' name='nhaXB' onChange={(e)=>handleSetFilterBook(e)} required/>
+            </div>
+            <div className={styles.solieu}>
+              <div className={styles.solieu_left}>
+                <div className={styles.item_sl}>
+                    <span className={styles.name_item}>Số lượng</span>
+                    <input type="text" className={styles.input_item} placeholder='Nhập số lượng' name= 'sales_number' onChange={(e)=>handleSetFilterBook(e)} required/>
+                </div>
+                <div className={styles.item_sl}>
+                  <span className={styles.name_item}>Năm xuất bản</span>
+                  <input type="text" className={styles.input_item} placeholder='Nhập năm xuất bản' name='publication_date' onChange={(e)=>handleSetFilterBook(e)} required/>
+                </div>
+                <div className={styles.item_sl}>
+                  <span className={styles.name_item}>Ngôn ngữ</span>
+                  <select className={styles.input_item} name='languages' onChange={(e)=>handleSetFilterBook(e)}>
+                    <option value="">Chọn ngôn ngữ</option>
+                      <option value="Tiếng Việt">Tiếng Việt</option>
+                      <option value="Tiếng Anh">Tiếng Anh</option>
+                      <option value="Tiếng Pháp">Tiếng Pháp</option>
+                    </select>
+                </div>
+              </div>
+              <div className={styles.solieu_right}>
+              <div className={styles.item_sl}>
+                <span className={styles.name_item}>Khối lượng</span>
+                <input type="text" className={styles.input_item} placeholder='Nhập khối lượng (gam)' name='weight' onChange={(e)=>handleSetFilterBook(e)} required/>
+              </div>
+              <div className={styles.item_sl}>
+                <span className={styles.name_item}>Kích thước</span>
+                <input type="text" className={styles.input_item} placeholder='Nhập kích thước (hxw) (cm)' name='size' onChange={(e)=>handleSetFilterBook(e)} required/>
+              </div>
+              <div className={styles.item_sl}>
+                <span className={styles.name_item}>Số trang</span>
+                <input type="text" className={styles.input_item} placeholder='Nhập số trang' name='numPage' onChange={(e)=>handleSetFilterBook(e)} required/>
+              </div>
+              </div>
+            </div>
+          </div>
         </div>
       </Modal.Body>
       <Modal.Footer>

@@ -2,16 +2,22 @@ import React, {useState} from 'react'
 import styles from './requestStore.module.css'
 import newRequest from '../../../ults/NewRequest';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faPenToSquare, faCircleInfo, faSearch, faBell, faCheck} from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faPenToSquare, faSearch, faBell, faCheck, faCircleInfo, faXmark} from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
 import SliderMenu from '../../../compoments/SliderMenu/SliderMenu';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import moment from 'moment';
+import DetailStoreRequest from './detailStore/DetailStoreRequest';
+import ModalCancel from './cancelRequestStore/CancelRequestStore';
 export default function RequestStore() {
     const [error, setError] = useState(null);
     const [isPending, setIsPending] = useState(true);
     const [data, setData] = useState(null);
+    const [selectedCustomer, setSelectedCustomer] = useState(null);
+    const [detailStore, setDetailStore] = useState(null)
+    const [customer1, setCustomer] = useState(null)
+    const [show, setShow] = useState(null)
     const getData = ()=>{
         setIsPending(true);
         newRequest.get(`/user/listRequest`, {
@@ -49,14 +55,6 @@ export default function RequestStore() {
     useEffect(()=>{
       getData()
       }, [])
-      useEffect(()=>{
-        if(error){
-          toast.error("Không tìm thấy yêu càu mở cửa hàng!", {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 1000, 
-          });
-        }
-        }, [error])
   return (
     <div className={styles.container}>
     <div className={styles.customer}>
@@ -77,21 +75,44 @@ export default function RequestStore() {
             <thead>
             <tr>
                 <th>Tên cửa hàng</th>
-                <th>Miêu tả cửa hàng</th>
                 <th>Ngày gửi yêu cầu</th>
+                <th>Xem thông tin</th>
                 <th>Xác nhận</th>
+                <th>Từ chối</th>
             </tr>
             </thead>
             <tbody>
             {!error && data && data?.map((customer) => (
                 <tr key={customer.id}>
+                {selectedCustomer && (
+                  <DetailStoreRequest store={selectedCustomer} show={true} handleClose={() => setSelectedCustomer(null)}/>
+                )}
+                {
+                  show && (
+                    <ModalCancel show={show} handleClose={()=>setShow(null)} id={customer1.id} getData = {getData}/>
+                  )
+                }
                 <td>{customer.nameStore}</td>
-                <td>{customer.descStore}</td>
                 <td>{moment(customer.createdAt).format("DD-MM-YYYY")}</td>
+                <td>
+                  <button>
+                      <FontAwesomeIcon icon={faCircleInfo} className={styles.user_icon} onClick={()=>{
+                        setSelectedCustomer(customer)
+                      }} />
+                  </button>
+                </td>
                 <td>
                     <button>
                     <FontAwesomeIcon icon={faCheck} className={styles.user_icon} onClick={()=>handelConfirm(customer.customer_id)} />
                     </button>
+                </td>
+                <td>
+                  <button>
+                      <FontAwesomeIcon icon={faXmark} className={styles.user_icon} onClick={()=>{
+                        setShow(true)
+                        setCustomer(customer.userStore)
+                      }} />
+                  </button>
                 </td>
                 </tr>
             ))}
