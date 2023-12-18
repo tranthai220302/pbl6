@@ -19,7 +19,7 @@ export default function ModalFreeShip({showExmaple, showCloseExample, id, isVouc
     const getData = (name) =>{
         setIsPending(true)
         if(isVoucher){
-            newRequest.get(`/voucherItem/list/free_ship/${id}?name=${name}`, {
+            newRequest.get(`/voucherItem/list/${id}?type=freeship&isExpire=true&name=${name}`, {
               withCredentials: true
             })
             .then((res) => {
