@@ -6,10 +6,12 @@ import newRequest from '../../ults/NewRequest'
 import { useLocation } from 'react-router-dom';
 import { Link, useNavigate} from 'react-router-dom'
 import { useQuantity } from '../../Context/QuantityProvider';
+import VoucherItem from '../../compoments/Voucher/VoucherItem';
+import VoucherFreeShipItem from '../../compoments/VoucherFreeShip/VoucherFreeShipItem';
 export default function ProductInf() {
     const [book, setBook] = useState();
     const [selectedImage, setSelectedImage] = useState();
-
+    const [idStore, setIdstore] = useState(null)
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
@@ -26,6 +28,7 @@ export default function ProductInf() {
           console.log('Fetching data for book with id:', id);
           const response = await newRequest.get(`/book/item/${id}`);
           console.log('API response:', response.data);
+          setIdstore(response.data.User.id)
           setBook(response.data);
           setSelectedImage(response.data.Images && response.data.Images[0]);
         } catch (error) {
@@ -224,6 +227,18 @@ export default function ProductInf() {
                             {book.desc}
                         </p>
                     </div>
+                    {idStore && (
+                        <div className={styles.voucher}>
+                            <h3>Miễn phí vận chuyển</h3>
+                            <VoucherFreeShipItem id = {idStore} />
+                        </div>
+                    )}
+                    {idStore && (
+                        <div className={styles.voucher}>
+                            <h3>Mã giảm giá sách</h3>
+                            <VoucherItem id = {idStore} />
+                        </div>
+                    )}
                 </div>)
                 
             }

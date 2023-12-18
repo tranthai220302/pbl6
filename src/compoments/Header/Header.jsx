@@ -5,7 +5,7 @@ import logo from '../../assets/img/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCartShopping, faBell, faSearch, faBook, faHouse} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-
+import newRequest from '../../ults/NewRequest';
 export default function Header({setOpenChat}) {
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
@@ -16,8 +16,18 @@ export default function Header({setOpenChat}) {
   
   
   const handleLogout = () => {
-    localStorage.removeItem('currentUser');
-    setUserData(null);
+    newRequest.post(`/auth/logout`, {
+      withCredentials: true
+    })
+    .then((res) => {
+      localStorage.removeItem('currentUser');
+      console.log(res.data)
+      setUserData(null);
+      navigate('/')
+    })
+    .catch((error) => {
+      console.log(error)
+    });
   };
 
   return (

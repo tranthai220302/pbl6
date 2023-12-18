@@ -8,6 +8,8 @@ import { faTrash, faPenToSquare, faCircleInfo, faSearch, faBell, faArrowUp} from
 import GraphAdmin from './DoanhThuAdmin/GraphAdmin'
 import UserChart from './User/GrapUser'
 import newRequest from '../../../ults/NewRequest'
+import { Navbar } from 'react-bootstrap'
+import NavbarAdmin from '../NavbarAdmin/NavbarAdmin'
 export default function HomeAdmin() {
     const [open, setOpen] = useState(true)
     const [number, setNumber] = useState({});
@@ -37,16 +39,7 @@ export default function HomeAdmin() {
   return (
     <div className={styles.container}>
       <div className={styles.customer}>
-        <div className={styles.navbar}>
-            <div className={styles.search}>
-              <input type="text"className={styles.search_input} />
-              <FontAwesomeIcon icon={faSearch} className={styles.search_icon}  />
-            </div>
-            <div className={styles.user}>
-              <FontAwesomeIcon icon={faBell} className={styles.notify_icon} />
-              <img className={styles.avatar} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHt1mwK4Kb4YVuHYIO5PUWrvcVgbYaW-Sb3g&usqp=CAU" alt="" />
-            </div>
-          </div>
+        <NavbarAdmin />
           {isLoading ? (
              <img className={styles.img_loading} src='https://i.gifer.com/ZKZg.gif' />
           ):(

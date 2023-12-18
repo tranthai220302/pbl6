@@ -6,6 +6,7 @@ import { faTrash, faPenToSquare, faCircleInfo, faSearch, faBell, faTruckFast, fa
 import { useState } from 'react';
 import Pie from '../../../compoments/Pie/Pie';
 import DrawLine from '../../../compoments/DrawLine/DrawLine';
+import NavbarAdmin from '../NavbarAdmin/NavbarAdmin';
 export default function Satistical() {
   const date = new Date();
   console.log(date.getMonth() + 1)
@@ -27,16 +28,7 @@ export default function Satistical() {
   }
   return (
     <div className={styles.container}>
-        <div className={styles.navbar}>
-          <div className={styles.search}>
-            <input type="text"className={styles.search_input} />
-            <FontAwesomeIcon icon={faSearch} className={styles.search_icon}  />
-          </div>
-          <div className={styles.user}>
-            <FontAwesomeIcon icon={faBell} className={styles.notify_icon} />
-            <img className={styles.avatar} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHt1mwK4Kb4YVuHYIO5PUWrvcVgbYaW-Sb3g&usqp=CAU" alt="" />
-          </div>
-        </div>
+      <NavbarAdmin />
         <div className={styles.content}>
           <div className={styles.draw}>
             <div className={styles.pie}>
