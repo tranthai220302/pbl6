@@ -119,7 +119,7 @@ export default function ProductInf() {
                                 <div className={styles.address_title}>
                                     <span>Địa chỉ nhận hàng</span>  
                                 </div>
-                                <input type="text" placeholder='Chọn địa chỉ nhận hàng' onChange={(e)=>{handleAdressChange(e)}} defaultValue={address}/>
+                                <input type="text" placeholder='Chọn địa chỉ nhận hàng' onChange={(e)=>{handleAdressChange(e)}} />
                             </div>
                             <div className={styles.Quantity}>
                                 <div className={styles.Quantity_title}>
@@ -135,7 +135,9 @@ export default function ProductInf() {
                                     </button>
                                 </div>
                                 <div className={styles.buy_product}>
-                                    <button className={styles.btn} onClick={(e)=>{BuyBook(id,quantity,e)}}>Mua ngay</button>
+                                    <Link to = {`/order/${id}`}>
+                                    <button className={styles.btn} >Mua ngay</button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
