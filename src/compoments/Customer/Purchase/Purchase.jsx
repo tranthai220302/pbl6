@@ -38,7 +38,7 @@ export default function Purchase() {
             setError(null);
             } catch (error) {
             setError(error.response.data);
-            setIsPending(false);
+            setIsPending(false)
             }
         }
     };
