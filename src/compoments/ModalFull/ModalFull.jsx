@@ -59,7 +59,7 @@ function Example({showExmaple, showCloseExample, id, isOrder, isVoucher}) {
       });
     } else if(isVoucher){
       setIsPending(true)
-        newRequest.get(`/voucherItem/${id}?name=${nameVoucher}`, {
+        newRequest.get(`/voucherItem/list/${id}?type=store`, {
           withCredentials: true
         })
         .then((res) => {

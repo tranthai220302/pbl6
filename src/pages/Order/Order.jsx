@@ -19,6 +19,7 @@ export default function Order() {
   const [price, setPrice] = useState(0);
   const [idVoucher, setIdVoucher] = useState([])
   const [isOnline, setIsOnline] = useState(null)
+  const [isOffline, setIsOffline] = useState(null)
   const [priceInfor, setPriceInfor] = useState({
     priceShip : 0,
     priceFreeShip : 0,
@@ -42,33 +43,34 @@ export default function Order() {
                 idVoucher
             });
             window.location.href = res.data;
-        }else{
-            setIsPendingOrder(true);
-            try {
-                const res = await newRequest.post(`/order/create/${id}`,{
-                    quantity,
-                    addressCus,
-                    priceShip,
-                    priceFreeShip,
-                    priceFreeVoucher,
-                    total,
-                    idVoucher
-                });
-                toast.success(res.data.message, {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 2000, 
-                    });
-                setIsPendingOrder(false);
-                setErrorOrder(false);
-                navigate('/')
-            } catch (error) {
-                toast.error(error.response.data, {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 2000, 
-                });
-                setErrorOrder(error.response.data);
-                setIsPendingOrder(false);
-            }
+        }
+        if(isOffline){
+          setIsPendingOrder(true);
+          try {
+              const res = await newRequest.post(`/order/create/${id}`,{
+                  quantity,
+                  addressCus,
+                  priceShip,
+                  priceFreeShip,
+                  priceFreeVoucher,
+                  total,
+                  idVoucher
+              });
+              toast.success(res.data.message, {
+                  position: toast.POSITION.TOP_RIGHT,
+                  autoClose: 2000, 
+                  });
+              setIsPendingOrder(false);
+              setErrorOrder(false);
+              navigate('/')
+          } catch (error) {
+              toast.error(error.response.data, {
+                  position: toast.POSITION.TOP_RIGHT,
+                  autoClose: 2000, 
+              });
+              setErrorOrder(error.response.data);
+              setIsPendingOrder(false);
+          }
         }
     } catch (error) {
         
@@ -222,10 +224,16 @@ export default function Order() {
                 <div>
                   <span>Chọn phương thức thanh toán</span>
                   <form action="">
-                    <input type="radio" id="1" name="thanhtoan" onClick={()=>{setIsOnline(false)}}/>
+                    <input type="radio" id="1" name="thanhtoan" onClick={()=>{
+                      setIsOffline(true)
+                      setIsOnline(false)
+                    }}/>
                     <label htmlFor="1">Thanh toán khi nhận hàng</label>
                     <br></br>
-                    <input type="radio" id="2" name="thanhtoan" onClick={()=>{setIsOnline(true)}}/>
+                    <input type="radio" id="2" name="thanhtoan" onClick={()=>{
+                      setIsOffline(false)
+                      setIsOnline(true)
+                    }}/>
                     <label htmlFor="2">Thanh toán online</label>
                   </form>
                   <div className={styles.total}>
