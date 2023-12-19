@@ -125,7 +125,7 @@ export default function ProductInf() {
                                 <div className={styles.Quantity_title}>
                                     <span>Số lượng</span>
                                 </div>
-                                <input type="number" defaultValue={1} onChange={(e)=>{handleQuantityChange(e)}}/>
+                                <input type="number"  onChange={(e)=>{handleQuantityChange(e)}}/>
                             </div>
                             <div className={styles.product_add_box}>
                                 <div className={styles.add_cart}>

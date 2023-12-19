@@ -9,27 +9,42 @@ export default function Purchase() {
     const [isPending, setIsPending] = useState(false);
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
-
-    const handleFilterChange = (filter) => {
-        setSelectedFilter(filter);
+    const [idState, setIdState] = useState(null);
+    const handleFilterChange = (id) => {
+        setIdState(id);
+        fetchPurchases(id)
     };
 
-    const fetchPurchases = async () => {
-        setIsPending(true);
-        try {
-        const res = await newRequest.get('/order/customer'); // Replace with your API endpoint
-        console.log(res)
-        setData(res.data);
-        setIsPending(false);
-        setError(null);
-        } catch (error) {
-        setError(error.response.data);
-        setIsPending(false);
+    const fetchPurchases = async (id) => {
+        if(id==0){
+            setIsPending(true);
+            try {
+            const res = await newRequest.get(`/order/customer`); // Replace with your API endpoint
+            console.log(res)
+            setData(res.data);
+            setIsPending(false);
+            setError(null);
+            } catch (error) {
+            setError(error.response.data);
+            setIsPending(false);
+            }
+        }else{
+            setIsPending(true);
+            try {
+            const res = await newRequest.get(`/order/customer?state=${id}`); // Replace with your API endpoint
+            console.log(res)
+            setData(res.data);
+            setIsPending(false);
+            setError(null);
+            } catch (error) {
+            setError(error.response.data);
+            setIsPending(false);
+            }
         }
     };
 
     useEffect(() => {
-        fetchPurchases();
+        fetchPurchases(0);
     }, []); // Fetch data on component mount, you might want to adjust this based on your needs
 
     const filteredPurchases = selectedFilter === 'all' ? data : data.filter(purchase => purchase.status === selectedFilter);
@@ -41,10 +56,10 @@ export default function Purchase() {
             </div>
             <div className={styles.Purchase_Sub_Title}>
                 <ul>
-                    <li onClick={() => handleFilterChange('all')}>
+                    <li onClick={() => handleFilterChange(0)}>
                         Tất cả
                     </li>
-                    <li onClick={() => handleFilterChange('Đang giao cho vận chuyển')}>
+                    <li onClick={() => handleFilterChange(1)}>
                         Chờ xác nhận
                     </li>
                     <li>
