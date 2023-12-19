@@ -168,7 +168,7 @@ export const createPaymentUrl = async(req, res, next) =>{
         let secretKey =process.env.vnp_HashSecret
         let vnpUrl =process.env.vnp_Url
         let amount = req.body.total;
-        let returnUrl = `http://localhost:8080/api/order/vnpay_return`;
+        let returnUrl = `https://www.harumi.store/api/order/vnpay_return`;
         let orderId = moment(date).format('DDHHmmss');
         console.log(amount)
         let bankCode =  "";  

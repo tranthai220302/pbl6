@@ -32,7 +32,7 @@ export const registerController = async (req, res, next) =>{
 export const logoutController = async(req, res, next) =>{
     try {
         return res.clearCookie( 'accessToken', {
-            sameSite: "none",
+            sameSite: "None",
             secure: true,
         }).status(200).send({
             message  : "Đăng xuất thành công!"
