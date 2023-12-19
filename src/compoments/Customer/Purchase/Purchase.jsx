@@ -44,14 +44,14 @@ export default function Purchase() {
                     <li onClick={() => handleFilterChange('all')}>
                         Tất cả
                     </li>
-                    <li onClick={() => handleFilterChange('Đang giao cho vận chuyển')}>
+                    <li onClick={() => handleFilterChange('Đơn hàng đang chờ cửa hàng xác nhận')}>
                         Chờ xác nhận
                     </li>
-                    <li>
+                    <li onClick={() => handleFilterChange('Đang giao cho vận chuyển')}>
                         Đang giao cho vận chuyển
                     </li>
-                    <li>
-                        Vận chuyển
+                    <li onClick={() => handleFilterChange('Đang vận chuyển')}>
+                        Đang vận chuyển
                     </li>
                     <li>
                         Chờ giao hàng
@@ -105,11 +105,8 @@ export default function Purchase() {
                                 </div>
                             </td>
                             <td className={styles.price}>
-                                <div className={styles.old_price}>
-                                    150.000đ
-                                </div>
                                 <div className={styles.new_price}>
-                                    {purchase.total_price}
+                                    {purchase.total_price}đ
                                 </div>
                             </td>
                             <td>

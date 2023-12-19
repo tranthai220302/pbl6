@@ -267,7 +267,7 @@ export default function Order() {
                      {!isPendingPrice && !errorPrice &&(
                             <tr>
                                 <th>Tổng tiền: </th>
-                                <td>{priceInfor.total}đ</td>
+                                <td>{price + priceInfor.priceShip - priceInfor.priceFreeShip - priceInfor.priceVoucher}đ</td>
                             </tr>
                       )}
                     </table>
