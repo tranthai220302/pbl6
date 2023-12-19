@@ -98,40 +98,78 @@ export const createOrderPaymentOnlieService = async (total, quantity, addressCus
         return error;
     }
 }
-export const getOrdersByCustomerService = async(customer_id) =>{
+export const getOrdersByCustomerService = async(customer_id, state_id) =>{
     try {
-        const orders = await db.order.findAll({
-            where : {
-                customer_id
-            },
-            include : [
-                {
-                    model : db.user,
-                    as : 'customer',
-                    attributes: { exclude: ['password'] },
+        if(state_id){
+            const orders = await db.order.findAll({
+                where : {
+                    customer_id
                 },
-                {
-                    model : db.user,
-                    as : 'store',
-                    attributes: { exclude: ['password'] },
-                    include : [
-                        {
-                            model : db.storeRequest,
-                            as : 'DetailStore'
-                        }
-                    ]
+                include : [
+                    {
+                        model : db.user,
+                        as : 'customer',
+                        attributes: { exclude: ['password'] },
+                    },
+                    {
+                        model : db.user,
+                        as : 'store',
+                        attributes: { exclude: ['password'] },
+                        include : [
+                            {
+                                model : db.storeRequest,
+                                as : 'DetailStore'
+                            }
+                        ]
+                    },
+                    {
+                        model : db.state,
+                        where : {
+                            id : state_id
+                        },
+                        attributes: ['status'],
+                    },
+                    {
+                        model : db.book,
+                    },
+                ]
+            })
+            if(orders.length == 0) return createError(400, 'Bạn không có đơn hàng!')
+            return orders;
+        }else{
+            const orders = await db.order.findAll({
+                where : {
+                    customer_id
                 },
-                {
-                    model : db.state,
-                    attributes: ['status'],
-                },
-                {
-                    model : db.book,
-                },
-            ]
-        })
-        if(orders.length == 0) return createError(400, 'Bạn không có đơn hàng!')
-        return orders;
+                include : [
+                    {
+                        model : db.user,
+                        as : 'customer',
+                        attributes: { exclude: ['password'] },
+                    },
+                    {
+                        model : db.user,
+                        as : 'store',
+                        attributes: { exclude: ['password'] },
+                        include : [
+                            {
+                                model : db.storeRequest,
+                                as : 'DetailStore'
+                            }
+                        ]
+                    },
+                    {
+                        model : db.state,
+                        attributes: ['status'],
+                    },
+                    {
+                        model : db.book,
+                    },
+                ]
+            })
+            if(orders.length == 0) return createError(400, 'Bạn không có đơn hàng!')
+            return orders;
+        }
     } catch (error) {
         return error;
     }

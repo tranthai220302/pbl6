@@ -40,7 +40,7 @@ export const createOrder = async (req, res, next) =>{
 
 export const getOrdersByCustomer = async (req, res, next) =>{
     try {
-        const orders = await getOrdersByCustomerService(req.id);
+        const orders = await getOrdersByCustomerService(req.id, req.query.state);
         if(orders instanceof Error) return next(orders);
         res.status(200).send(orders);
     } catch (error) {
