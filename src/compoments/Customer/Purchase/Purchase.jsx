@@ -62,11 +62,11 @@ export default function Purchase() {
                     <li onClick={() => handleFilterChange(1)}>
                         Chờ xác nhận
                     </li>
-                    <li>
+                    <li onClick={() => handleFilterChange(2)}>
                         Đang giao cho vận chuyển
                     </li>
-                    <li>
-                        Vận chuyển
+                    <li onClick={() => handleFilterChange(3)}>
+                        Đang vận chuyển
                     </li>
                     <li>
                         Chờ giao hàng
@@ -120,11 +120,8 @@ export default function Purchase() {
                                 </div>
                             </td>
                             <td className={styles.price}>
-                                <div className={styles.old_price}>
-                                    150.000đ
-                                </div>
                                 <div className={styles.new_price}>
-                                    {purchase.total_price}
+                                    {purchase.total_price}đ
                                 </div>
                             </td>
                             <td>
