@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from './ProductInf.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faMessage, faStore, faPlus} from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faMessage, faStore, faComments, faImage} from '@fortawesome/free-solid-svg-icons';
 import newRequest from '../../ults/NewRequest'
 import { useLocation } from 'react-router-dom';
 import { Link, useNavigate} from 'react-router-dom'
@@ -15,10 +15,22 @@ export default function ProductInf() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
+    const [rating, setRating] = useState(0);
+
+    const handleRating = (value) => {
+        setRating(value);
+    };
+
+    const calculateColor = () => {
+        const percentage = (rating / 5) * 100;
+        const color = `linear-gradient(90deg, gold ${percentage}%, gray ${percentage}%)`;
+        return { background: color };
+      };
+
     const { quantity, updateQuantity, address, updateAddress } = useQuantity();
     const handleQuantityChange = (event) => {
-      const newQuantity = parseInt(event.target.value, 10);
-      updateQuantity(newQuantity);
+        const newQuantity = parseInt(event.target.value, 10);
+        updateQuantity(newQuantity);
     };
     const handleAdressChange = (event) => {
         updateAddress(event.target.value);
@@ -241,6 +253,126 @@ export default function ProductInf() {
                             <VoucherItem id = {idStore} />
                         </div>
                     )}
+                    <div className={styles.cmt}>
+                        <h3>Đánh giá sản phẩm</h3>
+                        <table>
+                            <colgroup>
+                                <col width='50%' />
+                                <col width='50%' />
+                            </colgroup>
+                            <td>
+                                <div className={styles.rate_count}>
+                                    <div className={styles.star_count}>5</div>
+                                    {/* Đoạn sao này nhớ tô lại màu theo số phía trên nha */}
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <span
+                                            key={star}
+                                            onClick={() => handleRating(star)}
+                                            style={{
+                                                cursor: 'pointer',
+                                                color: star <= rating ? '#4EA58B' : 'gray',
+                                            }}
+                                            >
+                                            &#9733;
+                                        </span>
+                                    ))}
+                                    <div>
+                                        <FontAwesomeIcon icon={faComments}/>
+                                        <span className={styles.cmt_count}>1 bình luận</span>
+                                    </div>
+                                </div>
+                                <div className={styles.rate_detail}>
+                                    <div className={styles.rate_detail_item}>
+                                        <div>5 sao</div>
+                                        <div className={styles.rate_bar}>
+                                            <div
+                                            style={{
+                                                width: `100%`,
+                                                height: `14px`,
+                                                borderRadius: `4px`,
+                                                //chỉnh lại cái % phía trong theo rating nha, đây đang hiển thị theo cái sao phía trên
+                                                background: `linear-gradient(90deg, #4EA58B ${(rating / 5) * 100}%, gray ${(rating / 5) * 100}%)`,
+                                            }}
+                                            ></div>
+                                        </div>
+                                        <div>100%</div>
+                                    </div>
+                                    <div className={styles.rate_detail_item}>
+                                        <div>5 sao</div>
+                                        <div className={styles.rate_bar}>
+                                            <div
+                                            style={{
+                                                width: `100%`,
+                                                height: `14px`,
+                                                borderRadius: `4px`,
+                                                //chỉnh lại cái % phía trong theo rating nha, đây đang hiển thị theo cái sao phía trên
+                                                background: `linear-gradient(90deg, #4EA58B ${(rating / 5) * 100}%, gray ${(rating / 5) * 100}%)`,
+                                            }}
+                                            ></div>
+                                        </div>
+                                        <div>100%</div>
+                                    </div>
+                                </div>
+                                <div className={styles.cmt_space}>
+                                    <div className={styles.cmt_avt}>
+                                        <img src="https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/411337569_903820174609347_3824711788836504289_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeG1ErJ8YgNhXA7371mB0jpqaT6byvwHprRpPpvK_AemtPLWdGGXdfsaBlVvFKk3jmkmdy3gcDCD-6fN0jqwN9yz&_nc_ohc=-I5dA8pHCTAAX_LP2eE&_nc_ht=scontent.fhan14-1.fna&oh=00_AfAYJ8bUbwe4rg0GkTkqOxX945JffUG-Ceoe9ic7iABjsw&oe=658A35AA" alt="" />
+                                    </div>
+                                    <div className={styles.cmt_content}>
+                                        <div>
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <span
+                                                    key={star}
+                                                    onClick={() => handleRating(star)}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                        color: star <= rating ? '#4EA58B' : 'gray',
+                                                    }}
+                                                    >
+                                                    &#9733;
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <textarea className={styles.cmt_write} placeholder='Viết bình luận...'/>
+                                        <div className={styles.cmt_btn}>
+                                            <button className={styles.cmt_btn_send}>
+                                                Gửi
+                                            </button>
+                                            <button>
+                                                <FontAwesomeIcon icon={faImage}/>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div className={styles.cmt_show}>
+                                    <div className={styles.cmt_avt}>
+                                        <img src="https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/411337569_903820174609347_3824711788836504289_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeG1ErJ8YgNhXA7371mB0jpqaT6byvwHprRpPpvK_AemtPLWdGGXdfsaBlVvFKk3jmkmdy3gcDCD-6fN0jqwN9yz&_nc_ohc=-I5dA8pHCTAAX_LP2eE&_nc_ht=scontent.fhan14-1.fna&oh=00_AfAYJ8bUbwe4rg0GkTkqOxX945JffUG-Ceoe9ic7iABjsw&oe=658A35AA" alt="" />
+                                    </div>
+                                    <div className={styles.cmt_show_content}>
+                                        <h6>Việt Nam, Trương Thị Khánh Linh</h6>
+                                        <span className={styles.cmt_time}>11:11:11, 11/11/1111</span>
+                                        {/* Hiển thị số sao đánh giá của người đó */}
+                                        <div>
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <span
+                                                    key={star}
+                                                    onClick={() => handleRating(star)}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                        color: star <= rating ? '#4EA58B' : 'gray',
+                                                    }}
+                                                    >
+                                                    &#9733;
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <span>nice nice nice</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </table>
+                    </div>
                 </div>)
                 
             }
