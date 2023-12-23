@@ -68,10 +68,10 @@ export default function Purchase() {
                     <li onClick={() => handleFilterChange(3)}>
                         Đang vận chuyển
                     </li>
-                    <li>
-                        Chờ giao hàng
+                    <li onClick={() => handleFilterChange(4)}>
+                        Đang giao hàng
                     </li>
-                    <li>
+                    <li onClick={() => handleFilterChange(5)}>
                         Hoàn thành
                     </li>
                     <li>
