@@ -3,6 +3,7 @@ import SideBar from '../../compoments/SideBar/SideBar'
 import ListBookDetail from '../../compoments/ListBookDetail/ListBookDetail'
 import styles from './BookList.module.css'
 import { useLocation } from 'react-router-dom';
+import Chat from '../Chat/Chat';
 
 export default function BookList() {
     
@@ -17,7 +18,8 @@ export default function BookList() {
 
 
   return (
-    <div className={styles.BookList}>
+    <div>
+      <div className={styles.BookList}>
       <SideBar
         category={category}
         setCategory={setCategory}
@@ -40,6 +42,8 @@ export default function BookList() {
         languages={languages}
         nhaXB={nhaXB}
       />
+    </div>
+    <Chat />
     </div>
   );
 }

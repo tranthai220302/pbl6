@@ -2,8 +2,10 @@
     display: flex;
     align-items: center;
     gap: 20px;
-    height: 45px;
+    height: 40px;
     padding-left: 10px;
+    margin-top: 10px;
+    padding-right: 10px;
 }
 .send_img{
     height: 30px;
@@ -18,3 +20,68 @@
     border: 1px solid gray;
     padding: 3px 7px;
 }
+
+.file_img{
+    cursor: pointer;
+}
+
+.img_modal{
+    position: absolute;
+    top: -300px;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+    width: 100%;
+    z-index: 100;
+}
+.img_item{
+    height: 300px;
+    width: 100%;
+}
+.img_local{
+    position: relative;
+}
+.chatInput{
+    box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+    display: flex;
+    flex-direction: column;
+}
+.img_img1{
+    height:60px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    cursor: pointer;
+}
+.img_img{
+    height:30px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    cursor: pointer;
+}
+.img_img2 {
+    position: absolute;
+    left: 20px;
+    top: -70px;
+    padding: 10px;
+    background-color: #dff4f6;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
+    animation: slideIn 0.5s ease-out;
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateY(50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+
+
+.cancel{
+    position: absolute;
+    right: 0;
+    top: -10px;
+    cursor: pointer;
+}
+  

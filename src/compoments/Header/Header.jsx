@@ -85,6 +85,7 @@ export default function Header({setOpenChat}) {
                     {currentUser ? (
                       <>
                       <Link to='/profile'>Tài khoản của tôi</Link>
+                      <div onClick={()=>setOpenChat(true)}>Chat</div>
                       <Link>Đơn mua</Link>
                       <Link onClick={handleLogout}>Đăng xuất</Link>
                       </>
@@ -100,12 +101,12 @@ export default function Header({setOpenChat}) {
             </div>
         </div>
       )}
-      {open && (
+      {/* {open && (
         <div className={styles.infor}>
           <span className={styles.item} onClick={()=>{setOpenChat(true)}}>Chat</span>
           <span className={styles.item}>Xem thông tin</span>
         </div>
-      )}
+      )} */}
     </div>
   )
 }

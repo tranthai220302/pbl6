@@ -8,6 +8,7 @@ import { useQuantity } from '../../Context/QuantityProvider';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import Chat from '../Chat/Chat';
 export default function Order() {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -289,6 +290,7 @@ export default function Order() {
           <Link to="/login">Đăng nhập</Link>
         </div>
       )}
+      <Chat />
     </div>
   );
 }

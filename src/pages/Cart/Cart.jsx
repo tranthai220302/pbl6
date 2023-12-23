@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import newRequest from '../../ults/NewRequest';
 import { useQuantity } from '../../Context/QuantityProvider';
 import { useLocation } from 'react-router-dom';
+import Chat from '../Chat/Chat';
 
 export default function Cart() {
   const [error, setError] = useState(null);
@@ -265,6 +266,7 @@ export default function Cart() {
           <Link to="/login">Đăng nhập</Link>
         </div>
       )}
+      <Chat />
     </div>
   );
 }

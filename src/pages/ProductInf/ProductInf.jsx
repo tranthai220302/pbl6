@@ -8,7 +8,8 @@ import { Link, useNavigate} from 'react-router-dom'
 import { useQuantity } from '../../Context/QuantityProvider';
 import VoucherItem from '../../compoments/Voucher/VoucherItem';
 import VoucherFreeShipItem from '../../compoments/VoucherFreeShip/VoucherFreeShipItem';
-export default function ProductInf() {
+import Chat from '../Chat/Chat';
+export default function ProductInf({setOpenChat}) {
     const [book, setBook] = useState();
     const [selectedImage, setSelectedImage] = useState();
     const [idStore, setIdstore] = useState(null)
@@ -16,6 +17,7 @@ export default function ProductInf() {
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
     const { quantity, updateQuantity, address, updateAddress } = useQuantity();
+    const [isChat, setIsChat] = useState(null)
     const handleQuantityChange = (event) => {
       const newQuantity = parseInt(event.target.value, 10);
       updateQuantity(newQuantity);
@@ -25,10 +27,10 @@ export default function ProductInf() {
       };
     const fetchData = async () => {
         try {
-          console.log('Fetching data for book with id:', id);
           const response = await newRequest.get(`/book/item/${id}`);
           console.log('API response:', response.data);
-          setIdstore(response.data.User.id)
+          setIdstore(response.data.User)
+          console.log(response.data)
           setBook(response.data);
           setSelectedImage(response.data.Images && response.data.Images[0]);
         } catch (error) {
@@ -61,9 +63,7 @@ export default function ProductInf() {
         setSelectedImage(image);
       };
 
-    // Đọc thông tin người dùng từ Local Storage
     const storedUserData = localStorage.getItem('user');
-
     return(
         <div>
             {
@@ -144,18 +144,18 @@ export default function ProductInf() {
                     </div>
                     <div className={styles.Store_Inf}>
                         <div className={styles.avt_store}>
-                            <img src={book.User.DetailStore.avatar} alt="" />
+                            <img src={book.User.DetailStore?.avatar} alt="" />
                         </div>
                         <div className={styles.Store_Content}>
                             <div className={styles.Store_name}>
                                 <span>
-                                    {book.User.DetailStore.nameStore}
+                                    {book.User.DetailStore?.nameStore}
                                 </span>
                             </div>
                             <div className={styles.Store}>
-                                <button>
+                                <button onClick={()=>{setIsChat(true)}}>
                                     <FontAwesomeIcon icon={faMessage}/>
-                                    <span>Chat</span>
+                                    <span >Chat</span>
                                 </button>
                                 <button>
                                     <FontAwesomeIcon icon={faStore}/>
@@ -229,7 +229,7 @@ export default function ProductInf() {
                             {book.desc}
                         </p>
                     </div>
-                    {idStore && (
+                    {/* {idStore && (
                         <div className={styles.voucher}>
                             <h3>Miễn phí vận chuyển</h3>
                             <VoucherFreeShipItem id = {idStore} />
@@ -240,9 +240,14 @@ export default function ProductInf() {
                             <h3>Mã giảm giá sách</h3>
                             <VoucherItem id = {idStore} />
                         </div>
-                    )}
+                    )} */}
                 </div>)
                 
+            }
+            {
+                idStore && (
+                    <Chat isChat={isChat} setIsChat = {setIsChat} idUser = {idStore}/>
+                )
             }
         </div>
     )

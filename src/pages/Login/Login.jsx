@@ -20,7 +20,7 @@ export default function Login() {
     }),
     onSuccess: (data, variables, context) => {
       localStorage.setItem('currentUser', JSON.stringify(data.data));
-      if(data.data.RoleId == 1){
+      if(data.data.RoleId == 1 || data.data.RoleId == 2){
         navigate('/')
       }else if(data.data.RoleId == 4){
         navigate('/admin/home')
