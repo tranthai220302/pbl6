@@ -1,22 +1,11 @@
 import {
-    update_state_by_storeService,
     createShippemtService,
     update_state_successfulService,
-    update_state_failedService
+    update_state_failedService,
+    getShippmentByShipperService
 }
 from "../Models/Services/ShippemtService.js";
 import createError from "../ultis/createError.js";
-
-export const update_state_by_store = async (req, res, next) =>{
-    try {
-        if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'))
-        const state = await update_state_by_storeService(req.params.idOrder, req.id);
-        if(state instanceof Error) return next(state)
-        res.status(200).send(state);
-    } catch (error) {
-        next(error);
-    }
-}
 
 export const createshippemt = async (req, res, next) =>{
     try {
