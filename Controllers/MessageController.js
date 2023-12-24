@@ -3,7 +3,7 @@ import { createMessageService, deleteMessageService, getMessageByIdChatService }
 export const createMessage = async (req, res, next) =>{
     try {
         const idChat = req.params.idChat;
-        const message = await createMessageService(req.body.text, req.id, idChat);
+        const message = await createMessageService(req.body.text, req.id, idChat, req.body.img);
         if(message instanceof Error) return next(message);
         res.status(200).send(message)
     } catch (error) {

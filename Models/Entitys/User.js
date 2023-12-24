@@ -27,7 +27,7 @@ const User = (sequelize) => sequelize.define('User', {
       type: DataTypes.STRING,
     },
     avatar:{
-      type: DataTypes.STRING
+      type: DataTypes.STRING(1000)
     },
     phone: {
       type: DataTypes.INTEGER

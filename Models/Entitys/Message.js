@@ -7,6 +7,9 @@ const Message = (sequelize) => sequelize.define('Message', {
     },
     text:{
         type: DataTypes.STRING,
+    },
+    img : {
+        type : DataTypes.STRING,
     }
 
 

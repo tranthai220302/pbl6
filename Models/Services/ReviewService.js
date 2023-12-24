@@ -21,13 +21,59 @@ export const deleteReviewService = async(id,customer_id)=>{
         return error;
     }
 }
-export const getReviewsByBookService = async(id) =>{
+export const inforReviewBookService = async(id) =>{
     try {
-        const reviews = await db.review.findAll({
-            where :{book_id: id}
+        const number_review = await db.review.count({
+            where : {
+                book_id : id
+            }
         })
+        let arrRating = [];
+        for(let i = 1; i <=5 ; i++){
+            const count = await db.review.count({
+                where : {
+                    [Op.and] : [
+                        {book_id : id},
+                        {num_star : i}
+                    ]
+                }
+            })
+            if(!count){
+                arrRating.push(0)
+            }else{
+                arrRating.push((count/number_review)*100)
+            }
+        }
+        const numPage = (Math.ceil(number_review/2))
+        return {
+            number_review,
+            arrRating,
+            numPage
+        };
+    } catch (error) {
+        return error;
+    }
+}
+export const getReviewsByBookService = async(id, page, reviewsPerPage = 2) =>{
+    try {
+        const offset = (page - 1) * reviewsPerPage;
+
+        const reviews = await db.review.findAll({
+            include: [
+                {
+                    model: db.user,
+                    as: 'review1',
+                    attributes: { exclude: ['password'] }
+                }
+            ],
+            where: { book_id: id },
+            limit: reviewsPerPage,
+            offset: offset
+        });
         if(reviews.length == 0) return {message : 'Không có đánh giá!'}
-        return reviews;
+        return {
+            reviews,
+        };
     } catch (error) {
         return error;
     }
@@ -54,7 +100,7 @@ export const updateReviewService = async(id, desc, num_star, customer_id)=>{
         
     }
 }
-export const createReviewService = async(desc, customer_id, book_id, num_star) =>{
+export const createReviewService = async(desc, customer_id, book_id, num_star, img) =>{
     try {
         const order = await db.order.findAll({
             where : {
@@ -68,7 +114,10 @@ export const createReviewService = async(desc, customer_id, book_id, num_star) =
         if(order.length == 0) return createError(400, 'Bạn không thể đánh giá sản phẩm khi chưa có đơn hàng!')
         const checkUser = await db.review.findOne({
             where : {
-                customer_id
+                [Op.and] : [
+                    {customer_id},
+                    {Book_id : book_id}
+                ]
             }
         })
         if(checkUser) return createError(400, 'Bạn đã đánh giá ản phẩm này!')
@@ -76,7 +125,8 @@ export const createReviewService = async(desc, customer_id, book_id, num_star) =
             desc,
             customer_id,
             book_id,
-            num_star
+            num_star,
+            img
         })
         if(!review) return createError(400, 'Đánh giá không thành công!')
         return review;

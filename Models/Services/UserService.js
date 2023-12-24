@@ -59,7 +59,15 @@ export const getUsersByQueryService = async(filter, idRole) =>{
 }
 export const getUserByIdService = async(id) =>{
     try {
-        const user = await db.user.findOne({where:{id}})
+        const user = await db.user.findOne({
+            where: { id }, // Chuyển where vào đây
+            include: [
+                {
+                    model: db.storeRequest,
+                    as: 'DetailStore'
+                }
+            ]
+        });
         if(!user) return createError(400, 'Không tìm thấy người dùng!')
         return user;
     } catch (error) {
