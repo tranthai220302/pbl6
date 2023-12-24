@@ -2,7 +2,7 @@ import db from "../Entitys/index.js";
 import createError from "../../ultis/createError.js";
 import Sequelize from "sequelize";
 
-export const createShippemtService = async(orderId, shipperId) =>{
+export const createShippemtService = async(orderId, shipper_Id) =>{
     try {
         // Kiểm tra trạng thái của đơn hàng trước khi tạo shipment
         const order = await db.order.findOne({ where: { id: orderId } });
@@ -11,12 +11,17 @@ export const createShippemtService = async(orderId, shipperId) =>{
             return createError(400, 'Không thể nhận đơn hàng!');
         }
 
+        const store_id = order.store_id;
+        const store = await db.user.findOne({ where: { id: store_id}})
+
+        const customer_id = order.customer_id;
+        const customer = await db.user.findOne({ where: { id: customer_id}})
+
         const shippemt = await db.shippemt.create({
             start_address : store.address,
             end_address : customer.address,
             OrderId : orderId,
-            shipperId: shipperId
-            
+            shipperId: shipper_Id
         })
         
     
@@ -73,8 +78,8 @@ export const update_state_failedService = async(id) =>{
         
         const order = await db.order.findOne({ where: { id: id } });
 
-        if (!order || order.state !== 3) {
-            return createError(400, 'Đơn hàng chưa được vận chuyển!');
+        if (!order || order.StateId !== 3) {
+            return createError(400, 'Đơn hàng chưa được vận !');
         }
 
         const update_order = await db.order.update(
