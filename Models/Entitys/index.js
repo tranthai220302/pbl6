@@ -22,6 +22,7 @@ import ReportStore from "./ReportStore.js";
 import DetailShipper from "./DetailShipper.js";
 import ShipperRequest from "./ShipperRequest.js";
 import ReportShipper from "./ReportShipper.js";
+import OrderDetail from "./OrderDetail.js";
 const sequelize = new Sequelize(
     configdb.DB,
     configdb.USER,
@@ -43,6 +44,7 @@ const sequelize = new Sequelize(
 const db = {}
 db.sequelize = sequelize
 
+db.orderDetail = OrderDetail(sequelize)
 db.customer_voucherItem = Customer_VoucherItem(sequelize)
 db.admin = Admin(sequelize)
 db.book = Book(sequelize)
