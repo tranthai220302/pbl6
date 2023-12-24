@@ -94,7 +94,7 @@ db.user.hasMany(db.order, { foreignKey: 'customer_id', as: 'ordersCustomer' });
 db.order.belongsTo(db.user, { foreignKey: 'store_id', as: 'store' });
 db.user.hasMany(db.order, { foreignKey: 'store_id', as: 'ordersStore' });
 //order vs book
-db.order.belongsTo(db.book,{
+db.order.hasMany(db.book,{
   onDelete: 'CASCADE',
   onUpdate: 'NO ACTION'
 })
@@ -200,4 +200,6 @@ db.review.belongsTo(db.book, { as: 'review2', foreignKey: 'book_id', onDelete: '
 db.user.hasMany(db.review, { as: 'review_customer', foreignKey: 'customer_id' })
 db.book.hasMany(db.review, { as: 'review_book', foreignKey: 'book_id'})
 
+db.order.hasMany(db.cart);
+db.cart.belongsTo(db.order);
 export default db;
