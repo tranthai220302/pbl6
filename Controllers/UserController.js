@@ -12,7 +12,8 @@ import {
     getRequestShippersService,
     sendRequireShipperService,
     getNumberAdminService,
-    cancleRequestStoreService
+    cancleRequestStoreService,
+    cancleRequestShipperService
 
 } from "../Models/Services/UserService.js";
 import { Op } from "sequelize";
@@ -213,6 +214,17 @@ export const cancleRequestStore = async(req, res, next) =>{
     try {
         if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
         const data = await cancleRequestStoreService(req.params.id, req.body.message);
+        if(data instanceof Error) return next(data);
+        res.status(200).send(data);
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const cancleRequestShipper = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
+        const data = await cancleRequestShipperService(req.params.id, req.body.message);
         if(data instanceof Error) return next(data);
         res.status(200).send(data);
     } catch (error) {

@@ -11,6 +11,9 @@ const ShipperRequest = (sequelize) => sequelize.define('ShipperRequest', {
     numMobike : {
         type : DataTypes.STRING,
     },
+    avatar : {
+        type : DataTypes.STRING,
+    },
     isConfirm : {
         type: DataTypes.BOOLEAN
     }

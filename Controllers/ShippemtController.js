@@ -1,8 +1,7 @@
 import {
     createShippemtService,
     update_state_successfulService,
-    update_state_failedService,
-    getShippmentByShipperService
+    update_state_failedService
 }
 from "../Models/Services/ShippemtService.js";
 import createError from "../ultis/createError.js";

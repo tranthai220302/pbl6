@@ -19,7 +19,6 @@ import VoucherItem from "./VoucherItem.js";
 import Customer_VoucherItem from "./Customer_VoucherItem.js";
 import StoreRequest from "./StoreRequest.js";
 import ReportStore from "./ReportStore.js";
-import DetailShipper from "./DetailShipper.js";
 import ShipperRequest from "./ShipperRequest.js";
 import ReportShipper from "./ReportShipper.js";
 const sequelize = new Sequelize(
@@ -62,13 +61,8 @@ db.voucher = Voucher(sequelize)
 db.voucherItem = VoucherItem(sequelize)
 db.storeRequest = StoreRequest(sequelize)
 db.reportStore = ReportStore(sequelize)
-db.detailShipper = DetailShipper(sequelize)
 db.shipperRequest = ShipperRequest(sequelize)
 db.reportShipper = ReportShipper(sequelize)
-
-/*shipper vs detailShipper*/
-db.user.hasOne(db.detailShipper, {foreignKey : 'shipper_id'});
-db.detailShipper.belongsTo(db.user, {foreignKey : 'shipper_id'})
 
 /*reportShipper vs customer*/
 db.user.hasMany(db.reportShipper, {foreignKey : 'customer_id', as : 'reportShipperByCustomer'});
@@ -117,6 +111,10 @@ db.book.hasOne(db.cart, {
 /*User vs RequestStore*/
 db.user.hasOne(db.storeRequest, { as: "DetailStore", foreignKey: 'customer_id' });
 db.storeRequest.belongsTo(db.user, { as: "userStore", foreignKey: 'customer_id' });
+
+/*User vs RequestShipper*/
+db.user.hasOne(db.shipperRequest, { as: "DetailShipper", foreignKey: 'customer_id' });
+db.shipperRequest.belongsTo(db.user, { as: "userShipper", foreignKey: 'customer_id' });
 
 /*__Chat__*/
 //chat vs customer
