@@ -11,10 +11,16 @@ export const createChatService = async(filter)=>{
                 ]
             }
         })
-        if(checkChat) return createError(400, 'Đã tồn tại trò chuyện này!')
+        if(checkChat) return {
+            message : 'Đoạn chat đã được tạo trước đó !',
+            chat : checkChat
+        }
          const chat = await db.chat.create(filter);
         if(!chat) return createError(400, 'Tạo cuộc trò chuyện không thành công!')
-        return chat;
+        return {
+            message : 'Tạo đoạn chat thành công!',
+            chat
+        }
     } catch (error) {
         return error;
     }
@@ -31,6 +37,12 @@ export const getChatsByIdService = async(filter)=>{
                 model: db.user,
                 as: 'Participant2',
                 attributes: { exclude: ['password'] },
+                include : [
+                    {
+                        model : db.storeRequest,
+                        as : 'DetailStore'
+                    }
+                ]
             }]
         })
         return chats;

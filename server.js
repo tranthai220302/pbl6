@@ -59,12 +59,12 @@ cron.schedule('0 0 * * *', async () => {
   });
   console.log('Đã cập nhật sách đã hết hạn FlashSale.');
 });
-// await db.sequelize.sync({
-//     alter: true,
-//     logging : ()=>{}
-// }).then(()=>{
-//     console.log('Update database success')
-// })
+await db.sequelize.sync({
+    alter: true,
+    logging : ()=>{}
+}).then(()=>{
+    console.log('Update database success')
+})
 //api
 app.use('/api/auth', routerAuth)
 app.use('/api/book', routerBook)
@@ -98,7 +98,6 @@ const io = new Server(server, {
 });
 global.onlineUsers = new Map();
 io.on("connection", (socket) => {
-  console.log(`ketnoi ser ver ${socket.id}`)
   global.chatSocket = socket;
   socket.on("add-user", (userId) => {
     onlineUsers.set(userId, socket.id);
@@ -108,9 +107,8 @@ io.on("connection", (socket) => {
   socket.on("send-mes", (data) => {
     const sendUserSocket = onlineUsers.get(data.to);
     if (sendUserSocket) {
-      console.log(data.message)
       console.log(sendUserSocket)
-      socket.to(sendUserSocket).emit("mes-receive", data.message);
+      socket.to(sendUserSocket).emit("mes-receive", data);
     }
   });
 });

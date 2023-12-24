@@ -1,4 +1,4 @@
-import { createReviewService, deleteReviewService, getBookByReview5StarService, getReviewsByBookService, updateReviewService } from "../Models/Services/ReviewService.js";
+import { createReviewService, deleteReviewService, getBookByReview5StarService, getReviewsByBookService, inforReviewBookService, updateReviewService } from "../Models/Services/ReviewService.js";
 import createError from "../ultis/createError.js";
 
 export const deleteReview = async(req, res, next) =>{
@@ -14,7 +14,17 @@ export const deleteReview = async(req, res, next) =>{
 export const getReviewsByBook = async (req, res, next) =>{
     try {
         const idBook = req.params.id;
-        const reviews = await getReviewsByBookService(idBook);
+        const reviews = await getReviewsByBookService(idBook, req.query.page, 2);
+        if(reviews instanceof Error) return next(reviews);
+        res.status(200).send(reviews);
+    } catch (error) {
+        next(error)
+    }
+}
+export const inforReviewBook = async(req, res, next) =>{
+    try {
+        const idBook = req.params.id;
+        const reviews = await inforReviewBookService(idBook);
         if(reviews instanceof Error) return next(reviews);
         res.status(200).send(reviews);
     } catch (error) {
@@ -26,7 +36,7 @@ export const createReview= async (req, res, next) =>{
         const idBook = req.params.id;
         if(req.idRole !== 1) return next(createError(400, 'Bạn không có quyền này!'))
         const data = req.body;
-        const review = await createReviewService(data.desc, req.id, idBook, data.num_star);
+        const review = await createReviewService(data.desc, req.id, idBook, data.num_star, data.img);
         if(review instanceof Error) return next(review);
         res.status(200).send(review);
     } catch (error) {

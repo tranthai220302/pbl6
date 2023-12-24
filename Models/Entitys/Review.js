@@ -12,6 +12,10 @@ const Review = (sequelize) => sequelize.define('Review', {
     num_star : {
         type: DataTypes.INTEGER,
         defaultValue: 5
+    },
+    img : {
+        type : DataTypes.STRING(1000),
+        defaultValue : ''
     }
 })
 

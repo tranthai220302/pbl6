@@ -136,7 +136,7 @@ export const getOrdersByCustomerService = async(customer_id, state_id) =>{
             })
             if(orders.length == 0) return createError(400, 'Bạn không có đơn hàng!')
             return orders;
-        }else{
+        }else if(state_id='false'){
             const orders = await db.order.findAll({
                 where : {
                     customer_id

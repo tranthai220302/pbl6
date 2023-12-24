@@ -1,15 +1,16 @@
 import { Op } from "sequelize"
 import createError from "../../ultis/createError.js"
 import db from "../Entitys/index.js"
-export const createMessageService =async (text, idUser, idChat) =>{
+export const createMessageService =async (text, idUser, idChat, img) =>{
     try {
-        if(!text) return createError(400, 'Vui lòng nhập tin nhắn!')
+        if(!text && !img) return createError(400, 'Vui lòng nhập tin nhắn!')
         const chat = await db.chat.findByPk(idChat)
         if(!chat) return createError(400, 'Không tìm thấy đoạn chat!')
         const message = await db.message.create({
             text,
             UserId : idUser,
-            ChatId: idChat
+            ChatId: idChat,
+            img
         })
         if(!message) return createError(400, 'Gửi tin nhắn không thành công!')
         return message;
