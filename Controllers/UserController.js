@@ -12,7 +12,8 @@ import {
     getRequestShippersService,
     sendRequireShipperService,
     getNumberAdminService,
-    cancleRequestStoreService
+    cancleRequestStoreService,
+    cancleRequestShipperService
 
 } from "../Models/Services/UserService.js";
 import { Op } from "sequelize";
@@ -158,6 +159,7 @@ export const sendRequireShipper = async(req, res, next) =>{
         const filter = {
             ...(req.body.drivingLience && {drivingLience : req.body.drivingLience}),
             ...(req.body.numMobike && {numMobike : req.body.numMobike}),
+            ...(req.body.img && {avatar : req.body.img}),
             ...(req.id && {customer_id : req.id}),
             isConfirm : false
         }
@@ -213,6 +215,17 @@ export const cancleRequestStore = async(req, res, next) =>{
     try {
         if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
         const data = await cancleRequestStoreService(req.params.id, req.body.message);
+        if(data instanceof Error) return next(data);
+        res.status(200).send(data);
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const cancleRequestShipper = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
+        const data = await cancleRequestShipperService(req.params.id, req.body.message);
         if(data instanceof Error) return next(data);
         res.status(200).send(data);
     } catch (error) {

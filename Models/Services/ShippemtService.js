@@ -1,57 +1,8 @@
 import db from "../Entitys/index.js";
 import createError from "../../ultis/createError.js";
-import { distance } from "../../ultis/distance.js";
+import Sequelize from "sequelize";
 
-export const update_state_by_storeService = async(orderId, storeId) =>{
-    try {
-        const order = await db.order.findOne({ where: { id: orderId } });
-
-        if (!order || order.StateId !== 1) {
-            return createError(400, 'Không thể xác nhận đơn hàng!');
-        }
-
-        const store_id = order.store_id
-        if (store_id !== storeId) {
-            return createError(400, 'Không thể xác nhận đơn hàng!!!');
-        }
-
-        const update_order = await db.order.update(
-            {StateId: 2},
-            {where: {id: orderId}}
-        )
-
-        if (update_order[0] == 0) {
-            return createError(400, 'Không thể cập nhật trạng thái đơn hàng!');
-        }
-
-        const store = await db.user.findOne({ where: { id: store_id}})
-
-        const customer_id = order.customer_id;
-        const customer = await db.user.findOne({ where: { id: customer_id}})
-
-        const kc = await distance(customer.address, store.address)
-        
-        const price_Ship = (kc/1000)*5000;
-
-        const shippemt = await db.shippemt.create({
-            start_address : store.address,
-            end_address : customer.address,
-            OrderId : orderId,
-            distance : kc,
-            priceShip : price_Ship
-        })
-
-        return {
-            message: 'Đã xác nhận đơn hàng!',
-            update_order,
-            shippemt
-        }    
-    } catch (error) {
-        return error;   
-    }
-}
-
-export const createShippemtService = async(orderId, shipperId) =>{
+export const createShippemtService = async(orderId, shipper_Id) =>{
     try {
         // Kiểm tra trạng thái của đơn hàng trước khi tạo shipment
         const order = await db.order.findOne({ where: { id: orderId } });
@@ -60,10 +11,19 @@ export const createShippemtService = async(orderId, shipperId) =>{
             return createError(400, 'Không thể nhận đơn hàng!');
         }
 
-        const shippemt = await db.shippemt.update(
-            {shipperId: shipperId},
-            {where: {OrderId: orderId}}
-        )
+        const store_id = order.store_id;
+        const store = await db.user.findOne({ where: { id: store_id}})
+
+        const customer_id = order.customer_id;
+        const customer = await db.user.findOne({ where: { id: customer_id}})
+
+        const shippemt = await db.shippemt.create({
+            start_address : store.address,
+            end_address : customer.address,
+            OrderId : orderId,
+            shipperId: shipper_Id
+        })
+        
     
         if (!shippemt) return createError(400, 'Đơn hàng chưa có ai nhận!')
 
@@ -115,11 +75,11 @@ export const update_state_successfulService = async(id) =>{
 
 export const update_state_failedService = async(id) =>{
     try {
-        // Kiểm tra trạng thái của đơn hàng trước khi tạo shipment
+        
         const order = await db.order.findOne({ where: { id: id } });
 
-        if (!order || order.state !== 3) {
-            return createError(400, 'Đơn hàng chưa được vận chuyển!');
+        if (!order || order.StateId !== 3) {
+            return createError(400, 'Đơn hàng chưa được vận !');
         }
 
         const update_order = await db.order.update(

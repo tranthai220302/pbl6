@@ -10,12 +10,6 @@ const Shippemt = (sequelize) => sequelize.define('Shippemt', {
     },
     end_address:{
         type: DataTypes.STRING
-    },
-    distance: {
-        type: DataTypes.FLOAT
-    },
-    priceShip: {
-        type: DataTypes.FLOAT
     }
 })
 
