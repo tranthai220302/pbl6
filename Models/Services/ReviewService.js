@@ -56,33 +56,52 @@ export const inforReviewBookService = async(id) =>{
 }
 export const getReviewsByBookService = async(id, page, reviewsPerPage = 2) =>{
     try {
-        const offset = (page - 1) * reviewsPerPage;
+        if(page){
+            const offset = (page - 1) * reviewsPerPage;
 
-        const reviews = await db.review.findAll({
-            include: [
-                {
-                    model: db.user,
-                    as: 'review1',
-                    attributes: { exclude: ['password'] }
-                }
-            ],
-            where: { book_id: id },
-            limit: reviewsPerPage,
-            offset: offset
-        });
-        if(reviews.length == 0) return {message : 'Không có đánh giá!'}
-        return {
-            reviews,
-        };
+            const reviews = await db.review.findAll({
+                include: [
+                    {
+                        model: db.user,
+                        as: 'review1',
+                        attributes: { exclude: ['password'] }
+                    }
+                ],
+                where: { book_id: id },
+                limit: reviewsPerPage,
+                offset: offset
+            });
+            if(reviews.length == 0) return {message : 'Không có đánh giá!'}
+            return {
+                reviews,
+            };
+        }else{
+            const reviews = await db.review.findAll({
+                include: [
+                    {
+                        model: db.user,
+                        as: 'review1',
+                        attributes: { exclude: ['password'] }
+                    }
+                ],
+                where: { book_id: id },
+            });
+            if(reviews.length == 0) return {message : 'Không có đánh giá!'}
+            return {
+                reviews,
+            };
+        }
+
     } catch (error) {
         return error;
     }
 }
-export const updateReviewService = async(id, desc, num_star, customer_id)=>{
+export const updateReviewService = async(id, desc, num_star, customer_id, img)=>{
     try {
         const update_review = await db.review.update({
             desc,
-            num_star
+            num_star,
+            img
         }, {
             where : {
                 [Op.and] : [
@@ -120,7 +139,15 @@ export const createReviewService = async(desc, customer_id, book_id, num_star, i
                 ]
             }
         })
-        if(checkUser) return createError(400, 'Bạn đã đánh giá ản phẩm này!')
+        if(checkUser){
+            const updateReview = await updateReviewService(checkUser.id, desc, num_star, customer_id, img);
+            const review = await db.review.findOne({
+                where : {
+                    id : checkUser.id
+                }
+            })
+            return review;
+        }
         const review = await db.review.create({
             desc,
             customer_id,

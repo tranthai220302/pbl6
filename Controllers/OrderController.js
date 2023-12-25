@@ -12,7 +12,8 @@ import {
     revenueByAdminService,
 
     revenuaAdminByDateSerVice,
-    createOrderPaymentOnlieService
+    createOrderPaymentOnlieService,
+    createOrderByManyBookService
 } 
 from "../Models/Services/OrderServices.js";
 import { getBookByIdService } from "../Models/Services/BookService.js";
@@ -25,6 +26,7 @@ import moment from "moment/moment.js";
 import { distance } from "../ultis/distance.js";
 import { getUserById } from "./UserController.js";
 import { priceVoucherStoreByCustomer } from "../Models/Services/VoucherItemService.js";
+import { error, warn } from "console";
 dotenv.config()
 export const createOrder = async (req, res, next) =>{
     try {
@@ -37,7 +39,17 @@ export const createOrder = async (req, res, next) =>{
         next(error);
     }
 }
-
+export const createOrderByManyBook = async(req, res, next) =>{
+    try {
+        console.log('ccc')
+        if(req.idRole !== 1) return next(createError(400, 'Bạn không có quyền này!'));
+        const order = await createOrderByManyBookService(req.body.idBook, req.id, req.body.quantity, req.body.addressCus, req.body.priceShip, req.body.priceFreeShip, req.body.priceFreeVoucher, req.body.total, req.body.idVoucher);
+        if(order instanceof Error) next(order);
+        res.status(200).send(order)
+    } catch (error) {
+        next(error);
+    }
+}
 export const getOrdersByCustomer = async (req, res, next) =>{
     try {
         const orders = await getOrdersByCustomerService(req.id, req.query.state);
@@ -150,6 +162,32 @@ export const priceShipController = async(req, res, next) =>{
         })
     } catch (error) {
         next(error)   
+    }
+}
+export const priceShip = async(req, res, next)=>{
+    try {
+        console.log('cccc')
+        const address = req.body.addressCus;
+        const id = req.body.bookId;
+        console.log(id)
+        let priceShip = 0;
+        for(let i = 0; i < id.length; i++){
+            try {
+                let book = await getBookByIdService(id[i]);
+                if(book instanceof Error) next(book)
+                let store = await getUserByIdService(book.store_id)
+                if(store instanceof Error) next(store);
+                let dis =  await distance(address, store.address);
+                if(dis instanceof Error) next(dis)
+                priceShip  += parseInt((dis/1000)*2000);  
+            } catch (error) {
+                next(error)
+            } 
+        }
+        console.log(priceShip)
+        return res.status(200).send({priceShip})
+    } catch (error) {
+        next(error)
     }
 }
 let data = {}
