@@ -25,6 +25,7 @@ import BookList from './pages/BookList/BookList';
 import Cart from './pages/Cart/Cart';
 import ProductInf from './pages/ProductInf/ProductInf';
 import Profile from './pages/Profile/Profile';
+import ViewStore from './pages/Customer/ViewStore/ViewStore';
 import HomeStore from './pages/Store/HomeStore/HomeStore';
 import RequestStore from './pages/Admin/requestStore/requestStore';
 import { ToastContainer } from 'react-toastify';
@@ -103,6 +104,10 @@ const App = () => {
         {
           path: '/profile',
           element: <Profile/>
+        },
+        {
+          path: '/viewstore',
+          element: <ViewStore/>
         },
         {
           path: '/store/home',

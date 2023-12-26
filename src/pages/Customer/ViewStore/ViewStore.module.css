@@ -1,0 +1,66 @@
+.ViewStore {
+    background-color: #DFF4F6;
+    padding: 0 calc(100vw/15);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.avt_store img {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.Store_Inf, .Store_Voucher{
+    background-color: white;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.Store_Inf {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+}
+
+.Store_Content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.Store_name {
+    font-weight: bold;
+    font-size: 16px;
+    margin-left: 10px;
+    text-transform: uppercase;
+}
+
+.Store button {
+    width: 100px;
+    padding: 4px 6px;
+    font-size: small;
+    margin-left: 10px;
+
+}
+
+.Store button span{
+    text-transform: none;
+    padding-left: 6px;
+}
+
+.Store_Des {
+    border-left: solid 1px #4EA58B;
+}
+
+.Store_Des td {
+    padding-left: 20px;
+}
+
+.Store_Des_Icon {
+    color: #4EA58B;
+    margin-right: 10px;
+}

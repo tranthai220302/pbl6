@@ -116,8 +116,13 @@ export default function ProductInf({setOpenChat}) {
         getReviewInfor()
       }, [id]);
 
-      const handleThumbnailHover = (image) => {
-        setSelectedImage(image);
+    const handleThumbnailHover = (image) => {
+    setSelectedImage(image);
+    };
+
+    const handleViewStoreClick = (event) => {
+        event.preventDefault();
+        navigate(`/viewstore`);
       };
     const handleComment = async(message,numstar, img) =>{
         try {
@@ -256,7 +261,7 @@ export default function ProductInf({setOpenChat}) {
                                     <FontAwesomeIcon icon={faMessage}/>
                                     <span >Chat</span>
                                 </button>
-                                <button>
+                                <button onClick={(e) => handleViewStoreClick(e)}>
                                     <FontAwesomeIcon icon={faStore}/>
                                     <span>Xem Store</span>
                                 </button>
