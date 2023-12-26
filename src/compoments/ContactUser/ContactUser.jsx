@@ -1,18 +1,32 @@
-import React from 'react'
+
 import styles from './ContactUser.module.css'
 import {useQuery} from '@tanstack/react-query'
 import axios from 'axios'
 import logo from '../../assets/img/Rectangle 4 (1).png'
+import React, { useEffect, useState } from 'react'
+import newRequest from '../../ults/NewRequest'
 export default function ContactUser({chatUserChange}) {
-    const { isPending, error, data } = useQuery({
-        queryKey: ['contactUser'],
-        queryFn: () =>
-          axios.get('http://localhost:8080/api/chat', {
-            withCredentials: true
-          }).then(
-            (res) => res.data,
-          ),
-    })
+    const [error, setError] = useState(null);
+    const [isPending, setIsPending] = useState(true);
+    const [data, setData] = useState([]);
+    const getData = ()=>{
+        setIsPending(true);
+        newRequest.get(`/chat`, {
+        }).then(
+          (res) => {
+            setData(res.data)
+            setIsPending(false);
+            setError(false)
+            console.log(res.data)
+          }
+        ).catch((error)=>{
+          setError(error.response.data)
+          setIsPending(false)
+        })
+      }
+    useEffect(()=>{
+        getData()
+    },[])
     const user = JSON.parse(localStorage.getItem('currentUser'))
     return (
         <div className={styles.contactUser}>
@@ -51,11 +65,11 @@ export default function ContactUser({chatUserChange}) {
                             <div className={styles.user} key={i} onClick={()=>{chatUserChange(chat.id, chat.Participant2)}}>
                                 <img 
                                     className={styles.avatar}
-                                    src= {chat.Participant2.avatar}
+                                    src= {chat.Participant2.DetailStore.avatar}
                                     alt="Avatar" 
                                 />
                                 <div className={styles.infor}>
-                                    <span className={styles.username}>{chat.Participant2.firstName} {chat.Participant2.lastName}</span>
+                                    <span className={styles.username}>{chat.Participant2.DetailStore.nameStore}</span>
                                     <span className={styles.lastMessage}>{chat.lastMessage}</span>
                                 </div>
                             </div>

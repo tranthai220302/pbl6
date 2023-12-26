@@ -36,24 +36,21 @@ import Voucher from './pages/Admin/Voucher/Vouher';
 import Order from './pages/Order/Order';
 import { QuantityProvider } from './Context/QuantityProvider';
 const queryClient = new QueryClient()
+
 const App = () => {
   const [openChat, setOpenChat] = useState(false)
-  
   const Layout = () =>{
     const isAdminPage = useLocation().pathname.includes('/admin');
     const isLoginPage = useLocation().pathname.includes('/login');
     const isRegisterPage = useLocation().pathname.includes('/register');
-
-
-    console.log(isAdminPage)
+    console.log(openChat)
     return (
       <QuantityProvider>
           <QueryClientProvider client={queryClient}>
           <div className="app">
             {!isAdminPage && !isLoginPage && !isRegisterPage && (<Header setOpenChat={setOpenChat} />)}
             {isAdminPage && <SliderMenu />}
-            {openChat && (<Chat setOpenChat={setOpenChat} />)}
-            <Outlet/>
+            <Outlet />
             {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
             <ToastContainer />
           </div>
@@ -68,7 +65,7 @@ const App = () => {
       children : [
         {
           path: '/',
-          element : <Home/>
+          element : <Home openChat={openChat} setOpenChat={setOpenChat}/>
         },
         {
           path: '/home/more',
@@ -88,7 +85,7 @@ const App = () => {
         },
         {
           path: '/productinformation',
-          element: <ProductInf/>
+          element: <ProductInf />
         },
         {
           path: '/cart',

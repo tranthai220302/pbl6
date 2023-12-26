@@ -7,7 +7,7 @@ import navbar from '../../assets/img/welcom.png'
 import CountdownTimer from '../../compoments/CountdownTimer/CountdownTimer';
 
 
-export default function Home() {
+export default function Home({openChat, setOpenChat}) {
   const [open, setOpen] = useState(false)
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(true);
@@ -127,7 +127,7 @@ export default function Home() {
       </div>
       <div className={`${styles.danhmuc} ${styles.home_item}`}>
         <div className={styles.title}>
-          <span>DANH MỤC SẢN PHẨM</span>
+          <span onClick={()=>setOpenChat(true)}>DANH MỤC SẢN PHẨM</span>
         </div>
         <div className={styles.danhmuc_content}>
           {datacat && datacat.map((value) => (
@@ -176,6 +176,7 @@ export default function Home() {
           <span>Xem thêm</span>
         </button>
       </div>
+       <Chat />
     </div>
   )
 }
