@@ -16,7 +16,18 @@
     padding: 20px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
-
+.img_img1{
+    height: 100px;
+}
+.cancel{
+    position: absolute;
+    left: 70px;
+    top: -10px;
+    cursor: pointer;
+}
+.img_img2{
+    position: relative;
+}
 .product_essential_media {
     width: 50%;
     display: flex;
@@ -290,9 +301,12 @@ table, th, td {
 }
 
 .rate_bar {
-    flex: 1;
+    flex: 3;
     display: flex;
     align-items: center;
+}
+.percent{
+    flex: 0.5;
 }
 
 .cmt_space, .cmt_show {
@@ -348,6 +362,59 @@ table, th, td {
     color: gray;
     font-style: italic;
 }
-
+.comment1{
+    display: flex;
+    flex-direction: column;
+}
+.img_review{
+    margin-top: 10px;
+    width: 150px;
+    height: 200px;
+    cursor: pointer;
+}
+/* Add these styles to your CSS file */
+.modalContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* Adjust the alpha value for the desired level of opacity */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .img_modal {
+    position: relative;
+  }
+  
+  .img_item {
+    height: 600px   ;
+  }
+  
+  /* Add any additional styles you need */
+  
+.error{
+    color: red;
+    font-style: italic;
+}
+.num_page {
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    margin-top: 20px;
+}
+  
+.num_page span {
+margin: 0 5px;
+padding: 5px 10px;
+border: 1px solid #ccc;
+cursor: pointer;
+}
+  
+.num_page span:hover {
+background-color: #f0f0f0;
+}
 
 

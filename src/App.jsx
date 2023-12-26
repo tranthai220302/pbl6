@@ -35,6 +35,7 @@ import Satistical from './pages/Admin/Satistical/Satistical';
 import Voucher from './pages/Admin/Voucher/Vouher';
 import Order from './pages/Order/Order';
 import { QuantityProvider } from './Context/QuantityProvider';
+import CartOrder from './pages/Cart/CartOrder/CartOrder';
 const queryClient = new QueryClient()
 
 const App = () => {
@@ -94,6 +95,10 @@ const App = () => {
         {
           path: '/order/:id',
           element: <Order />
+        },
+        {
+          path : '/orderCart',
+          element :<CartOrder />
         },
         {
           path: '/profile',
