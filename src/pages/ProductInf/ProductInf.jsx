@@ -71,8 +71,13 @@ export default function ProductInf({setOpenChat}) {
         fetchData();
       }, [id]);
 
-      const handleThumbnailHover = (image) => {
-        setSelectedImage(image);
+    const handleThumbnailHover = (image) => {
+    setSelectedImage(image);
+    };
+
+    const handleViewStoreClick = (event) => {
+        event.preventDefault();
+        navigate(`/viewstore`);
       };
 
     const storedUserData = localStorage.getItem('user');
@@ -169,7 +174,7 @@ export default function ProductInf({setOpenChat}) {
                                     <FontAwesomeIcon icon={faMessage}/>
                                     <span >Chat</span>
                                 </button>
-                                <button>
+                                <button onClick={(e) => handleViewStoreClick(e)}>
                                     <FontAwesomeIcon icon={faStore}/>
                                     <span>Xem Store</span>
                                 </button>
