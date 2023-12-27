@@ -94,7 +94,7 @@ db.user.hasMany(db.order, { foreignKey: 'customer_id', as: 'ordersCustomer' });
 db.order.belongsTo(db.user, { foreignKey: 'store_id', as: 'store' });
 db.user.hasMany(db.order, { foreignKey: 'store_id', as: 'ordersStore' });
 //order vs book
-db.order.hasMany(db.book,{
+db.order.belongsTo(db.book,{
   onDelete: 'CASCADE',
   onUpdate: 'NO ACTION'
 })

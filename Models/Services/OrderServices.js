@@ -115,7 +115,7 @@ export const createOrderByManyBookService = async(bookId, customer_id, quantity,
         const arrOrder = [];
         for(let i = 0; i < bookId.length; i++){
             try {
-                const order = await createOrderService(bookId[i], customer_id, quantity[i], addressCustomer, priceShip, priceFreeShip, priceFreeVoucher, total, []);
+                const order = await createOrderService(bookId[i], customer_id, quantity[i], addressCustomer, priceShip[i], priceFreeShip[i], priceFreeVoucher[i], total[i], []);
                 if(order instanceof Error){
                     console.log(order)
                 }

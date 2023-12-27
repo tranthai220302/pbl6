@@ -168,3 +168,45 @@ export const getCartsService = async(customer_id) =>{
         return error;   
     }
 }
+export const getCartByArrIdService = async(customer_id, id) =>{
+    try {
+        console.log(id)
+        const carts = await db.cart.findAll({
+            where:{
+                [Op.and] : [
+                    {customerId : customer_id},
+                    {id : id}
+                ]
+            },
+            include : [
+                {
+                    model : db.book,
+                    include : [
+                        {
+                            model : db.category,
+                        },
+                        {
+                            model : db.author
+                        },
+                        {
+                            model : db.image
+                        },
+                        {
+                            model : db.user,
+                            include : [
+                                {
+                                    model : db.storeRequest,
+                                    as : "DetailStore"
+                                }
+                            ]
+                        }
+                    ] 
+                }
+            ]
+        })
+        if(carts.length == 0) return createError(400, 'Không có sản phẩm !')
+        return carts;
+    } catch (error) {
+        return error;   
+    }
+}

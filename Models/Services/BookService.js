@@ -78,7 +78,7 @@ export const updateBookService = async(id, name, desc, price, sales_number, publ
         return error;
     }
 }
-export const getBooksService = async() =>{
+export const getBokByArrId = async(id) =>{
     try {
         const books = await db.book.findAll({
             include : [
@@ -100,10 +100,75 @@ export const getBooksService = async() =>{
                         }
                     ]
                 }
-            ]   
+            ], 
+            where : {
+                id : id
+            } 
         });
         if(!books) return createError(400, 'Không có sách!');
+        console.log(books)
         return books;
+    } catch (error) {
+        return error;
+    }
+}
+export const getBooksService = async(id) =>{
+    try {
+        console.log(id)
+        if(!id){
+            const books = await db.book.findAll({
+                include : [
+                    {
+                        model : db.category,
+                    },
+                    {
+                        model : db.author
+                    },
+                    {
+                        model : db.image
+                    },
+                    {
+                        model : db.user,
+                        include : [
+                            {
+                                model : db.storeRequest,
+                                as : "DetailStore"
+                            }
+                        ]
+                    }
+                ]   
+            });
+            if(!books) return createError(400, 'Không có sách!');
+            return books;
+        }else{
+            const books = await db.book.findAll({
+                include : [
+                    {
+                        model : db.category,
+                    },
+                    {
+                        model : db.author
+                    },
+                    {
+                        model : db.image
+                    },
+                    {
+                        model : db.user,
+                        include : [
+                            {
+                                model : db.storeRequest,
+                                as : "DetailStore"
+                            }
+                        ]
+                    }
+                ], 
+                where : {
+                    id : id
+                } 
+            });
+            if(!books) return createError(400, 'Không có sách!');
+            return books;
+        }
     } catch (error) {
         return error;
     }

@@ -3,7 +3,8 @@ import {
     createCartService,
     getCartByIdService,
     getCartsService,
-    updateCartService
+    updateCartService,
+    getCartByArrIdService
 } from "../Models/Services/CartService.js";
 import createError from "../ultis/createError.js";
 
@@ -46,11 +47,23 @@ export const updateCart = async(req, res, next) =>{
 export const getCartById = async(req, res, next) =>{
     try {
         const idCart = req.params.idCart;
-        const Cart = await getCartByIdService(idCart ,req.id);
+        const Cart = await getCartByIdSer;vice(idCart ,req.id);
         if(Cart instanceof Error) return next(Cart)
         return res.status(200).send(Cart)
     } catch (error) {
         next(error)
+    }
+}
+export const getCartByArrId = async(req, res, next) =>{
+    try {
+        const customer_id = req.id;
+        const id = req.body.id
+        if(!customer_id) return next(createError(400, 'Bạn cần phải đăng nhập!'))
+        const carts = await getCartByArrIdService(customer_id, id);
+        if(carts instanceof Error) return next(carts);
+        res.status(200).send(carts);
+    } catch (error) {
+        next(error);
     }
 }
 export const getCarts = async(req, res, next) =>{

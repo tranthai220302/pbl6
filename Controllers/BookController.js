@@ -18,6 +18,7 @@ import {
     getNhaXBService,
     getLanguagesService,
     getAuthorSearchServices,
+    getBokByArrId,
 } 
 from "../Models/Services/BookService.js"
 import createError from "../ultis/createError.js"
@@ -54,9 +55,19 @@ export const updateBook = async(req, res, next) =>{
         next(error)
     }
 }
+export const getBooksByArr = async(req, res, next) => {
+    try {
+        console.log(req.body.id)
+        const books = await getBokByArrId(req.body.id);
+        if(books instanceof Error) return next(books)
+        return res.status(200).send(books)
+    } catch (error) {
+        next(error)
+    }
+}
 export const getBooks = async(req, res, next) => {
     try {
-        const books = await getBooksService();
+        const books = await getBooksService(req.body.id);
         if(books instanceof Error) return next(books)
         return res.status(200).send(books)
     } catch (error) {
