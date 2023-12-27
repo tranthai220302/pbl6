@@ -8,13 +8,15 @@ import { faUser, faCartShopping, faBell, faSearch, faBook} from '@fortawesome/fr
 
 export default function HeaderStore() {
     const [isLoggedIn, setLoggedIn] = useState(true);
-
+    const currentUser = localStorage.getItem("currentUser");
+    const [userData, setUserData] = useState();
     const handleLogin = () => {
         setLoggedIn(true);
     };
 
     const handleLogout = () => {
-        setLoggedIn(false);
+        localStorage.removeItem('currentUser');
+        setUserData(null)
     };
     return (
         <div className={styles.container}>
@@ -37,8 +39,17 @@ export default function HeaderStore() {
                         <FontAwesomeIcon icon={faUser}/>
                         Tên shop
                         <div className={styles.acc_dropdown}>
-                            <Link to=''>Hồ sơ shop</Link>
-                            <Link onClick={handleLogout}>Đăng xuất</Link>
+                        {currentUser ? (
+                        <>
+                        <Link to='/profile'>Hồ sơ Shop</Link>
+                        <Link onClick={handleLogout}>Đăng xuất</Link>
+                        </>
+                        ) : (
+                        <>
+                            <Link to="/login">Đăng nhập</Link>
+                            <Link to="/register">Đăng ký</Link>
+                         </>
+                        )}
                         </div>
                         </li>
                     </ul>
