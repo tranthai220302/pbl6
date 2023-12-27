@@ -4,7 +4,8 @@ import {
     getCartByIdService,
     getCartsService,
     updateCartService,
-    getCartByArrIdService
+    getCartByArrIdService,
+    deleteArrCartService
 } from "../Models/Services/CartService.js";
 import createError from "../ultis/createError.js";
 
@@ -78,3 +79,4 @@ export const getCarts = async(req, res, next) =>{
         next(error);
     }
 }
+

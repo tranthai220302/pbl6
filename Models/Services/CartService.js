@@ -86,6 +86,22 @@ export const deleteCartService = async(id, customerId) =>{
         return error;
     }
 }
+export const deleteArrCartService = async(id, customerId) =>{
+    try {
+        const delete_cart = await db.cart.destroy({
+            where : {
+                [Op.and] : [
+                    {id : id},
+                    {customerId : customerId}
+                ]
+            }
+        })
+        if(delete_cart == 0) return createError(400, 'Xoá giỏ hàng không thành công!')
+        return true;
+    } catch (error) {
+        
+    }
+}
 
 export const getCartByIdService = async(id, customerId) =>{
     try {

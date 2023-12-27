@@ -120,6 +120,8 @@ export const sendRequireStore = async(req, res, next) =>{
             ...(req.body.nameStore && {nameStore : req.body.nameStore}),
             ...(req.body.descStore && {descStore : req.body.descStore}),
             ...(req.body.img && {avatar : req.body.img}),
+            ...(req.body.papers && {avatar : req.body.papers}),
+            ...(req.body.address && {avatar : req.body.address}),
             ...(req.id && {customer_id : req.id}),
             isConfirm : false
         }

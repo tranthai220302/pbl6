@@ -14,6 +14,12 @@ const StoreRequest = (sequelize) => sequelize.define('StoreRequest', {
     avatar : {
         type : DataTypes.STRING,
     },
+    address : {
+        type : DataTypes.STRING,
+    },
+    papers : {
+        type : DataTypes.STRING,
+    },
     isConfirm : {
         type: DataTypes.BOOLEAN
     }

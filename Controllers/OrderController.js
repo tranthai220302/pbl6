@@ -43,7 +43,7 @@ export const createOrderByManyBook = async(req, res, next) =>{
     try {
         console.log('ccc')
         if(req.idRole !== 1) return next(createError(400, 'Bạn không có quyền này!'));
-        const order = await createOrderByManyBookService(req.body.idBook, req.id, req.body.quantity, req.body.addressCus, req.body.priceShip, req.body.priceFreeShip, req.body.priceFreeVoucher, req.body.total, req.body.idVoucher);
+        const order = await createOrderByManyBookService(req.body.idBook, req.id, req.body.quantity, req.body.addressCus, req.body.priceShip, req.body.priceFreeShip, req.body.priceFreeVoucher, req.body.total, req.body.idVoucher, req.body.idCart);
         if(order instanceof Error) next(order);
         res.status(200).send(order)
     } catch (error) {
