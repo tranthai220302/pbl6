@@ -24,7 +24,7 @@
 }
 
 .SideBar_item li:not(:last-child) {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .SideBar_item li:hover {
@@ -39,3 +39,8 @@
     font-size: 20px;
 }
 
+.item_child {
+    border-left: 1px solid #4ea58b75;
+    padding-left: 10px;
+    margin-left: 20px;
+}

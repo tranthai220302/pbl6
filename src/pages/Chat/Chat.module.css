@@ -27,3 +27,26 @@
     flex: 3;
     background-color: red;
 }
+@keyframes zoomInOut {
+  0% {
+    transform: scale(1); /* Kích thước ban đầu */
+  }
+  50% {
+    transform: scale(1.2); /* Kích thước phóng to */
+  }
+  100% {
+    transform: scale(1); /* Kích thước ban đầu */
+  }
+}
+
+.chat{
+  position: fixed;
+  bottom: 20px;
+  right: 50px;
+  display: flex;
+  margin: auto;
+  animation: zoomInOut 4s infinite; /* Infinite để lặp lại liên tục */
+  height: 60px;
+  cursor: pointer;
+  transition: transform 2s ease;
+}

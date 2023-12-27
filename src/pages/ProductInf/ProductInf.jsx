@@ -1,49 +1,86 @@
 import React, { useEffect, useState } from 'react'
 import styles from './ProductInf.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faMessage, faStore, faPlus} from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faMessage, faStore, faComments, faImage} from '@fortawesome/free-solid-svg-icons';
 import newRequest from '../../ults/NewRequest'
-import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom'
 import { useQuantity } from '../../Context/QuantityProvider';
-export default function ProductInf() {
+import VoucherItem from '../../compoments/Voucher/VoucherItem';
+import VoucherFreeShipItem from '../../compoments/VoucherFreeShip/VoucherFreeShipItem';
+import Chat from '../Chat/Chat';
+export default function ProductInf({setOpenChat}) {
     const [book, setBook] = useState();
     const [selectedImage, setSelectedImage] = useState();
-
+    const [idStore, setIdstore] = useState(null)
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
+    const [rating, setRating] = useState(0);
+
+    const handleRating = (value) => {
+        setRating(value);
+    };
+
+    const calculateColor = () => {
+        const percentage = (rating / 5) * 100;
+        const color = `linear-gradient(90deg, gold ${percentage}%, gray ${percentage}%)`;
+        return { background: color };
+      };
+
     const { quantity, updateQuantity, address, updateAddress } = useQuantity();
+    const [isChat, setIsChat] = useState(null)
     const handleQuantityChange = (event) => {
-      const newQuantity = parseInt(event.target.value, 10);
-      updateQuantity(newQuantity);
+        const newQuantity = parseInt(event.target.value, 10);
+        updateQuantity(newQuantity);
     };
     const handleAdressChange = (event) => {
         updateAddress(event.target.value);
       };
     const fetchData = async () => {
         try {
-          console.log('Fetching data for book with id:', id);
           const response = await newRequest.get(`/book/item/${id}`);
           console.log('API response:', response.data);
+          setIdstore(response.data.User)
+          console.log(response.data)
           setBook(response.data);
           setSelectedImage(response.data.Images && response.data.Images[0]);
         } catch (error) {
           console.error('Error fetching book details:', error);
         }
       };
-
+      const navigate = useNavigate();
+      const OrderBook = async (id,quantity)=>{
+        await newRequest.post(`/cart/create/${id}`,{"quantity": quantity}, {
+        }).then(
+          (res) => {
+            console.log(res.data)
+            alert('Đã thêm vào giỏ hàng');
+          }
+        ).catch((error)=>{
+            alert('Lỗi');
+        })
+      }
+      const BuyBook = async  (id,quantity, event) => {
+        event.preventDefault();
+        await OrderBook(id,quantity);
+        navigate(`/cart`, { state: { id } });
+      };
+      
     useEffect(() => {
         fetchData();
       }, [id]);
 
-      const handleThumbnailHover = (image) => {
-        setSelectedImage(image);
+    const handleThumbnailHover = (image) => {
+    setSelectedImage(image);
+    };
+
+    const handleViewStoreClick = (event) => {
+        event.preventDefault();
+        navigate(`/viewstore`);
       };
 
-    // Đọc thông tin người dùng từ Local Storage
     const storedUserData = localStorage.getItem('user');
-
     return(
         <div>
             {
@@ -99,43 +136,45 @@ export default function ProductInf() {
                                 <div className={styles.address_title}>
                                     <span>Địa chỉ nhận hàng</span>  
                                 </div>
-                                <input type="text" placeholder='Chọn địa chỉ nhận hàng' onChange={(e)=>{handleAdressChange(e)}} defaultValue={address}/>
+                                <input type="text" placeholder='Chọn địa chỉ nhận hàng' onChange={(e)=>{handleAdressChange(e)}} />
                             </div>
                             <div className={styles.Quantity}>
                                 <div className={styles.Quantity_title}>
                                     <span>Số lượng</span>
                                 </div>
-                                <input type="number" onChange={(e)=>{handleQuantityChange(e)}}/>
+                                <input type="number"  onChange={(e)=>{handleQuantityChange(e)}}/>
                             </div>
                             <div className={styles.product_add_box}>
                                 <div className={styles.add_cart}>
-                                    <button className={styles.btn}>
+                                    <button className={styles.btn} onClick={()=>OrderBook(id,quantity)}>
                                         <FontAwesomeIcon icon={faCartShopping}/>
                                         <span>Thêm vào giỏ hàng</span>
                                     </button>
                                 </div>
                                 <div className={styles.buy_product}>
-                                    <Link to = {`/order/${book.id}`}><button className={styles.btn}>Mua ngay</button></Link>
+                                    <Link to = {`/order/${id}`}>
+                                    <button className={styles.btn} >Mua ngay</button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className={styles.Store_Inf}>
                         <div className={styles.avt_store}>
-                            <img src={book.User.DetailStore.avatar} alt="" />
+                            <img src={book.User.DetailStore?.avatar} alt="" />
                         </div>
                         <div className={styles.Store_Content}>
                             <div className={styles.Store_name}>
                                 <span>
-                                    {book.User.DetailStore.nameStore}
+                                    {book.User.DetailStore?.nameStore}
                                 </span>
                             </div>
                             <div className={styles.Store}>
-                                <button>
+                                <button onClick={()=>{setIsChat(true)}}>
                                     <FontAwesomeIcon icon={faMessage}/>
-                                    <span>Chat</span>
+                                    <span >Chat</span>
                                 </button>
-                                <button>
+                                <button onClick={(e) => handleViewStoreClick(e)}>
                                     <FontAwesomeIcon icon={faStore}/>
                                     <span>Xem Store</span>
                                 </button>
@@ -207,8 +246,149 @@ export default function ProductInf() {
                             {book.desc}
                         </p>
                     </div>
+                    {/* {idStore && (
+                        <div className={styles.voucher}>
+                            <h3>Miễn phí vận chuyển</h3>
+                            <VoucherFreeShipItem id = {idStore} />
+                        </div>
+                    )}
+                    {idStore && (
+                        <div className={styles.voucher}>
+                            <h3>Mã giảm giá sách</h3>
+                            <VoucherItem id = {idStore} />
+                        </div>
+
+                    )} */}
+
+
+                    <div className={styles.cmt}>
+                        <h3>Đánh giá sản phẩm</h3>
+                        <table>
+                            <colgroup>
+                                <col width='50%' />
+                                <col width='50%' />
+                            </colgroup>
+                            <td>
+                                <div className={styles.rate_count}>
+                                    <div className={styles.star_count}>5</div>
+                                    {/* Đoạn sao này nhớ tô lại màu theo số phía trên nha */}
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <span
+                                            key={star}
+                                            onClick={() => handleRating(star)}
+                                            style={{
+                                                cursor: 'pointer',
+                                                color: star <= rating ? '#4EA58B' : 'gray',
+                                            }}
+                                            >
+                                            &#9733;
+                                        </span>
+                                    ))}
+                                    <div>
+                                        <FontAwesomeIcon icon={faComments}/>
+                                        <span className={styles.cmt_count}>1 bình luận</span>
+                                    </div>
+                                </div>
+                                <div className={styles.rate_detail}>
+                                    <div className={styles.rate_detail_item}>
+                                        <div>5 sao</div>
+                                        <div className={styles.rate_bar}>
+                                            <div
+                                            style={{
+                                                width: `100%`,
+                                                height: `14px`,
+                                                borderRadius: `4px`,
+                                                //chỉnh lại cái % phía trong theo rating nha, đây đang hiển thị theo cái sao phía trên
+                                                background: `linear-gradient(90deg, #4EA58B ${(rating / 5) * 100}%, gray ${(rating / 5) * 100}%)`,
+                                            }}
+                                            ></div>
+                                        </div>
+                                        <div>100%</div>
+                                    </div>
+                                    <div className={styles.rate_detail_item}>
+                                        <div>5 sao</div>
+                                        <div className={styles.rate_bar}>
+                                            <div
+                                            style={{
+                                                width: `100%`,
+                                                height: `14px`,
+                                                borderRadius: `4px`,
+                                                //chỉnh lại cái % phía trong theo rating nha, đây đang hiển thị theo cái sao phía trên
+                                                background: `linear-gradient(90deg, #4EA58B ${(rating / 5) * 100}%, gray ${(rating / 5) * 100}%)`,
+                                            }}
+                                            ></div>
+                                        </div>
+                                        <div>100%</div>
+                                    </div>
+                                </div>
+                                <div className={styles.cmt_space}>
+                                    <div className={styles.cmt_avt}>
+                                        <img src="https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/411337569_903820174609347_3824711788836504289_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeG1ErJ8YgNhXA7371mB0jpqaT6byvwHprRpPpvK_AemtPLWdGGXdfsaBlVvFKk3jmkmdy3gcDCD-6fN0jqwN9yz&_nc_ohc=-I5dA8pHCTAAX_LP2eE&_nc_ht=scontent.fhan14-1.fna&oh=00_AfAYJ8bUbwe4rg0GkTkqOxX945JffUG-Ceoe9ic7iABjsw&oe=658A35AA" alt="" />
+                                    </div>
+                                    <div className={styles.cmt_content}>
+                                        <div>
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <span
+                                                    key={star}
+                                                    onClick={() => handleRating(star)}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                        color: star <= rating ? '#4EA58B' : 'gray',
+                                                    }}
+                                                    >
+                                                    &#9733;
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <textarea className={styles.cmt_write} placeholder='Viết bình luận...'/>
+                                        <div className={styles.cmt_btn}>
+                                            <button className={styles.cmt_btn_send}>
+                                                Gửi
+                                            </button>
+                                            <button>
+                                                <FontAwesomeIcon icon={faImage}/>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div className={styles.cmt_show}>
+                                    <div className={styles.cmt_avt}>
+                                        <img src="https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-6/411337569_903820174609347_3824711788836504289_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeG1ErJ8YgNhXA7371mB0jpqaT6byvwHprRpPpvK_AemtPLWdGGXdfsaBlVvFKk3jmkmdy3gcDCD-6fN0jqwN9yz&_nc_ohc=-I5dA8pHCTAAX_LP2eE&_nc_ht=scontent.fhan14-1.fna&oh=00_AfAYJ8bUbwe4rg0GkTkqOxX945JffUG-Ceoe9ic7iABjsw&oe=658A35AA" alt="" />
+                                    </div>
+                                    <div className={styles.cmt_show_content}>
+                                        <h6>Việt Nam, Trương Thị Khánh Linh</h6>
+                                        <span className={styles.cmt_time}>11:11:11, 11/11/1111</span>
+                                        {/* Hiển thị số sao đánh giá của người đó */}
+                                        <div>
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <span
+                                                    key={star}
+                                                    onClick={() => handleRating(star)}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                        color: star <= rating ? '#4EA58B' : 'gray',
+                                                    }}
+                                                    >
+                                                    &#9733;
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <span>nice nice nice</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </table>
+                    </div>
+
                 </div>)
                 
+            }
+            {
+                idStore && (
+                    <Chat isChat={isChat} setIsChat = {setIsChat} idUser = {idStore}/>
+                )
             }
         </div>
     )

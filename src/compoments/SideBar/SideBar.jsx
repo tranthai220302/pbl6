@@ -13,9 +13,9 @@ export default function SideBar({ category, setCategory, price_min, setPrice_min
     const [dataLanguage, setDataLanguage] = useState([]);
     const [dataNhaXB, setDataNhaXB] = useState([]);
     const [isPending, setIsPending] = useState(true);
+    
     // const [category, setCategory] = useState(null);
     const [error, setError] = useState(null);
-
     const getCategory = async () => {
         setIsPending(true);
         await newRequest.get(`/category`, {
@@ -77,7 +77,6 @@ export default function SideBar({ category, setCategory, price_min, setPrice_min
         })
     }
     useEffect(() => {
-        //getData();
         getCategory();
         getAuthor();
         getLanguage();
@@ -111,7 +110,7 @@ export default function SideBar({ category, setCategory, price_min, setPrice_min
                 <form>
                     {datacate && datacate.map((value) => (
                             <li>
-                                <input type="radio" name="category" id={value.id} onClick={() => handleCategory(value.name)}/>
+                                <input type="radio" name="category" checked={category === value.name} id={value.id} onClick={() => handleCategory(value.name)}/>
                                 <lable >{value.name}</lable>
                             </li>
                     ))}          

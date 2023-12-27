@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import moment from 'moment';
 import DetailStoreRequest from './detailStore/DetailStoreRequest';
 import ModalCancel from './cancelRequestStore/CancelRequestStore';
+import NavbarAdmin from '../NavbarAdmin/NavbarAdmin';
 export default function RequestStore() {
     const [error, setError] = useState(null);
     const [isPending, setIsPending] = useState(true);
@@ -58,16 +59,7 @@ export default function RequestStore() {
   return (
     <div className={styles.container}>
     <div className={styles.customer}>
-          <div className={styles.navbar}>
-            <div className={styles.search}>
-              <input type="text"className={styles.search_input}  />
-              <FontAwesomeIcon icon={faSearch} className={styles.search_icon}/>
-            </div>
-            <div className={styles.user}>
-              <FontAwesomeIcon icon={faBell} className={styles.notify_icon} />
-              <img className={styles.avatar} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHt1mwK4Kb4YVuHYIO5PUWrvcVgbYaW-Sb3g&usqp=CAU" alt="" />
-            </div>
-          </div>
+      <NavbarAdmin />
           <div className={styles.content}>
         <div className={styles.list}>
         <div className={styles.table1}>

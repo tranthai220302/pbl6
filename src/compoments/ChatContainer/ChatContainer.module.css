@@ -10,9 +10,22 @@
     height: 30px;
     border-radius: 50%;
 }
+.con{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 .avatar{
     height: 30px;
     border-radius: 50%;
+    display: flex;
+}
+.avatar1{
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    margin-top: 80%;
 }
 .navbar{
     display: flex;
@@ -44,15 +57,27 @@
     align-items: center;
     font-size: 25px;
     font-weight: 700;
+    cursor: pointer;
 }
 .chat{
     display: flex;
     flex-direction: column;
     gap: 20px;
-    height: 300px;
+    height: 315px;
     overflow-y: auto;
     width: 100%;
     overflow-x: hidden;
+    padding-bottom: 10px;
+}
+.chat1{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 315px;
+    overflow-y: auto;
+    width: 100%;
+    overflow-x: hidden;
+    padding-bottom: 10px;
 }
 .chat_input{
     height: 340px;
@@ -76,6 +101,7 @@
     padding: 5px 15px;
     word-wrap: break-word;
     max-width: 120px;
+    margin-right: 5px;
 }
 .sender{
     display: flex;
@@ -83,6 +109,7 @@
     justify-content: flex-end;
     font-size: 14px;
     color: white;
+    position: relative;
 }
 .receive{
     display: flex;
@@ -91,6 +118,21 @@
     flex-direction: row-reverse;
     align-self: flex-start;
     color: black;
+    position: relative;
+}
+.img_receive{
+    height: 124px;
+    width: 123px;
+
+}
+.img_sender{
+    height: 124px;
+    width: 123px;
+}
+.container_chat{
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 .loading{
     display: flex;
@@ -98,4 +140,8 @@
     align-items: center;
     height: 80px;
     margin-top: 150px;
+}
+.img_img{
+    height: 50px;
+    border-radius: 50%;
 }

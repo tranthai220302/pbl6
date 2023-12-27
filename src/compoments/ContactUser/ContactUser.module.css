@@ -12,7 +12,7 @@
     align-items: center;
     gap: 10px;
     padding: 0px 10px;
-    height: 74px;
+    height: 71px;
 }
 @keyframes slideUpDown {
     0% {
@@ -61,6 +61,15 @@
     gap: 10px;
     padding: 2px 10px;
     margin-bottom: 10px;
+}
+.user1{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 2px 10px;
+    margin-bottom: 10px;
+    border-top: 1px solid gray;
+    height: 60px;
 }
 .user:hover{
     cursor: pointer;

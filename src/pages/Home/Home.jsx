@@ -6,7 +6,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import navbar from '../../assets/img/welcom.png'
 import CountdownTimer from '../../compoments/CountdownTimer/CountdownTimer';
 
-export default function Home() {
+
+export default function Home({openChat, setOpenChat}) {
   const [open, setOpen] = useState(false)
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(true);
@@ -14,7 +15,6 @@ export default function Home() {
   const [datacat, setDatacat] = useState([]);
   const [datafsale, setDatafsale] = useState([]);
   const { value } = useParams();
-
   const getData = ()=>{
     setIsPending(true);
     newRequest.get(`/book`, {
@@ -30,6 +30,10 @@ export default function Home() {
       setIsPending(false)
     })
   }
+  const Navigate= (Catname)=>{
+    navigate(`/booklist?category=${Catname}`)
+  }
+
 
   const getCategory = async()=>{
     setIsPending(true);
@@ -111,7 +115,7 @@ export default function Home() {
               <b>{(value.price * (1 - value.percentDiscount)).toFixed(0)}đ</b>
               <div>
                 <span className={styles.old_price}>{value.price}đ</span>
-                <span className={styles.percentDiscount}>{value.percentDiscount}%</span>
+                <span className={styles.percentDiscount}>{value.percentDiscount*100}%</span>
               </div>
               <span>Đã bán: {value.purchases}</span>
             </div>
@@ -123,11 +127,11 @@ export default function Home() {
       </div>
       <div className={`${styles.danhmuc} ${styles.home_item}`}>
         <div className={styles.title}>
-          <span>DANH MỤC SẢN PHẨM</span>
+          <span onClick={()=>setOpenChat(true)}>DANH MỤC SẢN PHẨM</span>
         </div>
         <div className={styles.danhmuc_content}>
           {datacat && datacat.map((value) => (
-            <div className={styles.danhmuc_item}>
+            <div className={styles.danhmuc_item} onClick={()=>Navigate(value.name)}>
               <img src={value.img} alt="" />
               <span>{value.name}</span>
             </div>
@@ -172,6 +176,7 @@ export default function Home() {
           <span>Xem thêm</span>
         </button>
       </div>
+       <Chat />
     </div>
   )
 }

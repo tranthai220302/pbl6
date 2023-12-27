@@ -20,10 +20,10 @@ export default function Login() {
     }),
     onSuccess: (data, variables, context) => {
       localStorage.setItem('currentUser', JSON.stringify(data.data));
-      if(data.data.RoleId == 1){
+      if(data.data.RoleId == 1 || data.data.RoleId == 2){
         navigate('/')
       }else if(data.data.RoleId == 4){
-        navigate('/admin/customer')
+        navigate('/admin/home')
       }
     },
   });
@@ -68,6 +68,9 @@ export default function Login() {
           <button className={styles.btn_login} onClick={handleLogin}>
             <span>Đăng nhập</span>
           </button>
+          {mutation.isPending && (
+            <img src='https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' height={20} width={450} />
+          )}
           <Link to='/'>
             <button className={styles.cancel}>
               <span>Hủy bỏ</span>
