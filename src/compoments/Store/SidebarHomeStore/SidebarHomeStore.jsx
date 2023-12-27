@@ -3,7 +3,24 @@ import styles from './SidebarHomeStore.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTicket, faClipboardList, faBagShopping, faShop, faSignal, faBolt} from '@fortawesome/free-solid-svg-icons';
 
-export default function SideBar({ setOpen }) {
+// export default function SideBar({ setOpen }) {
+
+export default function SideBar({managebook,setManageBook,manageorder,setManageOrder,managestore,setManageStore,analysis,setAnalysis}) {
+    
+
+    const handleManageBook = (managebook) => {
+        setManageBook(managebook)
+    }
+    const handleManageOrder = (manageorder) => {
+        setManageOrder(manageorder)
+    }
+    const handleManageStore = (managestore) => {
+        setManageStore(managestore)
+    }
+    const handleAnalysis = (analysis) => {
+        setAnalysis(analysis)
+    }
+
     // Sử dụng state để theo dõi trạng thái của từng mục
     const [isOpen, setIsOpen] = useState({
         item1: false,
@@ -20,13 +37,14 @@ export default function SideBar({ setOpen }) {
         [itemName]: !isOpen[itemName],
         });
     };
+    
     return (
         <div className={styles.SideBar}>
             <div className={styles.SideBar_item}>
                 <ul>
                     <li onClick={() => handleItemClick('item1')}>
                         <FontAwesomeIcon icon={faClipboardList}/>
-                        <span>Quản lý đơn hàng</span>
+                        <span onClick={() => {handleManageOrder(true);handleManageBook(false);handleAnalysis(false);handleManageStore(false)}}>Quản lý đơn hàng</span>
                     </li>
                     {isOpen.item1 && (
                         <div className={styles.item_child}>
@@ -38,7 +56,7 @@ export default function SideBar({ setOpen }) {
                     )}
                     <li onClick={() => handleItemClick('item2')}>
                         <FontAwesomeIcon icon={faBagShopping}/>
-                        <span>Quản lý sản phẩm</span>
+                        <span onClick={() => {handleManageBook(true);handleManageStore(false);handleManageOrder(false);handleAnalysis(false)}}>Quản lý sản phẩm</span>
                     </li>
                     {isOpen.item2 && (
                         <div className={styles.item_child}>
@@ -49,7 +67,7 @@ export default function SideBar({ setOpen }) {
                     )}
                     <li onClick={() => handleItemClick('item3')}>
                         <FontAwesomeIcon icon={faShop}/>
-                        <span>Quản lý cửa hàng</span>
+                        <span onClick={() =>{ handleManageStore(true);handleManageBook(false);handleManageOrder(false);handleAnalysis(false)}}>Quản lý cửa hàng</span>
                     </li>
                     {isOpen.item3 && (
                         <div className={styles.item_child}>
@@ -68,6 +86,7 @@ export default function SideBar({ setOpen }) {
                     </li>
                     <li>
                         <FontAwesomeIcon icon={faSignal}/>
+                        <span onClick={() => {handleAnalysis(true);handleManageBook(false);handleManageStore(false);handleManageOrder(false)}}>Dữ liệu</span>
                         <span>Dữ liệu thống kê</span>
                     </li>
                 </ul>
