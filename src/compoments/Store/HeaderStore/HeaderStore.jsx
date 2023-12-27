@@ -6,7 +6,7 @@ import logo from '../../../assets/img/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCartShopping, faBell, faSearch, faBook} from '@fortawesome/free-solid-svg-icons';
 
-export default function HeaderStore() {
+export default function HeaderStore({ setOpen }) {
     const [isLoggedIn, setLoggedIn] = useState(true);
 
     const handleLogin = () => {

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import styles from './SidebarHomeStore.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faClipboardList, faBagShopping, faShop, faSignal} from '@fortawesome/free-solid-svg-icons';
+import { faTicket, faClipboardList, faBagShopping, faShop, faSignal, faBolt} from '@fortawesome/free-solid-svg-icons';
 
-export default function SideBar() {
+export default function SideBar({ setOpen }) {
     // Sử dụng state để theo dõi trạng thái của từng mục
     const [isOpen, setIsOpen] = useState({
         item1: false,
@@ -42,7 +42,7 @@ export default function SideBar() {
                     </li>
                     {isOpen.item2 && (
                         <div className={styles.item_child}>
-                            <p>Tất cả sẩn phẩm</p>
+                            <p>Tất cả sản phẩm</p>
                             <p>Thêm sản phẩm</p>
                             <p>Sản phẩm vi phạm</p>
                         </div>
@@ -53,11 +53,19 @@ export default function SideBar() {
                     </li>
                     {isOpen.item3 && (
                         <div className={styles.item_child}>
-                            <p>Thông tin cửa hàng</p>
+                            <p onClick={()=>{setOpen(2)}}>Thông tin cửa hàng</p>
                             <p>Đánh giá cửa hàng</p>
                             <p>Mã giảm giá của cửa hàng</p>
                         </div>
                     )}
+                    <li>
+                        <FontAwesomeIcon icon={faTicket}/>
+                        <span>Quản lý Voucher</span>
+                    </li>
+                    <li>
+                        <FontAwesomeIcon icon={faBolt}/>
+                        <span>Quản lý FlashSale</span>
+                    </li>
                     <li>
                         <FontAwesomeIcon icon={faSignal}/>
                         <span>Dữ liệu thống kê</span>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from './ViewStore.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessage, faPlus, faStore, faStar, faUserCheck,faUsers} from '@fortawesome/free-solid-svg-icons';
+import { faMessage, faPlus, faStore, faStar, faUserCheck,faUsers,faLocationDot} from '@fortawesome/free-solid-svg-icons';
 import newRequest from '../../../ults/NewRequest'
 import Chat from '../../Chat/Chat';
 import { useLocation } from 'react-router-dom';
@@ -56,6 +56,12 @@ export default function ViewStore() {
                             <td>
                                 <FontAwesomeIcon className={styles.Store_Des_Icon} icon={faUsers}/>
                                 <span >Người theo dõi: 32</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan={2}>
+                                <FontAwesomeIcon className={styles.Store_Des_Icon} icon={faLocationDot}/>
+                                <span>Địa chỉ: 16/06 Ngô Sĩ Liên - Liên Chiểu - Đà Nẵng</span>
                             </td>
                         </tr>
                     </table>
