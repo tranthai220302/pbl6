@@ -59,12 +59,14 @@ export const getUsersByQueryService = async(filter, idRole) =>{
 }
 export const getUserByIdService = async(id) =>{
     try {
+        console.log(id)
         const user = await db.user.findOne({
-            where: { id }, // Chuyển where vào đây
+            where: { id },
             include: [
                 {
                     model: db.storeRequest,
-                    as: 'DetailStore'
+                    as: 'DetailStore',
+                    attributes: { exclude: ['password'] },
                 }
             ]
         });

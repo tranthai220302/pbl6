@@ -120,13 +120,13 @@ export const sendRequireStore = async(req, res, next) =>{
             ...(req.body.nameStore && {nameStore : req.body.nameStore}),
             ...(req.body.descStore && {descStore : req.body.descStore}),
             ...(req.body.img && {avatar : req.body.img}),
-            ...(req.body.papers && {avatar : req.body.papers}),
-            ...(req.body.address && {avatar : req.body.address}),
+            ...(req.body.papers && {papers : req.body.papers}),
+            ...(req.body.address && {address : req.body.address}),
             ...(req.id && {customer_id : req.id}),
             isConfirm : false
         }
         const sendRequire = await sendRequireStoreService(filter);
-        if(filter instanceof Error) next(filter);
+        if(sendRequire instanceof Error) return next(sendRequire);
         res.status(200).send(sendRequire)
     } catch (error) {
         next(error)
