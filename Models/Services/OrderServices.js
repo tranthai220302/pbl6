@@ -524,3 +524,40 @@ export const revenuaMonthByAdminService = async (month) =>{
         
     }
 }
+
+export const cancelOrderByStoreService = async(id, store_id) =>{
+    try {
+        const checkOrder = await db.order.findOne({
+
+            where : {
+                [Op.and] : [
+                    {id},
+                    {
+                        [Op.or]: [
+                            { StateId: 1 },
+                            { StateId: 2 }
+                        ]
+                    }
+                ]
+            }
+        })
+        if(checkOrder) return createError(400, 'Bạn không thể hủy đơn hàng này!')
+        const orderUpdate = await db.order.update({
+            StateId : 6
+        }, {
+            where : {
+                [Op.and] : [
+                    {id},
+                    {store_id}
+                ]
+            }
+        })
+        if(orderUpdate[0] === 0) return createError(400, 'Hủy đơn không thành công!');
+        return {
+            message : 'Hủy đơn thành công!'
+        }
+    } catch (error) {
+        return error;
+
+    }
+}

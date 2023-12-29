@@ -1,7 +1,10 @@
 import {
     createShippemtService,
     update_state_successfulService,
-    update_state_failedService
+    update_state_failedService,
+    getOrdersByShipperService,
+    getOrdersDeliveringService,
+    getOrdersService
 }
 from "../Models/Services/ShippemtService.js";
 import createError from "../ultis/createError.js";
@@ -41,6 +44,43 @@ export const update_state_failed = async(req, res, next) => {
         res.status(200).send(order);
     } catch (error) {
         next(error)
+    }
+}
+
+export const getOrders = async(req, res, next) =>{
+    try {
+        if(req.idRole != 3) return next(createError(400, 'Bạn cần phải đăng nhập!'))
+        const orders = await getOrdersService();
+        if(orders instanceof Error) return next(orders);
+        res.status(200).send(orders);
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+
+export const getOrdersByShipper = async(req, res, next) =>{
+    try {
+        const shipper_id = req.id;
+        if(!shipper_id) return next(createError(400, 'Bạn cần phải đăng nhập!'))
+        const orders = await getOrdersByShipperService(shipper_id);
+        if(orders instanceof Error) return next(orders);
+        res.status(200).send(orders);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getOrdersDelivering = async(req, res, next) =>{
+    try {
+        const shipper_id = req.id;
+        if(!shipper_id) return next(createError(400, 'Bạn cần phải đăng nhập!'))
+        const orders = await getOrdersDeliveringService(shipper_id);
+        if(orders instanceof Error) return next(orders);
+        res.status(200).send(orders);
+    } catch (error) {
+        next(error);
     }
 }
 

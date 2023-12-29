@@ -1,6 +1,7 @@
 import db from "../Entitys/index.js";
 import createError from "../../ultis/createError.js";
 import Sequelize from "sequelize";
+import { distance } from "../../ultis/distance.js";
 
 export const createShippemtService = async(orderId, shipper_Id) =>{
     try {
@@ -97,5 +98,70 @@ export const update_state_failedService = async(id) =>{
         }    
     } catch (error) {
         return error;   
+    }
+}
+
+export const getOrdersService = async() =>{
+    try {
+        const orders = await db.order.findAll({
+            where: {
+                StateId: 2
+            }
+        });
+         // Kiểm tra nếu không có shipment nào được tìm thấy
+         if (orders.length === 0) return createError(400, 'Không có đơn hàng!');
+
+        return orders;
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
+}
+
+export const getOrdersByShipperService = async(id) =>{
+    try {
+        const orders = await db.shippemt.findAll({
+            where: {
+                shipperId: id
+            },
+            include: [
+                {
+                    model: db.order
+                }
+            ]
+        });
+
+        // Kiểm tra nếu không có shipment nào được tìm thấy
+        if (orders.length === 0) return createError(400, 'Không có đơn hàng!');
+        return orders;
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
+}
+
+
+export const getOrdersDeliveringService = async(id) =>{
+    try {
+        const orders = await db.shippemt.findAll({
+            where: {
+                shipperId: id
+            },
+            include: [
+                {
+                    model: db.order,
+                    where: {
+                        StateId: 3
+                    }
+                }
+            ]
+        });
+
+        // Kiểm tra nếu không có shipment nào được tìm thấy
+        if (orders.length === 0) return createError(400, 'Không có đơn hàng!');
+        return orders;
+    } catch (error) {
+        console.error(error);
+        return error;
     }
 }
