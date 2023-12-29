@@ -379,37 +379,7 @@ export default function BodyHomeStore({managebook,manageorder,managestore,analys
             </div>
             
             )}
-            <div className={styles.BodyHomeStore_Item}>
-                <div className={styles.BodyHomeStore_Title}>
-                    Phân tích bán hàng hôm nay
-                </div>
-                <div className={styles.BodyHomeStore_Sales_Content}>
-                    <div className={styles.Sales_Chart}>
-                        <span>Doanh số</span>
-                        <LineChart width={500} height={150} data2={data2} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <Tooltip />
-                            <Legend />
-                            <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-                            <Line type="monotone" dataKey="pv" stroke="#82ca9d" />
-                        </LineChart>
-                    </div>
-                    <div className={styles.sales}>
-                        <div className={styles.Sales_Item}>
-                            <span>Lượt truy cập</span>
-                            <span className={styles.number}>0</span>
-                            <span className={styles.compare}>So với hôm qua: 100%</span>
-                        </div>
-                        <div className={styles.Sales_Item}>
-                            <span>Doanh số</span>
-                            <span className={styles.number}>0</span>
-                            <span className={styles.compare}>So với hôm qua: 100%</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     )
 }

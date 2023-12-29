@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './SidebarHomeStore.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTicket, faClipboardList, faBagShopping, faShop, faSignal, faBolt} from '@fortawesome/free-solid-svg-icons';
+import { set } from 'date-fns';
 
 // export default function SideBar({ setOpen }) {
 
-export default function SideBar({managebook,setManageBook,manageorder,setManageOrder,managestore,setManageStore,analysis,setAnalysis}) {
-    
-
+export default function SideBar({setSubMenu,setOpen,managebook,setManageBook,manageorder,setManageOrder,managestore,setManageStore,analysis,setAnalysis}) {
     const handleManageBook = (managebook) => {
         setManageBook(managebook)
     }
@@ -16,6 +15,7 @@ export default function SideBar({managebook,setManageBook,manageorder,setManageO
     }
     const handleManageStore = (managestore) => {
         setManageStore(managestore)
+        setOpen(1);
     }
     const handleAnalysis = (analysis) => {
         setAnalysis(analysis)
@@ -42,7 +42,7 @@ export default function SideBar({managebook,setManageBook,manageorder,setManageO
         <div className={styles.SideBar}>
             <div className={styles.SideBar_item}>
                 <ul>
-                    <li onClick={() => handleItemClick('item1')}>
+                    <li onClick={() => {setOpen(0);handleItemClick('item1')}}>
                         <FontAwesomeIcon icon={faClipboardList}/>
                         <span onClick={() => {handleManageOrder(true);handleManageBook(false);handleAnalysis(false);handleManageStore(false)}}>Quản lý đơn hàng</span>
                     </li>
@@ -54,7 +54,7 @@ export default function SideBar({managebook,setManageBook,manageorder,setManageO
                             <p>Trả hàng/hoàn tiền</p>
                         </div>
                     )}
-                    <li onClick={() => handleItemClick('item2')}>
+                    <li onClick={() => {setOpen(0);handleItemClick('item2')}}>
                         <FontAwesomeIcon icon={faBagShopping}/>
                         <span onClick={() => {handleManageBook(true);handleManageStore(false);handleManageOrder(false);handleAnalysis(false)}}>Quản lý sản phẩm</span>
                     </li>
@@ -65,15 +65,15 @@ export default function SideBar({managebook,setManageBook,manageorder,setManageO
                             <p>Sản phẩm vi phạm</p>
                         </div>
                     )}
-                    <li onClick={() => handleItemClick('item3')}>
+                    <li onClick={() => handleItemClick('item3') }>
                         <FontAwesomeIcon icon={faShop}/>
-                        <span onClick={() =>{ handleManageStore(true);handleManageBook(false);handleManageOrder(false);handleAnalysis(false)}}>Quản lý cửa hàng</span>
+                        <span>Quản lý cửa hàng</span>
                     </li>
                     {isOpen.item3 && (
                         <div className={styles.item_child}>
-                            <p onClick={()=>{setOpen(2)}}>Thông tin cửa hàng</p>
-                            <p>Đánh giá cửa hàng</p>
-                            <p>Mã giảm giá của cửa hàng</p>
+                            <p onClick={() => {setOpen(1);setSubMenu("Thông tin cửa hàng")}}>Thông tin cửa hàng</p>
+                            <p onClick={() => {setOpen(1);setSubMenu("Đánh giá cửa hàng")}}>Đánh giá cửa hàng</p>
+                            <p onClick={() => {setOpen(1);setSubMenu("Mã giảm giá của cửa hàng")}}>Mã giảm giá của cửa hàng</p>
                         </div>
                     )}
                     <li>
@@ -87,7 +87,6 @@ export default function SideBar({managebook,setManageBook,manageorder,setManageO
                     <li>
                         <FontAwesomeIcon icon={faSignal}/>
                         <span onClick={() => {handleAnalysis(true);handleManageBook(false);handleManageStore(false);handleManageOrder(false)}}>Dữ liệu</span>
-                        <span>Dữ liệu thống kê</span>
                     </li>
                 </ul>
             </div>

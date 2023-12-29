@@ -36,6 +36,8 @@ import Satistical from './pages/Admin/Satistical/Satistical';
 import Voucher from './pages/Admin/Voucher/Vouher';
 import Order from './pages/Order/Order';
 import { QuantityProvider } from './Context/QuantityProvider';
+import StoreManage from './compoments/Store/StoreManage/StoreManage';
+import Homeshipper from './pages/Shipper/Homeshipper/Homeshipper'
 const queryClient = new QueryClient()
 
 const App = () => {
@@ -49,8 +51,8 @@ const App = () => {
       <QuantityProvider>
           <QueryClientProvider client={queryClient}>
           <div className="app">
-            {!isAdminPage && !isLoginPage && !isRegisterPage && (<Header setOpenChat={setOpenChat} />)}
-            {isAdminPage && <SliderMenu />}
+            {/* {!isAdminPage && !isLoginPage && !isRegisterPage && (<Header setOpenChat={setOpenChat} />)}
+            {isAdminPage && <SliderMenu />} */}
             <Outlet />
             {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
             <ToastContainer />
@@ -109,6 +111,10 @@ const App = () => {
           element: <HomeStore/>
         },
         {
+          path: '/store/storemanage',
+          element: <StoreManage/>
+        },
+        {
           path: '/admin/login',
           element: <LoginAdmin />
         },
@@ -139,7 +145,11 @@ const App = () => {
         {
           path : '/admin/voucher',
           element: <Voucher />
-        }
+        },
+        {
+          path: '/shipper/home',
+          element: <Homeshipper />
+        },
       ]
     },
   ]);
