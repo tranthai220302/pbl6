@@ -13,6 +13,8 @@ import {
     createPaymentUrl,
     vpnayReturn,
     priceShipController,
+    createOrderByManyBook,
+    priceShip,
 } from '../Controllers/OrderController.js';
 import { verifyjson } from '../middleware/jwt.js';
 
@@ -29,5 +31,6 @@ routerOrder.post('/revenueAdmin', verifyjson, revenueByAdmin)
 routerOrder.post('/detailOrder/:id', verifyjson, priceShipController)
 routerOrder.post('/create_payment_url/:id',verifyjson, createPaymentUrl);
 routerOrder.get('/vnpay_return', vpnayReturn);
-
+routerOrder.post('/orderCart', verifyjson, createOrderByManyBook)
+routerOrder.post('/ship', verifyjson, priceShip)
 export default routerOrder;

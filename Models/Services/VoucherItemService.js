@@ -197,7 +197,7 @@ export const priceVoucherStoreByCustomer = async(customer_id, voucher_id, store_
         }
         return {
             voucher: voucher,
-            price_free
+            price_free : Math.ceil(price_free)
         };
     } catch (error) {
         return error;

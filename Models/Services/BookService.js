@@ -78,7 +78,7 @@ export const updateBookService = async(id, name, desc, price, sales_number, publ
         return error;
     }
 }
-export const getBooksService = async() =>{
+export const getBokByArrId = async(id) =>{
     try {
         const books = await db.book.findAll({
             include : [
@@ -100,50 +100,187 @@ export const getBooksService = async() =>{
                         }
                     ]
                 }
-            ]   
+            ], 
+            where : {
+                id : id
+            } 
         });
         if(!books) return createError(400, 'Không có sách!');
+        console.log(books)
         return books;
     } catch (error) {
         return error;
     }
-} 
-export const getBookByQueryService = async(filter, category, author) =>{
+}
+export const getBooksService = async(id) =>{
     try {
-        const booksByQuery = await db.book.findAll({
-            include : [
-                {
-                    model : db.category,
-                    where : category
-                },
-                {
-                    model : db.author,
-                    where : author
-                },
-                {
-                    model : db.image
-                },
-                {
-                    model : db.user,
-                    include : [
-                        {
-                            model : db.storeRequest,
-                            as : "DetailStore"
-                        }
-                    ]
-                }
-            ] ,  
-            
-            where : {
-                [Op.and] : [filter]
-            }
-        });
-        
-        if (!booksByQuery || booksByQuery.length === 0) {
-            return createError(400, "Không tìm thấy sách!");
+        console.log(id)
+        if(!id){
+            const books = await db.book.findAll({
+                include : [
+                    {
+                        model : db.category,
+                    },
+                    {
+                        model : db.author
+                    },
+                    {
+                        model : db.image
+                    },
+                    {
+                        model : db.user,
+                        include : [
+                            {
+                                model : db.storeRequest,
+                                as : "DetailStore"
+                            }
+                        ]
+                    }
+                ]   
+            });
+            if(!books) return createError(400, 'Không có sách!');
+            return books;
+        }else{
+            const books = await db.book.findAll({
+                include : [
+                    {
+                        model : db.category,
+                    },
+                    {
+                        model : db.author
+                    },
+                    {
+                        model : db.image
+                    },
+                    {
+                        model : db.user,
+                        include : [
+                            {
+                                model : db.storeRequest,
+                                as : "DetailStore"
+                            }
+                        ]
+                    }
+                ], 
+                where : {
+                    id : id
+                } 
+            });
+            if(!books) return createError(400, 'Không có sách!');
+            return books;
         }
-        
-        return booksByQuery;
+    } catch (error) {
+        return error;
+    }
+} 
+export const getBookByQueryService = async(filter, category, author, page, bookPerPage = 16) =>{
+    try {
+        if(!page){
+            const booksByQuery = await db.book.findAll({
+                include : [
+                    {
+                        model : db.category,
+                        where : category
+                    },
+                    {
+                        model : db.author,
+                        where : author
+                    },
+                    {
+                        model : db.image
+                    },
+                    {
+                        model : db.user,
+                        include : [
+                            {
+                                model : db.storeRequest,
+                                as : "DetailStore"
+                            }
+                        ]
+                    }
+                ] ,  
+                
+                where : {
+                    [Op.and] : [filter]
+                }
+            });
+            
+            if (!booksByQuery || booksByQuery.length === 0) {
+                return createError(400, "Không tìm thấy sách!");
+            }
+            
+            return booksByQuery;
+        }else{
+            const offset = (page - 1)*bookPerPage;
+            const booksByQuery = await db.book.findAll({
+                include : [
+                    {
+                        model : db.category,
+                        where : category
+                    },
+                    {
+                        model : db.author,
+                        where : author
+                    },
+                    {
+                        model : db.image
+                    },
+                    {
+                        model : db.user,
+                        include : [
+                            {
+                                model : db.storeRequest,
+                                as : "DetailStore"
+                            }
+                        ]
+                    }
+                ] ,  
+                
+                where : {
+                    [Op.and] : [filter]
+                },
+                limit : bookPerPage,
+                offset : offset
+            });
+            const count = await db.book.findAll({
+                include : [
+                    {
+                        model : db.category,
+                        where : category
+                    },
+                    {
+                        model : db.author,
+                        where : author
+                    },
+                    {
+                        model : db.image
+                    },
+                    {
+                        model : db.user,
+                        include : [
+                            {
+                                model : db.storeRequest,
+                                as : "DetailStore"
+                            }
+                        ]
+                    }
+                ] ,  
+                
+                where : {
+                    [Op.and] : [filter]
+                },
+            });
+            console.log(count.length)
+            const numpage = Math.ceil(count.length/16)
+            if (!booksByQuery || booksByQuery.length === 0) {
+                return createError(400, "Không tìm thấy sách!");
+            }
+            
+            return {
+                booksByQuery,
+                numpage
+            }
+        }
     } catch (error) {
         return error;
     }
@@ -179,39 +316,81 @@ export const getBookByIdService = async(id) =>{
         return error;
     }
 }   
-export const getBookByStoreService = async(id, name)=>{
+export const getBookByStoreService = async(id, name, page, bookPerPage = 16)=>{
     try {
-        console.log(name)
-        console.log(id)
-        const book = await db.book.findAll({
-            where: {
-                [Op.and] : [
-                    {store_id : id},
-                ]
-            },
-            include : [
-                {
-                    model : db.category,
-                },
-                {
-                    model : db.author
-                },
-                {
-                    model : db.image
-                },
-                {
-                    model : db.user,
-                    include : [
-                        {
-                            model : db.storeRequest,
-                            as : "DetailStore"
-                        }
+        if(!page){
+            const book = await db.book.findAll({
+                where: {
+                    [Op.and] : [
+                        {store_id : id},
                     ]
+                },
+                include : [
+                    {
+                        model : db.category,
+                    },
+                    {
+                        model : db.author
+                    },
+                    {
+                        model : db.image
+                    },
+                    {
+                        model : db.user,
+                        include : [
+                            {
+                                model : db.storeRequest,
+                                as : "DetailStore"
+                            }
+                        ]
+                    }
+                ]   
+            })
+            if(book.length == 0) return createError(400, 'Không có sách!')
+            return book;
+        }else {
+            const offset = (page - 1)*bookPerPage;
+            const book = await db.book.findAll({
+                where: {
+                    [Op.and] : [
+                        {store_id : id},
+                    ]
+                },
+                include : [
+                    {
+                        model : db.category,
+                    },
+                    {
+                        model : db.author
+                    },
+                    {
+                        model : db.image
+                    },
+                    {
+                        model : db.user,
+                        include : [
+                            {
+                                model : db.storeRequest,
+                                as : "DetailStore"
+                            }
+                        ]
+                    }
+                ],
+                limit : bookPerPage,
+                offset : offset   
+            })
+            const count = await db.book.count({
+                where : {
+                    store_id : id,
                 }
-            ]   
-        })
-        if(book.length == 0) return createError(400, 'Không có sách!')
-        return book;
+            })
+            const numpage = Math.ceil(count/15)
+            if(book.length == 0) return createError(400, 'Không có sách!')
+            return {
+                book,
+                numpage
+            };
+        }
     } catch (error) {
         return error;
     }

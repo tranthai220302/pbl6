@@ -98,6 +98,46 @@ export const createOrderPaymentOnlieService = async (total, quantity, addressCus
         return error;
     }
 }
+export const createOrderByManyBookService = async(bookId, customer_id, quantity, addressCustomer, priceShip, priceFreeShip,priceFreeVoucher, total, idVoucher, idCart) =>{
+    try {
+        if(idVoucher.length > 0){
+            const delete_FreeShip = await db.customer_voucherItem.destroy({
+                where : {
+                    [Op.and] : [
+                        {voucherItem_id : idVoucher},
+                        {user_id : customer_id}
+                    ]
+                }
+            })
+            if(delete_FreeShip === 0) return createError(400, 'Order không thành công!')
+        }
+        const arrOrder = [];
+        for(let i = 0; i < bookId.length; i++){
+            try {
+                const order = await createOrderService(bookId[i], customer_id, quantity[i], addressCustomer, priceShip[i], priceFreeShip[i], priceFreeVoucher[i], total[i], []);
+                if(order instanceof Error){
+                    console.log(order)
+                }
+                arrOrder.push(order);
+            } catch (error) {
+                return error;
+            }
+        }
+        if(arrOrder.length === 0) return createError(400, 'Order không thành công!');
+        const delete_cart = await db.cart.destroy({
+            where : {
+                [Op.and] : [
+                    {id : idCart},
+                    {customerId : customer_id}
+                ]
+            }
+        })
+        if(delete_cart == 0) return createError(400, 'Xoá giỏ hàng không thành công!')
+        return arrOrder;
+    } catch (error) {
+        return error;
+    }
+}
 export const getOrdersByCustomerService = async(customer_id, state_id) =>{
     try {
         if(state_id){
@@ -131,6 +171,11 @@ export const getOrdersByCustomerService = async(customer_id, state_id) =>{
                     },
                     {
                         model : db.book,
+                        include : [
+                            {
+                                model : db.image,
+                            }
+                        ]
                     },
                 ]
             })
@@ -164,6 +209,11 @@ export const getOrdersByCustomerService = async(customer_id, state_id) =>{
                     },
                     {
                         model : db.book,
+                        include : [
+                            {
+                                model : db.image,
+                            }
+                        ]
                     },
                 ]
             })

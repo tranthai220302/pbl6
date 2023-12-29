@@ -18,6 +18,7 @@ import {
     getNhaXBService,
     getLanguagesService,
     getAuthorSearchServices,
+    getBokByArrId,
 } 
 from "../Models/Services/BookService.js"
 import createError from "../ultis/createError.js"
@@ -54,9 +55,19 @@ export const updateBook = async(req, res, next) =>{
         next(error)
     }
 }
+export const getBooksByArr = async(req, res, next) => {
+    try {
+        console.log(req.body.id)
+        const books = await getBokByArrId(req.body.id);
+        if(books instanceof Error) return next(books)
+        return res.status(200).send(books)
+    } catch (error) {
+        next(error)
+    }
+}
 export const getBooks = async(req, res, next) => {
     try {
-        const books = await getBooksService();
+        const books = await getBooksService(req.body.id);
         if(books instanceof Error) return next(books)
         return res.status(200).send(books)
     } catch (error) {
@@ -85,6 +96,9 @@ export const getBookByQuery= async(req, res, next) =>{
             ...(q.languages && {languages : {
                 [Op.like] : `%${q.languages}%`
             }}),
+            ...(q.idStore && {
+                store_id : q.idStore
+            })
         }
         console.log(filter)
         console.log(q.priceMin)
@@ -100,7 +114,7 @@ export const getBookByQuery= async(req, res, next) =>{
                 }
             })
         }
-        const booksByQuery = await getBookByQueryService(filter, category, author);
+        const booksByQuery = await getBookByQueryService(filter, category, author, req.query.page, 16);
         if(booksByQuery instanceof Error) return next(booksByQuery)
         return res.status(200).send(booksByQuery);
     } catch (error) {
@@ -119,7 +133,7 @@ export const getBookById  = async(req, res, next) =>{
 export const getBookByStore = async(req, res, next) =>{
     try {
         const name = req.query.name;
-        const books = await getBookByStoreService(req.params.id,name)
+        const books = await getBookByStoreService(req.params.id,name,req.query.page, 16)
         if(books instanceof Error) return next(books)
         return res.status(200).send(books)    
     } catch (error) {

@@ -36,6 +36,7 @@ export const createVoucherItem = async (req, res, next) =>{
 
 export const getVoucherItemByCustomer= async(req, res, next) =>{
     try {
+        const currentDate = new Date()
         const isExpire = req.query.isExpire;
         const filter = {
            ...(req.query.type && {

@@ -86,6 +86,22 @@ export const deleteCartService = async(id, customerId) =>{
         return error;
     }
 }
+export const deleteArrCartService = async(id, customerId) =>{
+    try {
+        const delete_cart = await db.cart.destroy({
+            where : {
+                [Op.and] : [
+                    {id : id},
+                    {customerId : customerId}
+                ]
+            }
+        })
+        if(delete_cart == 0) return createError(400, 'Xoá giỏ hàng không thành công!')
+        return true;
+    } catch (error) {
+        
+    }
+}
 
 export const getCartByIdService = async(id, customerId) =>{
     try {
@@ -135,6 +151,48 @@ export const getCartsService = async(customer_id) =>{
         const carts = await db.cart.findAll({
             where:{
                 customerId : customer_id
+            },
+            include : [
+                {
+                    model : db.book,
+                    include : [
+                        {
+                            model : db.category,
+                        },
+                        {
+                            model : db.author
+                        },
+                        {
+                            model : db.image
+                        },
+                        {
+                            model : db.user,
+                            include : [
+                                {
+                                    model : db.storeRequest,
+                                    as : "DetailStore"
+                                }
+                            ]
+                        }
+                    ] 
+                }
+            ]
+        })
+        if(carts.length == 0) return createError(400, 'Không có sản phẩm !')
+        return carts;
+    } catch (error) {
+        return error;   
+    }
+}
+export const getCartByArrIdService = async(customer_id, id) =>{
+    try {
+        console.log(id)
+        const carts = await db.cart.findAll({
+            where:{
+                [Op.and] : [
+                    {customerId : customer_id},
+                    {id : id}
+                ]
             },
             include : [
                 {

@@ -12,6 +12,7 @@ import {
     getBookFlashSale, 
     getBookIsOrderByStore, 
     getBooks, 
+    getBooksByArr, 
     getLanguages, 
     getNhaXB, 
     getStoreFlashSale, 
@@ -24,6 +25,7 @@ import { confirmBookFlashSaleService } from '../Models/Services/BookService.js';
 const routerBook = express.Router()
 routerBook.post('/create/:id', verifyjson, createBook)
 routerBook.put('/update/:id',verifyjson, updateBook)
+routerBook.post('/arr', getBooksByArr)
 routerBook.delete('/delete/:id', verifyjson, deleteBook)
 routerBook.get('/', getBooks)
 routerBook.get('/search', getBookByQuery)

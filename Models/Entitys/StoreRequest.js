@@ -9,9 +9,15 @@ const StoreRequest = (sequelize) => sequelize.define('StoreRequest', {
         type: DataTypes.STRING,
     },
     descStore : {
-        type : DataTypes.STRING,
+        type : DataTypes.STRING(1000),
     },
     avatar : {
+        type : DataTypes.STRING,
+    },
+    address : {
+        type : DataTypes.STRING,
+    },
+    papers : {
         type : DataTypes.STRING,
     },
     isConfirm : {

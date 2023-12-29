@@ -19,7 +19,7 @@ import routerCategory from "./Routes/CategoryRoute.js";
 import { Server } from "socket.io";
 import routerReportStore from "./Routes/ReportStoreRoute.js";
 import routerShippemt from "./Routes/ShippementRoute.js";
-import routerReportShipper from "./Routes/ReportShipperRoute.js";
+import routerReviewShipper from "./Routes/ReviewShipperRoute.js";
 import path from "path";
 import cron from 'node-cron'
 import { fileURLToPath } from 'url';
@@ -59,12 +59,12 @@ cron.schedule('0 0 * * *', async () => {
   });
   console.log('Đã cập nhật sách đã hết hạn FlashSale.');
 });
-await db.sequelize.sync({
-    alter: true,
-    logging : ()=>{}
-}).then(()=>{
-    console.log('Update database success')
-})
+// await db.sequelize.sync({
+//     alter: true,
+//     logging : ()=>{}
+// }).then(()=>{
+//     console.log('Update database success')
+// })
 //api
 app.use('/api/auth', routerAuth)
 app.use('/api/book', routerBook)
@@ -80,7 +80,7 @@ app.use('/api/chat', routerChat)
 app.use('/api/category', routerCategory)
 app.use('/api/report', routerReportStore)
 app.use('/api/shippemt',routerShippemt)
-app.use('/api/reportShipper',routerReportShipper)
+app.use('/api/reviewShipper',routerReviewShipper)
 app.use((err, req, res, next)=>{
   const errorStatus = err.status || 500;
   const errorMessage = err.message || "Something went wrong!";
