@@ -6,9 +6,8 @@ import ItemFreeShip from './ItemFreeShip/ItemFreeShip';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-export default function VoucherFreeShipItem({id}) {
+export default function VoucherFreeShipItem({id, setIsPending}) {
   const [error, setError] = useState(null);
-  const [isPending, setIsPending] = useState(false);
   const [isPendingItem, setIsPendingItem] =useState(false)
   const [data, setData] = useState(null);
   const settings = {

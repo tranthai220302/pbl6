@@ -54,3 +54,16 @@
     font-style: italic;
     margin-top: 3px;
 }
+.expired {
+    position: absolute;
+    transform: rotate(-45deg);
+    transform-origin: 50% 50%; 
+    color: red; 
+    font-weight: 600;
+    top: 0;
+    background-color: white;
+    padding: 2px 5px;
+    border-radius: 10px;
+    font-size: 13px;
+    left: -20px;
+}

@@ -37,12 +37,14 @@ import Voucher from './pages/Admin/Voucher/Vouher';
 import Order from './pages/Order/Order';
 import { QuantityProvider } from './Context/QuantityProvider';
 import CartOrder from './pages/Cart/CartOrder/CartOrder';
+import ThankOrder from './pages/ThankOrder/ThankOrder';
 const queryClient = new QueryClient()
 
 const App = () => {
   const [openChat, setOpenChat] = useState(false)
   const Layout = () =>{
     const isAdminPage = useLocation().pathname.includes('/admin');
+    const isStorePage = useLocation().pathname.includes('/store');
     const isLoginPage = useLocation().pathname.includes('/login');
     const isRegisterPage = useLocation().pathname.includes('/register');
     console.log(openChat)
@@ -50,7 +52,7 @@ const App = () => {
       <QuantityProvider>
           <QueryClientProvider client={queryClient}>
           <div className="app">
-            {!isAdminPage && !isLoginPage && !isRegisterPage && (<Header setOpenChat={setOpenChat} />)}
+            {!isAdminPage && !isLoginPage && !isRegisterPage && !isStorePage && (<Header setOpenChat={setOpenChat} />)}
             {isAdminPage && <SliderMenu />}
             <Outlet />
             {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
@@ -102,11 +104,15 @@ const App = () => {
           element :<CartOrder />
         },
         {
+          path : '/thankOrder',
+          element :<ThankOrder />
+        },
+        {
           path: '/profile',
           element: <Profile/>
         },
         {
-          path: '/viewstore',
+          path: '/viewstore/:id',
           element: <ViewStore/>
         },
         {

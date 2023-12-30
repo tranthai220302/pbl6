@@ -14,6 +14,7 @@ import uploadImg from '../../ults/upload';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 export default function ProductInf({setOpenChat}) {
+    const [isPending, setIsPending] = useState(false)
     const [book, setBook] = useState();
     const [selectedImage, setSelectedImage] = useState();
     const [idStore, setIdstore] = useState(null)
@@ -336,13 +337,13 @@ export default function ProductInf({setOpenChat}) {
                     {idStore && (
                         <div className={styles.voucher}>
                             <h3>Miễn phí vận chuyển</h3>
-                            <VoucherFreeShipItem id = {idStore.id} />
+                            <VoucherFreeShipItem id = {idStore.id} setIsPending={setIsPending}/>
                         </div>
                     )}
                     {idStore && (
                         <div className={styles.voucher}>
                             <h3>Mã giảm giá sách</h3>
-                            <VoucherItem id = {idStore.id} />
+                            <VoucherItem id = {idStore.id} setIsPending = {setIsPending}/>
                         </div>
 
                     )}

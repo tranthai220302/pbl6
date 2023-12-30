@@ -8,8 +8,8 @@ import Collab from '../../compoments/Customer/Collab/Collab'
 import Voucher from '../../compoments/Customer/Voucher/Voucher'
 import Chat from '../Chat/Chat'
 
-export default function Profile() {
-    const [open, setOpen] = useState(1)
+export default function Profile({id}) {
+    const [open, setOpen] = useState({id})
 
     return(
         <div className={styles.Profile}>
