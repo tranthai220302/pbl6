@@ -1,0 +1,104 @@
+.Profile_Sidebar {
+    background-color: white;
+    width: 25%;
+    border-radius: 4px;
+    padding: 16px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    margin: 20px 0;
+    height: fit-content;
+}
+
+.profile_view_name {
+    border-bottom: 1px solid rgba(78, 165, 139, 0.34);
+}
+
+.profile_view_name .name {
+    font-weight: 500;
+    font-size: large;
+}
+
+.profile_view_name .profile_edit {
+    color: rgba(78, 165, 139, 0.863);
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.profile_view_name .profile_edit:hover {
+    color: green;
+}
+
+.profile_view_name .profile_edit span {
+    margin-left: 6px;
+}
+
+.profile_view_content {
+    margin-top: 10px;
+}
+
+.profile_view_content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.profile_view_content ul li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.profile_view_content ul li:hover {
+    color: green;
+}
+
+.profile_view_content ul li span {
+    margin-left: 10px;
+}
+
+.selected {
+    background-color: rgba(78, 165, 139, 0.863) !important;
+    color: green !important;
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2; /* Lớn hơn so với các phần tử khác */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .editForm {
+    background-color: white;
+    padding: 20px;
+    z-index: 3; /* Lớn hơn so với overlay */
+    display: grid;
+    width: 40%;
+  }
+
+  .editForm h3 {
+    text-align: center;
+    color: rgba(78, 165, 139, 0.863);
+  }
+  
+  .editForm input {
+    margin-bottom: 20px;
+  }
+
+  .editForm button {
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .btn_cancel {
+    border: 1px solid rgba(78, 165, 139, 0.863) !important;
+    background-color: rgba(78, 165, 139, 0.137) !important;
+    color: rgba(78, 165, 139, 0.863) !important;
+    margin-top: 20px;
+  }
+
+  

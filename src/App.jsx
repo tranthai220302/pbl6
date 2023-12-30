@@ -38,6 +38,8 @@ import Order from './pages/Order/Order';
 import { QuantityProvider } from './Context/QuantityProvider';
 import CartOrder from './pages/Cart/CartOrder/CartOrder';
 import ThankOrder from './pages/ThankOrder/ThankOrder';
+import StoreManage from './compoments/Store/StoreManage/StoreManage';
+import Homeshipper from './pages/Shipper/Homeshipper/Homeshipper'
 const queryClient = new QueryClient()
 
 const App = () => {
@@ -120,6 +122,10 @@ const App = () => {
           element: <HomeStore/>
         },
         {
+          path: '/store/storemanage',
+          element: <StoreManage/>
+        },
+        {
           path: '/admin/login',
           element: <LoginAdmin />
         },
@@ -150,7 +156,11 @@ const App = () => {
         {
           path : '/admin/voucher',
           element: <Voucher />
-        }
+        },
+        {
+          path: '/shipper/home',
+          element: <Homeshipper />
+        },
       ]
     },
   ]);
