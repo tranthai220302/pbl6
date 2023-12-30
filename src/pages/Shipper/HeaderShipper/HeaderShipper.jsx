@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import styles from './HeaderStore.module.css'
+import styles from './HeaderShipper.module.css'
 import { Link } from 'react-router-dom'
-import { useNavigate } from "react-router-dom";
 import logo from '../../../assets/img/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCartShopping, faBell, faSearch, faBook} from '@fortawesome/free-solid-svg-icons';
 
-export default function HeaderStore({ setOpen }) {
+export default function HeaderShipper({ setOpen }) {
     const [isLoggedIn, setLoggedIn] = useState(true);
     const currentUser = localStorage.getItem("currentUser");
     const [userData, setUserData] = useState();
@@ -24,7 +23,7 @@ export default function HeaderStore({ setOpen }) {
                 <div className={styles.left}>
                     <Link to="/store/home" className={styles.LogoBonus}>
                         <img className={styles.logo} src={logo} alt="logo" />
-                        <span >Kênh người bán</span>
+                        <span >Kênh người giao hàng</span>
                     </Link>
                 </div>
                 <div className={styles.right}>
@@ -37,7 +36,7 @@ export default function HeaderStore({ setOpen }) {
                         </li>
                         <li className={`${styles.item } ${styles.account}`}>
                         <FontAwesomeIcon icon={faUser}/>
-                        Tên shop
+                        Tên shipper
                         <div className={styles.acc_dropdown}>
                         {currentUser ? (
                         <>
