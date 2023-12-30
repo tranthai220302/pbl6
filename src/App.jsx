@@ -51,8 +51,8 @@ const App = () => {
       <QuantityProvider>
           <QueryClientProvider client={queryClient}>
           <div className="app">
-            {/* {!isAdminPage && !isLoginPage && !isRegisterPage && (<Header setOpenChat={setOpenChat} />)}
-            {isAdminPage && <SliderMenu />} */}
+            {!isAdminPage && !isLoginPage && !isRegisterPage && (<Header setOpenChat={setOpenChat} />)}
+            {isAdminPage && <SliderMenu />}
             <Outlet />
             {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
             <ToastContainer />
