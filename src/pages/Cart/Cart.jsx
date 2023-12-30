@@ -7,18 +7,21 @@ import newRequest from '../../ults/NewRequest';
 import { useQuantity } from '../../Context/QuantityProvider';
 import { useLocation } from 'react-router-dom';
 import Chat from '../Chat/Chat';
-
+import { useNavigate } from 'react-router-dom';
 export default function Cart() {
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(true);
   const [price, setPrice] = useState(0);
   const [data, setData] = useState([]);
+  const [quantity, setQuantity] = useState([])
   const [selectedItems, setSelectedItems] = useState([]);
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const [totalPrice, setTotalPrice] = useState("");
   const location = useLocation();
+  const [priceShip, setPriceShip] = useState(0);
   const { id } = location.state || "";
-
+  const {arrIdBook, updateArrIdBook, arrQuantity, updateArrQuantity, priceTotal, updatePriceTotal} = useQuantity();
+  const navigate = useNavigate();
   const fetchData = async () => {
     setIsPending(true);
     try {
@@ -66,7 +69,6 @@ export default function Cart() {
       setIsPending(false);
     }
   };
-
   useEffect(() => {
     fetchData();
   }, [id]);
@@ -74,40 +76,52 @@ export default function Cart() {
   useEffect(() => {
     const total = calculateTotalPrice();
     console.log('Total Price:', total);
-  }, [selectedItems, data]);
+  }, [selectedItems, data, quantity]);
 
-  const handleCheckboxChange = (id) => {
+  const handleCheckboxChange = async(id, q) => {
     const isSelected = selectedItems.includes(id);
     calculateTotalPrice();
+  
     if (!isSelected) {
       setSelectedItems([...selectedItems, id]);
+      setQuantity([...quantity, q]);
     } else {
-      setSelectedItems(selectedItems.filter((itemId) => itemId !== id));
+      const updatedItems = selectedItems.filter((itemId) => itemId !== id);
+      const updatedQuantity = quantity.filter((itemQ, index) => index !== selectedItems.indexOf(id));
+      setSelectedItems(updatedItems);
+      setQuantity(updatedQuantity);
     }
   };
-
   const calculateTotalPrice = () => {
     const selectedProducts = data.filter((product) =>
       selectedItems.includes(product.id)
     );
-
-    const totalPrice = selectedProducts.reduce((total, product) => {
-      const discountedPrice =
-        product.Book.price * (1 - product.Book.percentDiscount);
-      return total + product.quantity * discountedPrice;
-    }, 0);
-
-    setPrice(totalPrice.toFixed(0));
-    return totalPrice;
+    let total = 0;
+    selectedProducts.map((item, i)=>{
+      total += item.Book.price * (1 - item.Book.percentDiscount)*quantity[i]
+    })
+    setPrice(total.toFixed(0));
+    return total;
   };
 
   const handleCountChange = (id, newCount) => {
-    setSelectedItems([...selectedItems]);
-    updateCart(id, newCount);
+    const updatedQuantity = quantity.map((itemQ, index) => {
+      if (selectedItems.includes(id) && selectedItems.indexOf(id) === index) {
+        return parseInt(newCount, 10);
+      }
+      return itemQ;
+    });
+  
+    setQuantity(updatedQuantity);
     const newTotalPrice = calculateTotalPrice();
     setTotalPrice(newTotalPrice);
   };
-
+  const handleOrder = ()=>{
+    updateArrIdBook(selectedItems)
+    updateArrQuantity(quantity)
+    updatePriceTotal(price)
+    navigate('/orderCart')
+  }
   return (
     <div>
       {currentUser ? (
@@ -151,7 +165,7 @@ export default function Cart() {
                         <input
                           className={styles.checkbox}
                           type="checkbox"
-                          onChange={() => handleCheckboxChange(value.id)}
+                          onChange={() => handleCheckboxChange(value.id, value.quantity)}
                           checked={selectedItems.includes(value.id)}
                         />
                       </td>
@@ -240,18 +254,10 @@ export default function Cart() {
                         <th>Tổng số tiền sản phẩm: </th>
                         <td>{price}đ</td>
                       </tr>
-                      <tr>
-                        <th>Tiền ship: </th>
-                        <td>30.000đ</td>
-                      </tr>
-                      <tr>
-                        <th>Tổng: </th>
-                        <td>{price}đ</td>
-                      </tr>
                     </table>
                   </div>
                   <div className={styles.btn}>
-                    <button>Đặt hàng</button>
+                    <button onClick={()=>handleOrder()}>Xác nhận đặt hàng</button>
                   </div>
                 </div>
               </div>

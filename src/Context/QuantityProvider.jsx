@@ -1,18 +1,45 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 const QuantityContext = createContext();
 
 export const QuantityProvider = ({ children }) => {
   const [quantity, setQuantity] = useState(() => {
-    // Khôi phục giá trị từ localStorage, nếu không có thì mặc định là 1
     const storedQuantity = localStorage.getItem('quantity');
     return storedQuantity ? parseInt(storedQuantity, 10) : 1;
   });
 
   const [address, setAddress] = useState(() => {
-    // Khôi phục giá trị từ localStorage, nếu không có thì mặc định là ''
     const storedAddress = localStorage.getItem('address');
     return storedAddress || '';
+  });
+
+  const [arrIdBook, setArrIdBook] = useState(() => {
+    const storedArrIdBook = localStorage.getItem('arrIdBook');
+    try {
+      return storedArrIdBook ? JSON.parse(storedArrIdBook) : [];
+    } catch (error) {
+      console.error('Error parsing JSON from localStorage:', error);
+      return [];
+    }
+  });
+  
+  const [arrQuantity, setArrQuantity] = useState(() => {
+    const storedArrIdBook = localStorage.getItem('arrQuantity');
+    try {
+      return storedArrIdBook ? JSON.parse(storedArrIdBook) : [];
+    } catch (error) {
+      console.error('Error parsing JSON from localStorage:', error);
+      return [];
+    }
+  });
+  const [priceTotal, setPriceTotal] = useState(() => {
+    const storedArrIdBook = localStorage.getItem('priceTotal');
+    try {
+      return storedArrIdBook ? JSON.parse(storedArrIdBook) : 0;
+    } catch (error) {
+      console.error('Error parsing JSON from localStorage:', error);
+      return [];
+    }
   });
 
   const updateQuantity = (newQuantity) => {
@@ -20,14 +47,26 @@ export const QuantityProvider = ({ children }) => {
     localStorage.setItem('quantity', newQuantity);
   };
 
+  const updateArrQuantity = (newQuantity) => {
+    setArrQuantity(newQuantity);
+    localStorage.setItem('arrQuantity', newQuantity);
+  };
+  const updatePriceTotal = (newQuantity) => {
+    setPriceTotal(newQuantity);
+    localStorage.setItem('priceTotal', newQuantity);
+  };
   const updateAddress = (newAddress) => {
     setAddress(newAddress);
     localStorage.setItem('address', newAddress);
   };
 
+  const updateArrIdBook = (newArrIdBook) => {
+    setArrIdBook(newArrIdBook);
+    localStorage.setItem('arrIdBook', JSON.stringify(newArrIdBook));
+  };
 
   return (
-    <QuantityContext.Provider value={{ quantity, updateQuantity, address, updateAddress }}>
+    <QuantityContext.Provider value={{ quantity, updateQuantity, address, updateAddress, arrIdBook, updateArrIdBook, arrQuantity, updateArrQuantity, priceTotal, updatePriceTotal }}>
       {children}
     </QuantityContext.Provider>
   );
