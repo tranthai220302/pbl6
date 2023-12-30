@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const newRequest = axios.create({
-  baseURL: "https://harumi.store/api",
+  baseURL: "https://www.harumi.store/api",
   withCredentials: true,
 });
 
