@@ -210,3 +210,69 @@ export const getBookByReview5StarService = async()=>
         return error;
     }
 }
+export const getReviewsByStoreService = async(store_id) =>{
+    try {
+        const reviews = await db.review.findAll({
+            include : [
+                {
+                    model : db.book,
+                    as : 'review2',
+                    where : {store_id}
+                },
+                {
+                    model : db.user,
+                    as : 'review1',
+                    attributes : {exclude : ['password']}
+                },
+                {
+                    model : db.feedBack
+                }
+            ]
+        })
+        const numStar = reviews.length;
+        let percentStar = 0;
+        if(numStar !== 0){
+            let total = 0;
+            reviews.map((item)=>{
+                total += item.num_star
+            })
+            console.log(total)
+            percentStar = (total/numStar).toFixed(1);
+        }
+        if(reviews.length == 0) return createError(400, 'Không có đánh giá!');
+        return {
+            reviews,
+            percentStar
+        };
+    } catch (error) {
+        return error;
+    }
+}
+export const searchReviewsByStoreService = async(id, num_star)=>{
+    try {
+        const reviews = await db.review.findAll({
+            where : {
+                num_star
+            },
+            include : [
+                {
+                    model : db.book,
+                    as : 'review2',
+                    where : {store_id : id}
+                },
+                {
+                    model : db.user,
+                    as : 'review1',
+                    attributes : {exclude : ['password']}
+                },
+                {
+                    model : db.feedBack
+                }
+            ]
+        })
+        if(reviews.length == 0) return createError(400, 'Không có đánh giá');
+        return reviews;
+    } catch (error) {
+        return(error);
+    }
+}

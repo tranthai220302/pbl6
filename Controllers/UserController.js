@@ -13,7 +13,8 @@ import {
     sendRequireShipperService,
     getNumberAdminService,
     cancleRequestStoreService,
-    cancleRequestShipperService
+    cancleRequestShipperService,
+    workByStoreService
 
 } from "../Models/Services/UserService.js";
 import { Op } from "sequelize";
@@ -234,6 +235,12 @@ export const cancleRequestShipper = async(req, res, next) =>{
         next(error)
     }
 }
+export const workByStore = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này'));
+        const work = await workByStoreService(req.id);
+        if(work instanceof Error) next(work);
+        res.status(200).send(work);
 
 export const cancelOrderByStore = async(req, res, next) =>{
     try {
