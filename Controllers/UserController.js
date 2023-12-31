@@ -20,7 +20,7 @@ import {
 import { Op } from "sequelize";
 import createError from "../ultis/createError.js";
 import { isToday, nextDay } from "date-fns";
-import { confirmOrderByStoreService, revenuaMonthByAdminService } from "../Models/Services/OrderServices.js";
+import { cancelOrderByStoreService, confirmOrderByStoreService, revenuaMonthByAdminService } from "../Models/Services/OrderServices.js";
 
 export const updateUser = async(req, res, next) =>{
     try {
@@ -241,6 +241,14 @@ export const workByStore = async(req, res, next) =>{
         const work = await workByStoreService(req.id);
         if(work instanceof Error) next(work);
         res.status(200).send(work);
+
+export const cancelOrderByStore = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'));
+        const idOrder = req.params.id;
+        const cancel = await cancelOrderByStoreService(idOrder, req.id);
+        if(confirm instanceof Error) return next(cancel);
+        res.status(200).send(cancel);
     } catch (error) {
         next(error);
     }

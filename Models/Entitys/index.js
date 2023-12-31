@@ -23,6 +23,7 @@ import DetailShipper from "./DetailShipper.js";
 import ShipperRequest from "./ShipperRequest.js";
 import ReportShipper from "./ReportShipper.js";
 import FeedBack from "./FeedBack.js";
+import ReviewShipper from "./ReviewShipper.js";
 const sequelize = new Sequelize(
     configdb.DB,
     configdb.USER,
@@ -66,6 +67,7 @@ db.reportStore = ReportStore(sequelize)
 db.detailShipper = DetailShipper(sequelize)
 db.shipperRequest = ShipperRequest(sequelize)
 db.reportShipper = ReportShipper(sequelize)
+db.reviewShipper = ReviewShipper(sequelize)
 
 /*feedBack vs review*/
 db.review.hasOne(db.feedBack);
@@ -200,10 +202,17 @@ db.order.belongsTo(db.state)
 db.state.hasMany(db.order)
 /*Review*/
 db.review.belongsTo(db.user, { as: 'review1', foreignKey: 'customer_id' });
-db.review.belongsTo(db.book, { as: 'review2', foreignKey: 'book_id', onDelete: 'CASCADE',onUpdate: 'NO ACTION'  });
+db.review.belongsTo(db.shippemt, { as: 'review2', foreignKey: 'shipper_id', onDelete: 'CASCADE',onUpdate: 'NO ACTION'  });
 db.user.hasMany(db.review, { as: 'review_customer', foreignKey: 'customer_id' })
 db.book.hasMany(db.review, { as: 'review_book', foreignKey: 'book_id'})
 
+/*ReviewShipper*/
+db.reviewShipper.belongsTo(db.user, { as: 'reviewShipper1', foreignKey: 'customer_id' });
+db.reviewShipper.belongsTo(db.user, { as: 'reviewShipper2', foreignKey: 'shipper_id', onDelete: 'CASCADE',onUpdate: 'NO ACTION'  });
+db.user.hasMany(db.reviewShipper, { as: 'reviewShipper_customer', foreignKey: 'customer_id' })
+db.user.hasMany(db.reviewShipper, { as: 'review_shipper', foreignKey: 'shipper_id'}) 
+
 db.order.hasMany(db.cart);
 db.cart.belongsTo(db.order);
+
 export default db;

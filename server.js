@@ -21,6 +21,7 @@ import routerReportStore from "./Routes/ReportStoreRoute.js";
 import routerShippemt from "./Routes/ShippementRoute.js";
 import routerReportShipper from "./Routes/ReportShipperRoute.js";
 import routerFeedBack from "./Routes/FeedBackRoute.js";
+import routerReviewShipper from "./Routes/ReviewShipperRoute.js";
 import path from "path";
 import cron from 'node-cron'
 import { fileURLToPath } from 'url';
@@ -83,6 +84,7 @@ app.use('/api/report', routerReportStore)
 app.use('/api/shippemt',routerShippemt)
 app.use('/api/reportShipper',routerReportShipper)
 app.use('/api/feedBack', routerFeedBack)
+app.use('/api/reviewShipper',routerReviewShipper)
 app.use((err, req, res, next)=>{
   const errorStatus = err.status || 500;
   const errorMessage = err.message || "Something went wrong!";
