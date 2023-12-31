@@ -241,7 +241,10 @@ export const workByStore = async(req, res, next) =>{
         const work = await workByStoreService(req.id);
         if(work instanceof Error) next(work);
         res.status(200).send(work);
-
+    }catch(error){
+        return error;
+    }
+}
 export const cancelOrderByStore = async(req, res, next) =>{
     try {
         if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'));
