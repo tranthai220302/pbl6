@@ -15,7 +15,8 @@ import {
     ConfirmShipper,
     getRequestShippers,
     cancleRequestStore,
-    cancleRequestShipper
+    cancleRequestShipper,
+    workByStore
 } from '../Controllers/UserController.js';
 import { verifyjson } from '../middleware/jwt.js';
 import { revenuaMonthByAdmin } from '../Controllers/OrderController.js';
@@ -38,5 +39,6 @@ routerUser.get('/number', verifyjson, getNumberAdmin)
 routerUser.post('/revenuaAdminByMonth', verifyjson, revenuaMonthByAdmin)
 routerUser.post('/cancleRequestStore/:id', verifyjson, cancleRequestStore)
 routerUser.post('/cancleRequestShipper/:id', verifyjson, cancleRequestShipper)
+routerUser.get('/workStore', verifyjson, workByStore)
 
 export default routerUser;

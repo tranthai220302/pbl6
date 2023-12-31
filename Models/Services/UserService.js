@@ -347,3 +347,69 @@ export const cancleRequestShipperService = async(customer_id, message) =>{
         return error;   
     }
 }
+export const getOrderByStateService = async(store_id, StateId) =>{
+    try {
+        const order= await db.order.findAll({
+            where : {
+                StateId : StateId,
+                store_id
+            },
+            include : [
+                {
+                    model : db.user,
+                    as : 'customer',
+                    attributes: { exclude: ['password'] },
+                },
+                {
+                    model : db.state,
+                    attributes: ['status'],
+                },
+                {
+                    model : db.book,
+                    include : [
+                        {
+                            model : db.image,
+                        }
+                    ]
+                },
+            ]
+        })
+        return {
+            order,
+            number : order.length
+        }
+    } catch (error) {
+        return error;
+    }
+}
+export const workByStoreService = async(id) =>{
+    try {
+        const orderWaitCofirm = await getOrderByStateService(id, 1);
+        const orderWaitShip = await getOrderByStateService(id, 2);
+        const orderComplete = await getOrderByStateService(id, 5);
+        const orderCancel = await getOrderByStateService(id, 6);
+        const orderReturn = await getOrderByStateService(id, 7);
+        const book = await db.book.findAll({
+            where : {
+                [Op.and] : [
+                    {store_id : id},
+                    {sales_number : 0}
+                ]
+            }
+        })
+        const book0 = {
+            book,
+            number : book.length
+        }
+        return {
+            orderWaitCofirm,
+            orderWaitShip,
+            orderComplete,
+            orderCancel,
+            orderReturn,
+            book
+        }
+    } catch (error) {
+        return error;
+    }
+}

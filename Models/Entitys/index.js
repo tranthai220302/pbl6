@@ -22,6 +22,7 @@ import ReportStore from "./ReportStore.js";
 import DetailShipper from "./DetailShipper.js";
 import ShipperRequest from "./ShipperRequest.js";
 import ReportShipper from "./ReportShipper.js";
+import FeedBack from "./FeedBack.js";
 const sequelize = new Sequelize(
     configdb.DB,
     configdb.USER,
@@ -42,7 +43,7 @@ const sequelize = new Sequelize(
 );
 const db = {}
 db.sequelize = sequelize
-
+db.feedBack = FeedBack(sequelize);
 db.customer_voucherItem = Customer_VoucherItem(sequelize)
 db.admin = Admin(sequelize)
 db.book = Book(sequelize)
@@ -66,6 +67,9 @@ db.detailShipper = DetailShipper(sequelize)
 db.shipperRequest = ShipperRequest(sequelize)
 db.reportShipper = ReportShipper(sequelize)
 
+/*feedBack vs review*/
+db.review.hasOne(db.feedBack);
+db.feedBack.belongsTo(db.review);
 /*shipper vs detailShipper*/
 db.user.hasOne(db.detailShipper, {foreignKey : 'shipper_id'});
 db.detailShipper.belongsTo(db.user, {foreignKey : 'shipper_id'})
