@@ -19,9 +19,7 @@ import VoucherItem from "./VoucherItem.js";
 import Customer_VoucherItem from "./Customer_VoucherItem.js";
 import StoreRequest from "./StoreRequest.js";
 import ReportStore from "./ReportStore.js";
-import DetailShipper from "./DetailShipper.js";
 import ShipperRequest from "./ShipperRequest.js";
-import ReportShipper from "./ReportShipper.js";
 import FeedBack from "./FeedBack.js";
 import ReviewShipper from "./ReviewShipper.js";
 const sequelize = new Sequelize(
@@ -64,24 +62,12 @@ db.voucher = Voucher(sequelize)
 db.voucherItem = VoucherItem(sequelize)
 db.storeRequest = StoreRequest(sequelize)
 db.reportStore = ReportStore(sequelize)
-db.detailShipper = DetailShipper(sequelize)
 db.shipperRequest = ShipperRequest(sequelize)
-db.reportShipper = ReportShipper(sequelize)
 db.reviewShipper = ReviewShipper(sequelize)
 
 /*feedBack vs review*/
 db.review.hasOne(db.feedBack);
 db.feedBack.belongsTo(db.review);
-/*shipper vs detailShipper*/
-db.user.hasOne(db.detailShipper, {foreignKey : 'shipper_id'});
-db.detailShipper.belongsTo(db.user, {foreignKey : 'shipper_id'})
-
-/*reportShipper vs customer*/
-db.user.hasMany(db.reportShipper, {foreignKey : 'customer_id', as : 'reportShipperByCustomer'});
-db.reportShipper.belongsTo(db.user, {foreignKey: 'customer_id', as : 'customerReportShipper'})
-/*reportShipper vs shipper*/
-db.user.hasMany(db.reportShipper, {foreignKey : 'shipper_id', as : 'reportByShipper'});
-db.reportShipper.belongsTo(db.user, {foreignKey: 'shipper_id', as : 'shipperByReport'})
 
 /*reportStore vs customer*/
 db.user.hasMany(db.reportStore, {foreignKey : 'customer_id', as : 'reportByCustomer'});
@@ -153,7 +139,6 @@ db.book.hasMany(db.image,{
 })
 db.image.belongsTo(db.book)
 
-
 /*Book*/
 //storeId
 db.user.hasMany(db.book, {
@@ -182,12 +167,9 @@ db.book.belongsToMany(db.category, {through: 'Category_Book'})
 db.shippemt.belongsTo(db.order)
 db.order.hasOne(db.shippemt)
 //ShipperId
-db.user.hasMany(db.shippemt,{
-  foreignKey: 'shipperId'
-})
-db.shippemt.belongsTo(db.user,{
-  foreignKey: 'shipperId'
-})
+db.user.hasMany(db.shippemt,{ foreignKey: 'shipperId', as: 'ordersShipper'})
+db.shippemt.belongsTo(db.user,{ foreignKey: 'shipperId', as: 'shipper'})
+
 
 /*Voucher vs VoucherItem*/
 db.voucherItem.belongsTo(db.voucher);
@@ -202,7 +184,7 @@ db.order.belongsTo(db.state)
 db.state.hasMany(db.order)
 /*Review*/
 db.review.belongsTo(db.user, { as: 'review1', foreignKey: 'customer_id' });
-db.review.belongsTo(db.shippemt, { as: 'review2', foreignKey: 'shipper_id', onDelete: 'CASCADE',onUpdate: 'NO ACTION'  });
+db.review.belongsTo(db.book, { as: 'review2', foreignKey: 'book_id', onDelete: 'CASCADE',onUpdate: 'NO ACTION'  });
 db.user.hasMany(db.review, { as: 'review_customer', foreignKey: 'customer_id' })
 db.book.hasMany(db.review, { as: 'review_book', foreignKey: 'book_id'})
 
@@ -214,5 +196,9 @@ db.user.hasMany(db.reviewShipper, { as: 'review_shipper', foreignKey: 'shipper_i
 
 db.order.hasMany(db.cart);
 db.cart.belongsTo(db.order);
+
+/*User vs RequestShipper*/
+db.user.hasOne(db.shipperRequest, { as: "DetailShipper", foreignKey: 'customer_id' });
+db.shipperRequest.belongsTo(db.user, { as: "userShipper", foreignKey: 'customer_id' });
 
 export default db;

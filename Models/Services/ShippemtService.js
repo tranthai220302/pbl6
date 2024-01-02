@@ -134,8 +134,33 @@ export const getOrdersByShipperService = async(id) =>{
             },
             include: [
                 {
-                    model: db.order
-                }
+                    model: db.order,
+                    include : [
+                        {
+                            model : db.user,
+                            as : 'customer',
+                            attributes: { exclude: ['password'] },
+                        },
+                        {
+                            model : db.user,
+                            as : 'store',
+                            attributes: { exclude: ['password'] },
+                            include : [
+                                {
+                                    model : db.storeRequest,
+                                    as : 'DetailStore'
+                                }
+                            ]
+                        },
+                        {
+                            model : db.state,
+                            attributes: ['status'],
+                        },
+                        {
+                            model : db.book,
+                        },
+                    ]
+                }                
             ]
         });
 

@@ -5,8 +5,10 @@ export const createReviewShipperService = async(desc, customer_id, order_id, num
     try {
         const shippemt = await db.shippemt.findOne({
             where : {
-                OrderId: order_id,
-                StateId: 4
+                [Op.and] : [
+                    {OrderId: order_id},
+                    {StateId: 4}
+                ]
             }
         })
 
@@ -72,6 +74,31 @@ export const deleteReviewShipperService = async(id,customer_id)=>{
         return {
             status: true,
             meessage: 'Xoá thành công!'
+        };
+    } catch (error) {
+        return error;
+    }
+}
+
+export const StarReviewShipperService = async(id) =>{
+    try {
+        const reviews = await db.reviewShipper.findAll({
+            where: {
+                shipper_id: id
+            }
+        })
+        const numStar = reviews.length;
+        let Star = 0;
+        if(numStar !== 0){
+            let total = 0;
+            reviews.map((item)=>{
+                total += item.num_star
+            })
+            Star = (total/numStar).toFixed(1);
+        }
+        if(reviews.length == 0) return createError(400, 'Không có đánh giá!');
+        return {
+            Star
         };
     } catch (error) {
         return error;

@@ -1,4 +1,4 @@
-import { createReviewShipperService, deleteReviewShipperService, updateReviewShipperService } from "../Models/Services/ReviewShipperService.js";
+import { StarReviewShipperService, createReviewShipperService, deleteReviewShipperService, updateReviewShipperService } from "../Models/Services/ReviewShipperService.js";
 import createError from "../ultis/createError.js";
 
 export const createReviewShipper= async (req, res, next) =>{
@@ -35,3 +35,14 @@ export const deleteReviewShipper = async(req, res, next) =>{
         next(error);
     }
 } 
+
+export const StarReviewShipper = async(req, res, next) =>{
+    try {
+        const shipper_id = req.params.id;
+        const reviews = await StarReviewShipperService(shipper_id);
+        if(reviews instanceof Error) return next(reviews);
+        res.status(200).send(reviews);
+    } catch (error) {
+        next(error)
+    }
+}

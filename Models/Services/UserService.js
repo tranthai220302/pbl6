@@ -273,7 +273,14 @@ export const getRequestShippersService = async()=>{
         const listRequest = await db.shipperRequest.findAll({
             where : {
                 isConfirm : false
-            }
+            },
+            include : [
+                {
+                    model : db.user,
+                    as : 'userShipper',
+                    attributes : {exclude : ['password']}
+                }
+            ]
         })
         if(listRequest.length == 0) return createError(400, 'Không có yêu cầu!');
         return listRequest;
