@@ -42,6 +42,5 @@ routerUser.post('/revenuaAdminByMonth', verifyjson, revenuaMonthByAdmin)
 routerUser.post('/cancleRequestStore/:id', verifyjson, cancleRequestStore)
 routerUser.post('/cancleRequestShipper/:id', verifyjson, cancleRequestShipper)
 routerUser.get('/workStore', verifyjson, workByStore)
-routerUser.post('/storeFlashSale', verifyjson, getStoreF)
 
 export default routerUser;
