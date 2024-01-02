@@ -601,8 +601,10 @@ export const confirmBookFlashSaleService = async(store_id, id) =>{
         return error;
     }
 }
-export const getStoreFlashSaleService = async(time, date)=>{
+export const getStoreFlashSaleService = async(date)=>{
     try {
+        console.log(date)
+        const data = new Date(date)
         const user = await db.user.findAll({
             include : [
                 {
@@ -610,17 +612,43 @@ export const getStoreFlashSaleService = async(time, date)=>{
                     where : {
                         [Op.and] : [
                             {isFlashSale : 0},
-                            {timeFlashSale : time},
-                            Sequelize.literal(`DATE(dateFlashSale) = '${date.toISOString().split('T')[0]}'`)
+                            Sequelize.literal(`DATE(dateFlashSale) = '${data.toISOString().split('T')[0]}'`)
                         ]
                     }
-                }
+                },
+                {
+                    model : db.storeRequest,
+                    as : 'DetailStore'
+                },
             ]
         })
         if(user.length === 0) return createError(400, 'Không có cửa hàng đăng ký sự kiện ')
         return user;
     } catch (error) {
         return error;
+    }
+}
+export const getBookFlashSaleByStoreService = async(id, date)=>{
+    try {
+        const data = new Date(date)
+        const book = await db.book.findAll({
+            where : {
+                [Op.and] : [
+                    {isFlashSale : 0},
+                    Sequelize.literal(`DATE(dateFlashSale) = '${data.toISOString().split('T')[0]}'`),
+                    {store_id : id}
+                ]
+            },
+            include : [
+                {
+                    model : db.image
+                }
+            ]
+        })
+        if(book.length == 0) return createError(400, 'Không có danh sách!')
+        return book;
+    } catch (error) {
+        return error;   
     }
 }
 export const getBookWaitConfirmFlashSaleService = async(idStore) =>{

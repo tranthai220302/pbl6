@@ -42,7 +42,7 @@ const Book = (sequelize) => sequelize.define('Book', {
     },
     dateFlashSale : {
         type : DataTypes.DATE,
-        defaultValue : 0
+        defaultValue : null
     },
     nhaXB : {
         type : DataTypes.STRING,

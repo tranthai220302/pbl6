@@ -17,7 +17,8 @@ import {
     cancleRequestStore,
     cancleRequestShipper,
     workByStore,
-    cancelOrderByStore
+    cancelOrderByStore,
+    getStoreFlashSale
 } from '../Controllers/UserController.js';
 import { verifyjson } from '../middleware/jwt.js';
 import { revenuaMonthByAdmin } from '../Controllers/OrderController.js';

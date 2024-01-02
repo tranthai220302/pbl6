@@ -205,8 +205,16 @@ export const createPaymentUrl = async(req, res, next) =>{
         let tmnCode =process.env.vnp_TmnCode
         let secretKey =process.env.vnp_HashSecret
         let vnpUrl =process.env.vnp_Url
-        let amount = req.body.total;
-        let returnUrl = `https://www.harumi.store/api/order/vnpay_return`;
+        let amount1 = req.body.total;
+        let amount = 0;
+        if(req.body.idCart){
+            amount1.map((item)=>{
+                amount +=item;
+            })
+        }else{
+            amount = amount1
+        }
+        let returnUrl = `http://localhost:8080/api/order/vnpay_return`;
         let orderId = moment(date).format('DDHHmmss');
         console.log(amount)
         let bankCode =  "";  
@@ -239,17 +247,34 @@ export const createPaymentUrl = async(req, res, next) =>{
         let signData = querystring.stringify(vnp_Params, { encode: false });   
         let hmac = crypto.createHmac("sha512", secretKey);
         let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex"); 
-        data = {
-            total: amount,
-            quantity: req.body.quantity,
-            addressCustomer: req.body.addressCus,
-            BookId: req.params.id,
-            customer_id: req.id,
-            priceShip: req.body.priceShip,
-            priceFreeShip: req.body.priceFreeShip,
-            priceFreeVoucher: req.body.priceFreeVoucher,
-            idVoucher: req.body.idVoucher
-        };
+        if(!req.body.idCart){
+            data = {
+                total: amount1,
+                quantity: req.body.quantity,
+                addressCustomer: req.body.addressCus,
+                BookId: req.params.id,
+                customer_id: req.id,
+                priceShip: req.body.priceShip,
+                priceFreeShip: req.body.priceFreeShip,
+                priceFreeVoucher: req.body.priceFreeVoucher,
+                idVoucher: req.body.idVoucher,
+            };
+        }
+        if(req.body.idCart){
+            data = {
+                total: amount1,
+                quantity: req.body.quantity,
+                addressCustomer: req.body.addressCus,
+                BookId: req.body.idBook,
+                customer_id: req.id,
+                priceShip: req.body.priceShip,
+                priceFreeShip: req.body.priceFreeShip,
+                priceFreeVoucher: req.body.priceFreeVoucher,
+                idVoucher: req.body.idVoucher,
+                idCart : req.body.idCart
+            };
+        }
+        console.log(req.body.idBook)
         vnp_Params['vnp_SecureHash'] = signed;
         vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
         res.status(200).send(vnpUrl)
@@ -287,18 +312,35 @@ export const vpnayReturn = async(req, res, next) =>{
         let secretKey =process.env.vnp_HashSecret
         let signData = querystring.stringify(vnp_Params, { encode: false });   
         let hmac = crypto.createHmac("sha512", secretKey);
-        let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");   
-        const order = await createOrderPaymentOnlieService(
-            data?.total,
-            data?.quantity,
-            data?.addressCustomer,
-            data?.BookId,
-            data?.customer_id,
-            data?.priceShip,
-            data?.priceFreeShip,
-            data?.priceFreeVoucher,
-            data?.idVoucher
-        )
+        let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
+        let order = null;   
+        if(data.idCart){
+            order = await createOrderByManyBookService(
+                data?.BookId,
+                data?.customer_id,
+                data?.quantity,
+                data?.addressCustomer,
+                data?.priceShip,
+                data?.priceFreeShip,
+                data?.priceFreeVoucher,
+                data?.total,
+                data?.idVoucher,
+                data?.idCart
+            )
+        }else if(!data.idCart){
+             order = await createOrderPaymentOnlieService(
+                data?.total,
+                data?.quantity,
+                data?.addressCustomer,
+                data?.BookId,
+                data?.customer_id,
+                data?.priceShip,
+                data?.priceFreeShip,
+                data?.priceFreeVoucher,
+                data?.idVoucher
+            )
+        }
+        if(!order) return next(createError(400, 'Order không thành công!'))
         if(order instanceof Error) return next(order);
         res.render('success', {code: vnp_Params['vnp_ResponseCode']})
     } catch (error) {
