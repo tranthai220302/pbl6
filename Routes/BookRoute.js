@@ -10,6 +10,7 @@ import {
     getBookByQuery, 
     getBookByStore, 
     getBookFlashSale, 
+    getBookFlashSaleByStore, 
     getBookIsOrderByStore, 
     getBooks, 
     getBooksByArr, 
@@ -37,8 +38,9 @@ routerBook.get('/orderHigh', getBookBoughtHigh  )
 routerBook.get('/flashSale', getBookFlashSale)
 routerBook.post('/registerFlashSale/:id', verifyjson, registerBookFlashSale)
 routerBook.post('/confirmFlashSale/:id', verifyjson, confirmBookFlashSale)
-routerBook.get('/store', getStoreFlashSale)
+routerBook.post('/store',verifyjson, getStoreFlashSale)
 routerBook.get('/list/nhaXB', getNhaXB)
 routerBook.get('/list/languages', getLanguages)
 routerBook.get('/list/author', getAuthorSearch)
+routerBook.post('/bookFlas/:id', verifyjson, getBookFlashSaleByStore)
 export default routerBook;

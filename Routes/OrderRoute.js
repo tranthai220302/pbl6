@@ -33,4 +33,5 @@ routerOrder.post('/create_payment_url/:id',verifyjson, createPaymentUrl);
 routerOrder.get('/vnpay_return', vpnayReturn);
 routerOrder.post('/orderCart', verifyjson, createOrderByManyBook)
 routerOrder.post('/ship', verifyjson, priceShip)
+routerOrder.post('/orderCart/Online', verifyjson, createPaymentUrl)
 export default routerOrder;

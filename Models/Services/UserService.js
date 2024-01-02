@@ -413,3 +413,34 @@ export const workByStoreService = async(id) =>{
         return error;
     }
 }
+export const getStoreFlashSaleService = async(date) =>{
+    try {
+        const book = await db.book.findAll({
+            where : {
+                [Op.and] : [
+                    {
+                        dateFlashSale : date
+                    },
+                    {
+                        isFlashSale : 0
+                    }
+                ]
+            },
+            include : [
+                {
+                    model : db.user,
+                    attributes : {exclude : ['password']},
+                    include : [
+                        {
+                            model : db.storeRequest,
+                            as : 'DetailStore'
+                        }
+                    ]
+                }
+            ]
+        })
+        return book;
+    } catch (error) {
+        
+    }
+}
