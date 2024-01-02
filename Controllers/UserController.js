@@ -14,7 +14,8 @@ import {
     getNumberAdminService,
     cancleRequestStoreService,
     cancleRequestShipperService,
-    workByStoreService
+    workByStoreService,
+    getStoreFlashSaleService
 
 } from "../Models/Services/UserService.js";
 import { Op } from "sequelize";
@@ -254,5 +255,16 @@ export const cancelOrderByStore = async(req, res, next) =>{
         res.status(200).send(cancel);
     } catch (error) {
         next(error);
+    }
+}
+export const getStoreFlashSale = async(req, res, next)=>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
+        const date = req.body.date;
+        const user = await getStoreFlashSaleService(date);
+        if(user instanceof Error) next(user);
+        res.status(200).send(user)
+    } catch (error) {
+        
     }
 }

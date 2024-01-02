@@ -100,6 +100,7 @@ export const createOrderPaymentOnlieService = async (total, quantity, addressCus
 }
 export const createOrderByManyBookService = async(bookId, customer_id, quantity, addressCustomer, priceShip, priceFreeShip,priceFreeVoucher, total, idVoucher, idCart) =>{
     try {
+        console.log(bookId)
         if(idVoucher.length > 0){
             const delete_FreeShip = await db.customer_voucherItem.destroy({
                 where : {
@@ -132,7 +133,6 @@ export const createOrderByManyBookService = async(bookId, customer_id, quantity,
                 ]
             }
         })
-        if(delete_cart == 0) return createError(400, 'Xoá giỏ hàng không thành công!')
         return arrOrder;
     } catch (error) {
         return error;

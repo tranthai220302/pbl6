@@ -202,7 +202,7 @@ db.order.belongsTo(db.state)
 db.state.hasMany(db.order)
 /*Review*/
 db.review.belongsTo(db.user, { as: 'review1', foreignKey: 'customer_id' });
-db.review.belongsTo(db.shippemt, { as: 'review2', foreignKey: 'shipper_id', onDelete: 'CASCADE',onUpdate: 'NO ACTION'  });
+db.review.belongsTo(db.book, { as: 'review2', foreignKey: 'book_id', onDelete: 'CASCADE',onUpdate: 'NO ACTION'  });
 db.user.hasMany(db.review, { as: 'review_customer', foreignKey: 'customer_id' })
 db.book.hasMany(db.review, { as: 'review_book', foreignKey: 'book_id'})
 
