@@ -90,7 +90,9 @@
     background-color: white;
     padding: 20px;
     z-index: 3; /* Lớn hơn so với overlay */
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     width: 40%;
   }
 
@@ -113,5 +115,103 @@
     background-color: rgba(78, 165, 139, 0.137) !important;
     color: rgba(78, 165, 139, 0.863) !important;
     margin-top: 20px;
+  }
+
+  .img_book {
+    height: 100px;
+  }
+
+  .book {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  .price {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+  }
+
+  .current_price {
+    font-weight: 500;
+    font-size: larger;
+    color: #4EA58B;
+  }
+
+  .old_price {
+    font-size: small;
+    text-decoration: line-through;
+    color: gray;
+    margin-right: 10px;
+  }
+
+  .percent_discount {
+    color: #4EA58B;
+    background-color: #BEDDDD;
+    border-radius: 4px;
+    padding: 2px;
+    font-size: small;
+    font-weight: 500;
+  }
+
+  .avt_cus {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+
+  .name_cus {
+    font-weight: 500;
+  }
+
+  .cus_inf {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cus_comment {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .icon_cmt {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .icon_cmt_child {
+    display: flex;
+    flex-direction: column;
+    color: #4EA58B;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+
+  .FormTitle {
+    position: relative;
+  }
+  
+  .CloseForm {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: #000; /* Change the color as needed */
+    font-size: 20px; /* Change the font size as needed */
+  }
+
+  .send_mess {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .send_mess button {
+    padding: 10px !important;
+    height: 50px;
   }
 
