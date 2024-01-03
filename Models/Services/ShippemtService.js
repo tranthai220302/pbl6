@@ -114,7 +114,32 @@ export const getOrdersService = async() =>{
         const orders = await db.order.findAll({
             where: {
                 StateId: 2
-            }
+            },
+            include : [
+                {
+                    model : db.user,
+                    as : 'customer',
+                    attributes: { exclude: ['password'] },
+                },
+                {
+                    model : db.user,
+                    as : 'store',
+                    attributes: { exclude: ['password'] },
+                    include : [
+                        {
+                            model : db.storeRequest,
+                            as : 'DetailStore'
+                        }
+                    ]
+                },
+                {
+                    model : db.state,
+                    attributes: ['status'],
+                },
+                {
+                    model : db.book,
+                },
+            ]
         });
          // Kiểm tra nếu không có shipment nào được tìm thấy
          if (orders.length === 0) return createError(400, 'Không có đơn hàng!');
@@ -185,7 +210,32 @@ export const getOrdersDeliveringService = async(id) =>{
                     model: db.order,
                     where: {
                         StateId: 3
-                    }
+                    },
+                    include : [
+                        {
+                            model : db.user,
+                            as : 'customer',
+                            attributes: { exclude: ['password'] },
+                        },
+                        {
+                            model : db.user,
+                            as : 'store',
+                            attributes: { exclude: ['password'] },
+                            include : [
+                                {
+                                    model : db.storeRequest,
+                                    as : 'DetailStore'
+                                }
+                            ]
+                        },
+                        {
+                            model : db.state,
+                            attributes: ['status'],
+                        },
+                        {
+                            model : db.book,
+                        }
+                    ]
                 }
             ]
         });
@@ -214,7 +264,32 @@ export const getOrderCompleteService = async(id) =>{
                             { StateId: 4 },
                             { StateId: 5 }
                         ]
-                    }
+                    },
+                    include : [
+                        {
+                            model : db.user,
+                            as : 'customer',
+                            attributes: { exclude: ['password'] },
+                        },
+                        {
+                            model : db.user,
+                            as : 'store',
+                            attributes: { exclude: ['password'] },
+                            include : [
+                                {
+                                    model : db.storeRequest,
+                                    as : 'DetailStore'
+                                }
+                            ]
+                        },
+                        {
+                            model : db.state,
+                            attributes: ['status'],
+                        },
+                        {
+                            model : db.book,
+                        },
+                    ]
                 }
             ],
             order: [
