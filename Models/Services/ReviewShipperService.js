@@ -104,3 +104,20 @@ export const StarReviewShipperService = async(id) =>{
         return error;
     }
 }
+
+export const getlistReviewShipperService = async(id) =>{
+    try {
+        const reviews = await db.reviewShipper.findAll({
+            where: {
+                shipper_id: id,
+                review: [
+                    [db.reviewShipper, 'updatedAt', 'DESC'] // Sắp xếp theo trường updatedAt của đơn hàng, thay 'createdAt' bằng tên trường thực tế nếu khác
+                ]
+            }
+        })
+        if(reviews.length == 0) return createError(400, 'Không có đánh giá!');
+        return reviews;
+    } catch (error) {
+        return error;
+    }
+}

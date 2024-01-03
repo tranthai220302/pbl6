@@ -15,7 +15,9 @@ import {
     cancleRequestStoreService,
     cancleRequestShipperService,
     workByStoreService,
-    getStoreFlashSaleService
+    getStoreFlashSaleService,
+    getShippersService,
+    getDetailShipperService
 
 } from "../Models/Services/UserService.js";
 import { Op } from "sequelize";
@@ -266,5 +268,27 @@ export const getStoreFlashSale = async(req, res, next)=>{
         res.status(200).send(user)
     } catch (error) {
         
+    }
+}
+
+export const getShippers = async(req, res, next) =>{
+    try {
+        if(req.idRole != 4) return next(createError(400, 'Bạn cần phải đăng nhập!'))
+        const shippers = await getShippersService();
+        if(shippers instanceof Error) return next(shippers);
+        res.status(200).send(shippers);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getDetailShipper = async(req, res, next) =>{
+    try {
+        if(req.idRole != 4) return next(createError(400, 'Bạn cần phải đăng nhập!'))
+        const shipper = await getDetailShipperService(req.params.id);
+        if(shipper instanceof Error) return next(shipper);
+        res.status(200).send(shipper);
+    } catch (error) {
+        next(error);
     }
 }

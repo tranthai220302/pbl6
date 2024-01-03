@@ -451,3 +451,57 @@ export const getStoreFlashSaleService = async(date) =>{
         
     }
 }
+
+export const getShippersService = async() =>{
+    try {
+        const shippers = await db.shipperRequest.findAll({
+            where: {
+                isConfirm: 1
+            },
+            include : [
+                {
+                    model : db.user,
+                    as : 'userShipper',
+                    attributes: { exclude: ['password'] },
+                }
+            ]
+        });
+         if (shippers.length === 0) return createError(400, 'Không có shipper!');
+
+        return shippers;
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
+}
+
+
+export const getDetailShipperService = async(id) =>{
+    try {
+        const shippers = await db.shipperRequest.findAll({
+            where: {
+                [Op.and] : [
+                    {
+                        isConfirm: 1
+                    },
+                    {
+                        customer_id : id
+                    }
+                ]
+            },
+            include : [
+                {
+                    model : db.user,
+                    as : 'userShipper',
+                    attributes: { exclude: ['password'] },
+                }
+            ]
+        });
+         if (shippers.length === 0) return createError(400, 'Không có shipper!');
+
+        return shippers;
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
+}
