@@ -12,7 +12,7 @@ export const loginController = async(req, res, next) =>{
             httpOnly: true,
             secure: true,
             sameSite: 'None',
-            domain: 'www.harumi.store',
+            // domain: 'www.harumi.store',
             path: "/",
         }).status(200).send(token.user)
     } catch (error) {
@@ -22,7 +22,8 @@ export const loginController = async(req, res, next) =>{
 export const registerController = async (req, res, next) =>{
     try {
         const data = req.body;
-        const user = await registerService(data.username, data.email, data.password, data.confirmPassword, data.firstName, data.lastName, data.phone, data.address, data.age);
+        console.log(data)
+        const user = await registerService(data.username, data.email, data.password, data.confirmPassword, data.firstName, data.lastName, data.phone, data.address, data.age, data.avatar);
         if (user instanceof Error) return next(user)
         return res.status(200).send(user)
     } catch (error) {

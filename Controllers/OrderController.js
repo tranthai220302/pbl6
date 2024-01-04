@@ -62,7 +62,7 @@ export const getOrdersByCustomer = async (req, res, next) =>{
 export const getOdrderByStore = async (req, res, next) =>{
     try {
         if(req.idRole !== 2 && req.idRole !== 4) return createError(400, 'Bạn không có quyền này!')
-        const orders = await getOrderByStoreService(req.params.id);
+        const orders = await getOrderByStoreService(req.params.id, req.query.page, req.query.idState);
         if(orders instanceof Error) return next(orders);
         res.status(200).send(orders)
     } catch (error) {

@@ -3,14 +3,17 @@ import createError from "../../ultis/createError.js";
 import db from "../Entitys/index.js";
 export const createReportService = async(filter) =>{
     try {
+        const checkBook = await db.book.findByPk(filter.book_id)
+        if(!checkBook) return createError(400, 'Không tìm thấy sách!')
         const checkReport = await db.reportStore.findOne({
             where : {
                 [Op.and] : [
                     {customer_id : filter.customer_id}, 
-                    {store_id : filter.store_id}
+                    {book_id : filter.book_id}
                 ]
             }
         })
+        filter.store_id = checkBook.store_id;
         if(checkReport) return createError(400, 'Bạn đã báo cáo cửa hàng này rồi!')
         const report = await db.reportStore.create(filter);
         if(!report) return createError(400, 'Báo cáo không thành công!');
@@ -30,6 +33,9 @@ export const getReportByStoreService = async(store_id) =>{
                 {
                     model : db.user,
                     as : 'customerReport'
+                },
+                {
+                    model : db.book,
                 }
             ]
         })
@@ -60,6 +66,62 @@ export const storeReportByCustomerService = async() =>{
             return isUnique;
           });
           return uniqueArray;
+    } catch (error) {
+        return error;
+    }
+}
+export const getBookByReportService = async(id)=>{
+    try {
+        const book = await db.book.findAll({
+            include : [
+                {
+                    model : db.reportStore,
+                    where : {
+                        store_id : id
+                    },
+                    include : [
+                        {
+                            model : db.user,
+                            as : 'customerReport'
+                        }
+                    ]
+
+                },
+                {
+                    model : db.category,
+                },
+                {
+                    model : db.author,
+                },
+                {
+                    model : db.image
+                },
+                {
+                    model : db.user,
+                    include : [
+                        {
+                            model : db.storeRequest,
+                            as : "DetailStore"
+                        }
+                    ]
+                }
+            ]
+        })
+        if(book.length === 0) return createError(400, 'Không có sách bị báo cáo!')
+        return book;
+    } catch (error) {
+        return error;
+    }
+}
+export const deletReportService = async(id)=>{
+    try {
+        const delete1 = await db.reportStore.destroy({
+            where : {id}
+        })
+        if(delete1 == 0) return createError(400, 'Xoá không thành công!');
+        return {
+            message : 'Xoá thành công!'
+        }
     } catch (error) {
         return error;
     }

@@ -11,6 +11,9 @@ const Category = (sequelize) => sequelize.define('Category', {
     },
     img : {
         type : DataTypes.STRING
+    },
+    desc : {
+        type : DataTypes.STRING(1000)
     }
 })
 
