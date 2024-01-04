@@ -224,42 +224,97 @@ export const getOrdersByCustomerService = async(customer_id, state_id) =>{
         return error;
     }
 }
-export const getOrderByStoreService = async(store_id) =>{
+export const getOrderByStoreService = async(store_id, page, StateId) =>{
     try {
-        const store = await db.user.findByPk(store_id)
-        if(!store) return createError(400, 'Không tìm thấy cửa hàng!')
-        const orders = await db.order.findAll({
-            where : {
-                store_id : store_id
-            },
-            include : [
-                {
-                    model : db.user,
-                    as : 'customer',
-                    attributes: { exclude: ['password'] },
+        if(!page ){
+            const store = await db.user.findByPk(store_id)
+            if(!store) return createError(400, 'Không tìm thấy cửa hàng!')
+            const orders = await db.order.findAll({
+                where : {
+                    store_id : store_id
                 },
-                {
-                    model : db.user,
-                    as : 'store',
-                    attributes: { exclude: ['password'] },
-                    include : [
-                        {
-                            model : db.storeRequest,
-                            as : 'DetailStore'
-                        }
+                include : [
+                    {
+                        model : db.user,
+                        as : 'customer',
+                        attributes: { exclude: ['password'] },
+                    },
+                    {
+                        model : db.user,
+                        as : 'store',
+                        attributes: { exclude: ['password'] },
+                        include : [
+                            {
+                                model : db.storeRequest,
+                                as : 'DetailStore'
+                            }
+                        ]
+                    },
+                    {
+                        model : db.state,
+                        attributes: ['status'],
+                    },
+                    {
+                        model : db.book,
+                    },
+                ]
+            })
+            if(orders.lengths == 0) return createError(400, 'Không có order !')
+            return orders;
+        }else{
+            const offset = (page - 1)*10
+            const store = await db.user.findByPk(store_id)
+            if(!store) return createError(400, 'Không tìm thấy cửa hàng!')
+            const orders = await db.order.findAll({
+                where : {
+                    [Op.and] : [
+                        {store_id : store_id},
+                        {StateId}
                     ]
                 },
-                {
-                    model : db.state,
-                    attributes: ['status'],
-                },
-                {
-                    model : db.book,
-                },
-            ]
-        })
-        if(orders.lengths == 0) return createError(400, 'Không có order !')
-        return orders;
+                include : [
+                    {
+                        model : db.user,
+                        as : 'customer',
+                        attributes: { exclude: ['password'] },
+                    },
+                    {
+                        model : db.user,
+                        as : 'store',
+                        attributes: { exclude: ['password'] },
+                        include : [
+                            {
+                                model : db.storeRequest,
+                                as : 'DetailStore'
+                            }
+                        ]
+                    },
+                    {
+                        model : db.state,
+                        attributes: ['status'],
+                    },
+                    {
+                        model : db.book,
+                    },
+                ],
+                offset : offset,
+                limit : 10,
+            })
+            if(orders.lengths == 0) return createError(400, 'Không có order !')
+            const num = await db.order.count({
+                where : {
+                    [Op.and] : [
+                        {store_id : store_id},
+                        {StateId}
+                    ]
+                }
+            })
+            if(orders.length === 0) return createError(400, 'Không có đơn hàng!')
+            return {
+                orders,
+                numPage : Math.ceil(num/10)
+            };
+        }
     } catch (error) {
         return error;
     }

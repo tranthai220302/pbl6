@@ -16,18 +16,48 @@ export const createCategoryService = async(name, img)=>{
         next(error)
     }
 }
-export const getCategorysService = async()=>{
+export const getCategorysService = async(isNumber, page)=>{
     try {
-        const categorys = await db.category.findAll();
-        if(categorys.length == 0) return createError(400, 'Không tìm thấy danh mục!')
-        return categorys;
+        if(!isNumber){
+            const categorys = await db.category.findAll();
+            if(categorys.length == 0) return createError(400, 'Không tìm thấy danh mục!')
+            return categorys;
+        }else{
+            const offset = (page - 1)*3;
+            const categorys = await db.category.findAll({
+                offset : offset,
+                limit : 3,
+            });
+            const numPage = await db.category.count();
+            let number = [];
+            for(let item of categorys){
+                const numberItem = await db.book.count({
+                    include : [
+                        {
+                            model : db.category,
+                            where : {
+                                name : item.name
+                            }
+                        }
+                    ]
+                })
+                number.push(numberItem)
+            }
+            if(categorys.length == 0) return createError(400, 'Không tìm thấy danh mục!')
+            return {
+                categorys,
+                number,
+                numPage : Math.ceil(numPage/3)
+            };
+        }
     } catch (error) {
-        next(error)
+        return(error)
     }
 }
 export const deleteCategoryService = async(id)=>{
     try {
-        const category = await db.category.findOne({id})
+        console.log(id)
+        const category = await db.category.findByPk(id)
         if(!category) return createError(400, 'Không tìm thấy danh mục!')
         const delete_category = await db.category.destroy({
             where:{id}
@@ -38,6 +68,25 @@ export const deleteCategoryService = async(id)=>{
             message: 'Xó dnh mục thành công!'
         }
     } catch (error) {
-        next(error)
+        return(error)
     }
 }
+export const updateCategoryService = async(id, name, desc, img)=>{
+    try {
+        const category = await db.category.findByPk(id)
+        if(!category) return createError(400, 'Không tìm thấy danh mục!')
+        const update = await db.category.update({
+            name,
+            desc,
+            img
+        },{where : {id}})
+        if(update[0] === 0) return createError(400, 'Chỉnh sửa không thành công!')
+        return{
+            status: true,
+            message: 'Chỉnh sửa thành công!'
+        }
+    } catch (error) {
+        return(error)
+    }
+}
+

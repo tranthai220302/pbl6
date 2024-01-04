@@ -37,7 +37,7 @@ export const loginService = async (username, password) => {
     }
     
 } 
-export const registerService = async (username, email, password, confirmPassword, firstName, lastName, phone, address, age) =>{
+export const registerService = async (username, email, password, confirmPassword, firstName, lastName, phone, address, age, avatar) =>{
     try {
         const user = await db.user.findOne({
             where : {
@@ -64,6 +64,7 @@ export const registerService = async (username, email, password, confirmPassword
             phone,
             address,
             age,
+            avatar,
             password : hassPass,
             RoleId : isCustomer.id,
         })

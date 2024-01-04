@@ -1,5 +1,6 @@
 import express from 'express'
 import { 
+    cancelBookFS,
     confirmBookFlashSale,
     createBook, 
     deleteBook, 
@@ -38,6 +39,7 @@ routerBook.get('/orderHigh', getBookBoughtHigh  )
 routerBook.get('/flashSale', getBookFlashSale)
 routerBook.post('/registerFlashSale/:id', verifyjson, registerBookFlashSale)
 routerBook.post('/confirmFlashSale/:id', verifyjson, confirmBookFlashSale)
+routerBook.post('/cancelBookFS/:id', verifyjson, cancelBookFS)
 routerBook.post('/store',verifyjson, getStoreFlashSale)
 routerBook.get('/list/nhaXB', getNhaXB)
 routerBook.get('/list/languages', getLanguages)

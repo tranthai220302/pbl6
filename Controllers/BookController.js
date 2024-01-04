@@ -20,6 +20,7 @@ import {
     getAuthorSearchServices,
     getBokByArrId,
     getBookFlashSaleByStoreService,
+    cancelBookFSService,
 } 
 from "../Models/Services/BookService.js"
 import createError from "../ultis/createError.js"
@@ -115,7 +116,7 @@ export const getBookByQuery= async(req, res, next) =>{
                 }
             })
         }
-        const booksByQuery = await getBookByQueryService(filter, category, author, req.query.page, 16);
+        const booksByQuery = await getBookByQueryService(filter, category, author, req.query.page, parseInt(req.query.num));
         if(booksByQuery instanceof Error) return next(booksByQuery)
         return res.status(200).send(booksByQuery);
     } catch (error) {
@@ -195,9 +196,11 @@ export const registerBookFlashSale = async(req, res, next) =>{
     try {
         if(req.idRole !== 2) return next(createError(400, 'Bạn không có quyền này!'));
         const id = req.body.id;
+        if(!id || id.length == 0) return next(createError(400, 'Vui lòng chọn sách!'))
         const store_id = req.params.id;
-        const date = new Date();
-        const registerBook = await registerBookFlashSaleSeervice(store_id, req.body.time, id, date);
+        const date = req.body.date;
+        if(!date) return next(createError(400, 'Vui lòng chọn ngày đăng ký FlashSale!'))
+        const registerBook = await registerBookFlashSaleSeervice(store_id, "9h-11h", id, date);
         if(registerBook instanceof Error) return next(registerBook);
         return res.status(200).send(registerBook)
     } catch (error) {
@@ -208,8 +211,22 @@ export const confirmBookFlashSale = async(req, res, next) =>{
     try {
         if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
         const id = req.body.id;
+        if(!id || id.length == 0) return next(createError(400, 'Vui lòng chọn sách!'))
         const store_id = req.params.id;
         const confirmBook = await confirmBookFlashSaleService(store_id, id);
+        if(confirmBook instanceof Error) return next(confirmBook);
+        return res.status(200).send(confirmBook);
+    } catch (error) {
+        next(error);
+    }
+}
+export const cancelBookFS = async(req, res, next) =>{
+    try {
+        if(req.idRole !== 4) return next(createError(400, 'Bạn không có quyền này!'));
+        const id = req.body.id;
+        if(!id ||  id.length == 0) return next(createError(400, 'Vui lòng chọn sách!'))
+        const store_id = req.params.id;
+        const confirmBook = await cancelBookFSService(store_id, id);
         if(confirmBook instanceof Error) return next(confirmBook);
         return res.status(200).send(confirmBook);
     } catch (error) {

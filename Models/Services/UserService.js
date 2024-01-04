@@ -29,8 +29,9 @@ export const deleteUserService = async (id) =>{
         return error;
     }
 }
-export const getUsersByQueryService = async(filter, idRole) =>{
+export const getUsersByQueryService = async(filter, idRole, page) =>{
     try {
+        const offset = (page - 1) * 8;
         const usersInclude = [
             {
               model: db.role,
@@ -45,14 +46,23 @@ export const getUsersByQueryService = async(filter, idRole) =>{
               as : 'DetailStore'
             });
           }
-          
+          const num = await db.user.count({
+            attributes: { exclude: ['password'] },
+            where: filter,
+            include: usersInclude,
+          })
           const users = await db.user.findAll({
             attributes: { exclude: ['password'] },
             where: filter,
             include: usersInclude,
+            offset : offset,
+            limit : 8
           });   
         if(users.length == 0) return createError(400, 'Không tìm thấy người dùng!')
-        return users;
+        return {
+            users,
+            numPage : Math.ceil(num/8)
+        };
     } catch (error) {
         return error;
     }

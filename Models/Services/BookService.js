@@ -173,7 +173,7 @@ export const getBooksService = async(id) =>{
         return error;
     }
 } 
-export const getBookByQueryService = async(filter, category, author, page, bookPerPage = 16) =>{
+export const getBookByQueryService = async(filter, category, author, page, bookPerPage) =>{
     try {
         if(!page){
             const booksByQuery = await db.book.findAll({
@@ -537,20 +537,27 @@ export const registerBookFlashSaleSeervice = async(store_id, time, id, date) =>{
     try {
         if(!time) return createError(400, 'Không tìm thấy thời gian sự kiện !')
         console.log(date)
+        const currentDate = new Date();
+        const hours = currentDate.getHours();
+        const data = new Date(date)
+        if(data < currentDate) return createError(400, 'Vui lòng chọn ngày lớn hơn thời gian hiện tại!')
+        if(hours >=9 && hours <=11 && data == currentDate) return createError(400, 'Sự kiện đang diễn ra, không thể đăng ký được')
         const checkBook = await db.book.findAll({
             where : {
                 [Op.and] : [
-                    { timeFlashSale: { [Op.not]: 0 } }, 
-                    {isFlashSale : 1}
+                    { timeFlashSale: time }, 
+                    {isFlashSale : 1},
+                    {id : id},
+                    Sequelize.literal(`DATE(dateFlashSale) >= '${currentDate.toISOString().split('T')[0]}'`)
                 ]
             }
         })
-        if(checkBook.length > 0) return createError(400, 'Sự kiện của bạn đang diễn ra và bạn không được đăng ký tới khi kết thúc!')
+        if(checkBook.length > 0) return createError(400, 'Sách này đã được đăng ký rồi!')
         const checkBook1 = await db.book.findAll({
             where : {
                 [Op.and] : [
-                    { timeFlashSale: { [Op.not]: 0 } }, 
-                    {isFlashSale : 0}
+                    { timeFlashSale: time }, 
+                    {isFlashSale : 0},
                 ]
             }
         })
@@ -558,7 +565,7 @@ export const registerBookFlashSaleSeervice = async(store_id, time, id, date) =>{
         const updateBook = await db.book.update(
             {
                 timeFlashSale : time,
-                dateFlashSale : date
+                dateFlashSale : data
             },
             {
                 where : {
@@ -583,6 +590,30 @@ export const confirmBookFlashSaleService = async(store_id, id) =>{
         const updateBook = await db.book.update(
             {
                 isFlashSale : 1
+            },
+            {
+                where : {
+                    [Op.and] : [
+                        {store_id},
+                        {id : id}
+                    ]
+                }
+            }
+        )
+        if(updateBook[0] == 0) return createError(400, 'Xác nhận không thành công!');
+        return {
+            message : 'Xác nhận thành công!'
+        }
+    } catch (error) {
+        return error;
+    }
+}
+export const cancelBookFSService = async(store_id, id) =>{
+    try {
+        const updateBook = await db.book.update(
+            {
+                timeFlashSale : 0,
+                dateFlashSale : null
             },
             {
                 where : {

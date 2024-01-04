@@ -54,6 +54,7 @@ export const getUsersByQuery = async(req, res, next) =>{
     try {
         const  idRole = req.params.idRole
         const q = req.query;
+        const page = req.query.page;
         const filter = {
             ...(q.name && {[Op.or] : {
                 firstName : {
@@ -71,7 +72,7 @@ export const getUsersByQuery = async(req, res, next) =>{
         }
         if(req.idRole!==4) return next(createError(400, 'Bạn không có quyền này!'))
         if(idRole == 4) return next(createError(400, 'Người dùng không tồn tại!'))
-        const users = await getUsersByQueryService(filter, idRole);
+        const users = await getUsersByQueryService(filter, idRole, page);
         if(users instanceof Error) return next(users)
         return res.status(200).send(users);
     } catch (error) {

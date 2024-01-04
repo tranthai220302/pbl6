@@ -75,6 +75,9 @@ db.reportStore.belongsTo(db.user, {foreignKey: 'customer_id', as : 'customerRepo
 /*reportStore vs store*/
 db.user.hasMany(db.reportStore, {foreignKey : 'store_id', as : 'reportByStore'});
 db.reportStore.belongsTo(db.user, {foreignKey: 'store_id', as : 'storeByReport'})
+/*report vs Book*/
+db.book.hasMany(db.reportStore, {foreignKey : 'book_id'});
+db.reportStore.belongsTo(db.book, {foreignKey: 'book_id'})
 /*Author vs store*/
 db.author.belongsTo(db.user, {foreignKey: 'store_id'});
 db.user.hasMany(db.author, {foreignKey: 'store_id'})
