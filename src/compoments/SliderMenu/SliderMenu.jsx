@@ -2,16 +2,20 @@ import React from 'react'
 import styles from './SliderMenu.module.css'
 import logo from '../../assets/img/logo.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faStore, faShippingFast, faTicketAlt} from '@fortawesome/free-solid-svg-icons';
+import { faUser, faStore, faShippingFast, faTicketAlt, faBolt, faList} from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { itemsCustomer, itemsShipper, itemsStore, itemsVoucher } from '../../data';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { itemFlashSale } from '../../data';
+import { itemCategory } from '../../data';
 export default function SliderMenu({seOpen}) {
     const [isKhachHangOpen, setIsKhachHangOpen] = useState(false);
     const [isCuaHangOpen, setIsCuaHangOpen] = useState(false);
     const [isShipperOpen, setIsShipperOpen] = useState(false);
     const [isVoucherOpen, setIsVoucherOpen] = useState(false);
+    const [isFS, setIsFS] = useState(false);
+    const [isCate, setIsCate] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const navigate = useNavigate()
     const handleItemClick = (index, item) => {
@@ -105,6 +109,46 @@ export default function SliderMenu({seOpen}) {
                             onClick={() => handleItemClick(index + 11, item)}
                         >
                             <span className={index + 11 == selectedItem ? styles.item_require_select : styles.item_require}>{item.name}</span>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>        
+        <div className={styles.item}>
+            <div className={styles.name} onClick={()=>{setIsFS(!isFS)}}>
+                <FontAwesomeIcon icon={faBolt} className={styles.voucher_icon} />
+                <span className={styles.name_item}>Flash Sale</span>
+
+            </div>
+            {isFS && (
+                <ul className={styles.require}>
+                    {itemFlashSale.map((item, index) => (
+                        <li
+                            className={styles.item_require}
+                            key={index}
+                            onClick={() => handleItemClick(index + 12, item)}
+                        >
+                            <span className={index + 12 == selectedItem ? styles.item_require_select : styles.item_require}>{item.name}</span>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+        <div className={styles.item}>
+            <div className={styles.name} onClick={()=>{setIsCate(!isCate)}}>
+                <FontAwesomeIcon icon={faList} className={styles.voucher_icon} />
+                <span className={styles.name_item}>Thể loại</span>
+
+            </div>
+            {isCate && (
+                <ul className={styles.require}>
+                    {itemCategory.map((item, index) => (
+                        <li
+                            className={styles.item_require}
+                            key={index}
+                            onClick={() => handleItemClick(index + 13, item)}
+                        >
+                            <span className={index + 13 == selectedItem ? styles.item_require_select : styles.item_require}>{item.name}</span>
                         </li>
                     ))}
                 </ul>
