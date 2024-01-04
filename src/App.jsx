@@ -40,6 +40,10 @@ import CartOrder from './pages/Cart/CartOrder/CartOrder';
 import ThankOrder from './pages/ThankOrder/ThankOrder';
 import StoreManage from './compoments/Store/StoreManage/StoreManage';
 import Homeshipper from './pages/Shipper/Homeshipper/Homeshipper'
+import FlashSale from './pages/Admin/FlashSale/FlashSale';
+import Category from './pages/Admin/Category/Category';
+import AddCategory from './pages/Admin/Category/AddCategory/AddCategory';
+import AddCustomer from './pages/Admin/Customer/AddCustomer/AddCustomer';
 const queryClient = new QueryClient()
 
 const App = () => {
@@ -142,12 +146,28 @@ const App = () => {
           element: <Store />
         },
         {
+          path: '/admin/adCustomer',
+          element: <AddCustomer />
+        },
+        {
+          path : '/admin/flashSale',
+          element :<FlashSale />
+        },
+        {
           path : '/admin/requestStore',
           element: <RequestStore />
         },
         {
           path : '/admin/report',
           element: <ReportPage />
+        },
+        {
+          path : '/admin/category',
+          element: <Category />
+        },
+        {
+          path: '/admin/addCategory',
+          element: <AddCategory />
         },
         {
           path : '/admin/satistical',

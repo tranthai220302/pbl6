@@ -2,13 +2,15 @@ import React, {useState} from 'react'
 import styles from './ReportPage.module.css'
 import newRequest from '../../../ults/NewRequest';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faPenToSquare, faCircleInfo, faSearch, faBell, faCheck} from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faPenToSquare, faCircleInfo, faSearch, faBell, faCheck, faBook} from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
 import SliderMenu from '../../../compoments/SliderMenu/SliderMenu';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import moment from 'moment'
 import NavbarAdmin from '../NavbarAdmin/NavbarAdmin';
+import Example from '../../../compoments/ModalFull/ModalFull';
+import ModalReport from '../../../compoments/ModalFull/ModalReport/ModalReport';
 export default function ReportPage() {
     const [error, setError] = useState(null);
     const [isPending, setIsPending] = useState(true);
@@ -16,6 +18,7 @@ export default function ReportPage() {
     const [reports, setReports] = useState(null);
     const [isPendingReport, setIsPendingReport] = useState(null);
     const [errorReport, setErrorReport] = useState(null);
+    const [a, setA] = useState(null)
     const getData = ()=>{
         setIsPending(true);
         newRequest.get(`/report/store`, {
@@ -51,11 +54,19 @@ export default function ReportPage() {
     useEffect(()=>{
       getData()
       }, [])
+      console.log(a)
+      const click = (id)=>{
+        console.log(a)
+        setA(id)
+      }
   return (
     <div className={styles.container}>
     <div className={styles.customer}>
-      <NavbarAdmin />
+      <NavbarAdmin isNoSearch={true} />
           <div className={styles.content}>
+              {a && (
+                <Example showExmaple={true} showCloseExample={()=>{setA(null)}} id = {a} isOrder={false} isVoucher={false}/>
+              )}
         <div className={styles.list}>
         <div className={styles.table1}>
             <table>
@@ -63,15 +74,21 @@ export default function ReportPage() {
             <tr>
                 <th>Tên cửa hàng</th>
                 <th>Xem báo cáo</th>
+                <th>Danh sách sản phẩm</th>
             </tr>
             </thead>
             <tbody>
             {!error && data && data?.map((customer) => (
-                <tr key={customer.id}>
+                <tr key={customer.store_id}>
                 <td>{customer.storeByReport.firstName} {customer.storeByReport.lastName}</td>
                 <td>
                     <button>  
-                    <FontAwesomeIcon icon={faCheck} className={styles.user_icon} onClick={()=>handelReport(customer.store_id)} />
+                      <FontAwesomeIcon icon={faCheck} className={styles.user_icon} onClick={()=>handelReport(customer.store_id)} />
+                    </button>
+                </td>
+                <td>
+                    <button >  
+                      <FontAwesomeIcon icon={faBook} className={styles.user_icon}  onClick={()=>click(customer.store_id)}/>
                     </button>
                 </td>
                 </tr>

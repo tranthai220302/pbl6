@@ -85,10 +85,6 @@ export default function SideBar({setSubMenu,setOpen,managebook,setManageBook,man
                         </div>
                     )}
                     <li>
-                        <FontAwesomeIcon icon={faTicket}/>
-                        <span>Quản lý Voucher</span>
-                    </li>
-                    <li>
                         <FontAwesomeIcon icon={faBolt}/>
                         <span>Quản lý FlashSale</span>
                     </li>

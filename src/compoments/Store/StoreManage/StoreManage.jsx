@@ -5,7 +5,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import newRequest from '../../../ults/NewRequest';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare,faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPenToSquare,faTrash, faReply, faMessage, faClose, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
 const EditStore = ({ item, setOpenedit, getDataVoucher }) => {
   console.log(item)
@@ -98,8 +98,6 @@ const EditStore = ({ item, setOpenedit, getDataVoucher }) => {
     </div>
   );
 };
-
-
 const Edit = ({item,setOpenedit ,getDataVoucher}) => {
     console.log(item);
     // Sử dụng item để đặt giá trị mặc định của formData
@@ -225,22 +223,173 @@ const Edit = ({item,setOpenedit ,getDataVoucher}) => {
       </div>
     );
   };
+  const Feedback= ({ setOpenedit,item,getDataVoucher }) => {
+    console.log(item)
+    const [formData, setFormData] = useState({
+      name: '',
+      discountValue: '',
+      discountType: '',
+      expiryDate: '',
+      quantity: '',
+      codition: '',
+    });
+  
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    };
+  
+    const UpdatUser = () => {
+      const jsonData = {
+        "name": formData.name,
+        "discountValue": formData.discountValue,
+        "discountType": formData.discountType,
+        "expiryDate": formData.expiryDate,
+        "quantity": formData.quantity,
+        "codition": formData.codition,
+        "VoucherId":1
+      };
+    
+      newRequest.post(`/feedBack/create/${item.id}`, jsonData, {
+        withCredentials: true
+      }).then(
+        (res) => {
+          console.log(res.data);
+          getDataVoucher();
+        }
+      ).catch((error) => {
+        console.error(error);
+      });
+    };
+
+    const [rating, setRating] = useState(5);
+    const handleRating = (value) => {
+        setRating(value);
+    };
+
+    const [replyVisible, setReplyVisible] = useState(false);
+
+    const handleReplyClick = () => {
+      setReplyVisible(true);
+    };
+
+    const handleReplySubmit = () => {
+    };
+    
+    
+  
+    return (
+      <div className={styles.overlay}>
+        <div className={styles.editForm}>
+          <div className={styles.FormTitle}>
+            <h3>Chi tiết đánh giá</h3>
+            <FontAwesomeIcon className={styles.CloseForm} icon={faClose} onClick={() => setOpenedit(false)} />
+          </div>
+          <div className={styles.book}>
+            <img className={styles.img_book} src="https://scontent.fdad2-1.fna.fbcdn.net/v/t39.30808-6/411337569_903820174609347_3824711788836504289_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeG1ErJ8YgNhXA7371mB0jpqaT6byvwHprRpPpvK_AemtPLWdGGXdfsaBlVvFKk3jmkmdy3gcDCD-6fN0jqwN9yz&_nc_ohc=fRbnf6qD0AgAX9iltHN&_nc_ht=scontent.fdad2-1.fna&oh=00_AfBj0R_RDiov29fjjRvhFj7LCdukZfhsNsVmWVx47P2oFw&oe=659A07AA" alt="" />
+            <div>
+              <h4>Tên sách</h4>
+              <span>Tên tác giả</span>
+            </div>
+            <div className={styles.price}>
+              <span className={styles.current_price}>20000đ</span>
+              <div>
+                <span className={styles.old_price}>40000đ</span>
+                <span className={styles.percent_discount}>-50%</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h5>Đánh giá</h5>
+            <div className={styles.cus_comment}>
+              <img className={styles.avt_cus} src="https://scontent.fdad2-1.fna.fbcdn.net/v/t39.30808-6/411337569_903820174609347_3824711788836504289_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeG1ErJ8YgNhXA7371mB0jpqaT6byvwHprRpPpvK_AemtPLWdGGXdfsaBlVvFKk3jmkmdy3gcDCD-6fN0jqwN9yz&_nc_ohc=fRbnf6qD0AgAX9iltHN&_nc_ht=scontent.fdad2-1.fna&oh=00_AfBj0R_RDiov29fjjRvhFj7LCdukZfhsNsVmWVx47P2oFw&oe=659A07AA" alt="" />
+              <div className={styles.cus_inf}>
+                <span className={styles.name_cus}>Trương Thị Khánh Linh</span>
+                {/* Đoạn sao này nhớ tô lại màu theo số phía trên nha */}
+                <div>
+                  {[1, 2, 3, 4, 5].map((star) => (
+                      <span
+                          key={star}
+                          onClick={() => handleRating(star)}
+                          style={{
+                              cursor: 'pointer',
+                              color: star <= rating ? '#4EA58B' : 'gray',
+                          }}
+                          >
+                          &#9733;
+                      </span>
+                  ))}
+                </div>
+                <div>
+                  Nội dung comment (có thì hiện)
+                </div>
+                <div className={styles.icon_cmt}>
+                    <div className={styles.icon_cmt_child} onClick={handleReplyClick}>
+                      <FontAwesomeIcon icon={faReply}/>
+                      <span>Trả lời</span>
+                    </div>
+                    <div className={styles.icon_cmt_child}>
+                      <FontAwesomeIcon icon={faMessage}/>
+                      <span>Nhắn tin</span>
+                    </div>
+                </div>
+                {replyVisible && (
+                  <div className={styles.send_mess}>
+                    <textarea style={{width:'100%'}}
+                      placeholder="Nhập nội dung trả lời..."
+                      // Add necessary attributes, styles, and event handlers for the textarea
+                    />
+                    <button onClick={handleReplySubmit}><FontAwesomeIcon icon={faPaperPlane}/></button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
   
 export default function StoreManage({ Submenu, SetSubmenu }) {
+  const [percentStar,setpercentStar]= useState("")
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const [data, setData] = useState({});
+  const [datareview, setDataeview] = useState({});
+  const [dataStar, setDataStar] = useState([]);
   const [dataVoucher, setDataVoucher] = useState([]);
-const [openedit, setOpenedit]= useState(false);
-const [idvoucher,setIdvoucher] = useState("")
-const getData = () => {
-  newRequest.get(`/user/infor/${currentUser.id}`, {}).then(
-    (res) => {
-      console.log(res.data);
-      setData(res.data);
-    }
-  ).catch((error) => {
-  });
-}
+  const [openedit, setOpenedit]= useState(false);
+  const [idvoucher,setIdvoucher] = useState("")
+  const getData = () => {
+    newRequest.get(`/user/infor/${currentUser.id}`, {}).then(
+      (res) => {
+        console.log(res.data);
+        setData(res.data);
+      }
+    ).catch((error) => {
+    });
+  }
+  const getDataStar = () => {
+    newRequest.get(`/review/store/${currentUser.id}`, {}).then(
+      (res) => {
+        console.log(res.data.reviews);
+        setDataStar(res.data.reviews);
+        setpercentStar(res.data.percentStar)
+      }
+    ).catch((error) => {
+    });
+  }
+  const getByNumStar = (num) => {
+    newRequest.get(`/review/store/search/${currentUser.id}?numstar=${num}`, {}).then(
+      (res) => {
+        console.log(res.data);
+        setDataStar(res.data);
+      }
+    ).catch((error) => {
+    });
+  }
 const getDataVoucher= () => {
     newRequest.get(`/voucherItem/list/${currentUser.id}?type=store&isExpire=true`, {withCredentials: true}).then(
       (res) => {
@@ -254,12 +403,18 @@ const getDataVoucher= () => {
   useEffect(() => {
     getDataVoucher();
     getData();
+    getDataStar();
   }, []); // Gọi useEffect chỉ một lần khi component được tạo ra
   const handledit=(id)=>{
         setIdvoucher(id)
         setOpenedit("edit");
         console.log("xin chao")
   }
+  const handlFeedBack=(item)=>{
+    setDataeview(item)
+    setOpenedit("feedback");
+    console.log("xin chao")
+}
   const handladd=()=>{
     setOpenedit("add");
     console.log("xin chao")
@@ -321,16 +476,16 @@ const handleditstore=()=>{
               <div className={styles.StoreManage_Title}>
                 Đánh giá cửa hàng
               </div>
-              <div className={styles.rating}>
+                <div className={styles.rating}>
                 <div>
-                    Được đánh giá 4.3/5
+                    Được đánh giá {percentStar}/5
                 </div>
-                <div>Tất cả</div>
-                <div>1 sao</div>
-                <div>2 sao</div>
-                <div>3 sao</div>
-                <div>4 sao</div>
-                <div>5 sao</div>
+                <div onClick={()=>getDataStar()}>Tất cả</div>
+                <div onClick={()=>getByNumStar(1)}>1 sao</div>
+                <div onClick={()=>getByNumStar(2)}>2 sao</div>
+                <div onClick={()=>getByNumStar(3)}>3 sao</div>
+                <div onClick={()=>getByNumStar(4)}>4 sao</div>
+                <div onClick={()=>getByNumStar(5)}>5 sao</div>
               </div>
               <div>
               <table className={styles.viewrating}>
@@ -343,37 +498,19 @@ const handleditstore=()=>{
                     <th>Đánh giá của Người mua</th>
                     <th>Số sao</th>
                     <th>Tên người đánh giá</th>
+                    <th>Phản hồi</th>
                   </tr>
-                  <tr>
-                    <td>{data.DetailStore?.descStore}</td>
-                    <td>{data.DetailStore?.descStore}</td>
-                    <td>{data.DetailStore?.descStore}</td>
-                    <td>{data.DetailStore?.descStore}</td>
-                  </tr>
-                  <tr>
-                    <td>{data.DetailStore?.descStore}</td>
-                    <td>{data.DetailStore?.descStore}</td>
-                    <td>{data.DetailStore?.descStore}</td>
-                    <td>{data.DetailStore?.descStore}</td>
-                  </tr>
-                  <tr>
-                    <td>{data.DetailStore?.descStore}</td>
-                    <td>{data.DetailStore?.descStore}</td>
-                    <td>{data.DetailStore?.descStore}</td>
-                    <td>{data.DetailStore?.descStore}</td>
-                  </tr>
-                  <tr>
-                    <td>{data.DetailStore?.descStore}</td>
-                    <td>{data.DetailStore?.descStore}</td>
-                    <td>{data.DetailStore?.descStore}</td>
-                    <td>{data.DetailStore?.descStore}</td>
-                  </tr>
-                  <tr>
-                    <td>{data.DetailStore?.descStore}</td>
-                    <td>{data.DetailStore?.descStore}</td>
-                    <td>{data.DetailStore?.descStore}</td>
-                    <td>{data.DetailStore?.descStore}</td>
-                  </tr>
+                  {dataStar && dataStar?.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.review2.name}</td>
+                      <td>{item.desc}</td>
+                      <td>{item.num_star}</td>
+                      <td>{item.review1?.firstName} {item.review1?.lastName}</td>
+                      <td onClick={()=>handlFeedBack(item)}><FontAwesomeIcon icon={faPenToSquare} /></td>
+                    </tr>
+                  ))}
+
+
                 </table>
               </div>
             </div>
@@ -439,9 +576,10 @@ const handleditstore=()=>{
           )}
         </Tab>
       </Tabs>
-    {openedit==="edit" && <Edit item={idvoucher} setOpenedit={setOpenedit}  getDataVoucher={getDataVoucher}/>}
+    {openedit==="edit" && <Edit item={idvoucher} setOpenedit={setOpenedit}  getDat  aVoucher={getDataVoucher}/>}
     {openedit==="add" && <Add  setOpenedit={setOpenedit} id={currentUser.id}/>}
     {openedit==="editstore" && <EditStore item={data}  setOpenedit={setOpenedit}  />}
+    {openedit==="feedback" && <Feedback item={datareview}  setOpenedit={setOpenedit}  />}
     </div>
   );
 }

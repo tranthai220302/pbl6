@@ -6,7 +6,8 @@ import style from './DetailStore.module.css'
 import newRequest from '../../../../ults/NewRequest';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPenToSquare, faCircleInfo, faSearch, faBell, faEnvelope, faWarehouse, faMobilePhone, faUser} from '@fortawesome/free-solid-svg-icons';
-function DoanhThu({show, handleClose, store}) {
+function DetailStore({show, handleClose, store}) {
+  console.log(store)
   return (
     <>
       <Modal show={show} fullscreen={true} onHide={handleClose}>
@@ -52,13 +53,14 @@ function DoanhThu({show, handleClose, store}) {
                 <div className={style.store}>
                 <div className={style.title}>Thông tin cửa hàng</div>
                     <div className={style.avatart}>
-                        <img src="https://cdn.pixabay.com/photo/2022/12/08/19/23/book-store-7643976_640.jpg" alt="" />
+                        <img src={store.DetailStore.avatar} alt="" />
                     </div>
-                    <div className={style.nameStore}>Cửa hàng của Thái</div>
+                    <div className={style.nameStore}>{store.DetailStore.nameStore}</div>
                     <div className={style.descStore}>
-                    Những lý do bạn nên yêu một người thích đọc sách :3333
-Bạn cho rằng sách là nhàm chán, và yêu người thích đọc sách cũng sẽ rất nhàm chán. Hoàn toàn không như bạn nghĩ đâu nhé! Sách là kiến thức, và yêu người thích đọc sách bạn sẽ có tất cả.
-Nếu bạn vẫn đang trên hành trình tìm kiếm một nửa để lấp đầy khoảng trống trong trái tim mình, hằng ngày vẫn ngồi một mình tại những quán cà phê nhỏ, hãy thử ngắm nhìn một ai đó đang chăm chú vào quyển sách trên tay. Bạn thấy gì không? Một nét thu hút, sự đắm say và cả những khoảnh khắc lãng mạn. Hoặc bạn vẫn ngây ngô hỏi vì sao phải chọn nửa kia là người thích đọc sách? Dưới đây là những lý do giải đáp thắc mắc cho bạn.
+                    {store.DetailStore.descStore}
+                    </div>
+                    <div className={style.descStore}>
+                    Địa điểm : {store.DetailStore.address}
                     </div>
                 </div>
             </div>
@@ -68,4 +70,4 @@ Nếu bạn vẫn đang trên hành trình tìm kiếm một nửa để lấp �
   );
 }
 
-export default DoanhThu;
+export default DetailStore;

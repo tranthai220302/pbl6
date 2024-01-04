@@ -66,6 +66,7 @@
     width: 80%;
     height: 100%;
     margin: auto;
+    flex-direction: column;
 }
 
 .table1 {
@@ -175,4 +176,21 @@ button:hover {
     color: red;
     display: flex;
     margin-top: 40px;
+}
+.num_page {
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    margin-top: 20px;
+}
+  
+.num_page span {
+margin: 0 5px;
+padding: 5px 10px;
+border: 1px solid #ccc;
+cursor: pointer;
+}
+  
+.num_page span:hover {
+background-color: #f0f0f0;
 }
