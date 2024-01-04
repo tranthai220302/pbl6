@@ -19,8 +19,8 @@
   height: 100px;
 }
 
-.StoreManage_Content table th {
-  padding-left: 20px;
+.StoreManage_Content {
+  padding: 0 20px;
 }
 
 .StoreInf {
@@ -92,7 +92,6 @@
     z-index: 3; /* Lớn hơn so với overlay */
     display: flex;
     flex-direction: column;
-    gap: 20px;
     width: 40%;
   }
 
@@ -101,7 +100,7 @@
     color: rgba(78, 165, 139, 0.863);
   }
   
-  .editForm input {
+  .editForm input, .editForm select {
     margin-bottom: 20px;
   }
 
@@ -215,3 +214,25 @@
     height: 50px;
   }
 
+  .avt_store {
+    display: flex;
+    justify-content: center;
+  }
+
+  .icon:hover {
+    cursor: pointer;
+    color: green;
+  }
+
+  .StoreManage td, .StoreManage th {
+    text-align: center !important;
+  }
+
+  .Store_inf {
+    display: flex;
+    margin: 10px 0;
+  }
+
+  .Store_inf h6 {
+    width: 30%;
+  }

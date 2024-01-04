@@ -40,6 +40,8 @@ import CartOrder from './pages/Cart/CartOrder/CartOrder';
 import ThankOrder from './pages/ThankOrder/ThankOrder';
 import StoreManage from './compoments/Store/StoreManage/StoreManage';
 import Homeshipper from './pages/Shipper/Homeshipper/Homeshipper'
+import { ChatContextProvider } from './compoments/Notification/NotificationProvider';
+import { Notifications } from './compoments/react-push-notification/dist';
 const queryClient = new QueryClient()
 
 const App = () => {
@@ -50,7 +52,9 @@ const App = () => {
     const isLoginPage = useLocation().pathname.includes('/login');
     const isRegisterPage = useLocation().pathname.includes('/register');
     console.log(openChat)
+
     return (
+      <ChatContextProvider>
       <QuantityProvider>
           <QueryClientProvider client={queryClient}>
           <div className="app">
@@ -59,9 +63,11 @@ const App = () => {
             <Outlet />
             {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
             <ToastContainer />
+            <Notifications />
           </div>
         </QueryClientProvider>
       </QuantityProvider>
+      </ChatContextProvider>
     )
   }
   const router = createBrowserRouter([
