@@ -11,6 +11,11 @@ import Example from '../../../compoments/ModalFull/ModalFull';
 import DetailStore from './DetailStore/DetailStore';
 import DoanhThu from './DoanhThu/DoanhThu';
 import NavbarAdmin from '../NavbarAdmin/NavbarAdmin';
+import { confirmAlert } from 'react-confirm-alert'; 
+import { toast } from 'react-toastify';
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
+import ModalListBook from '../Category/ModalListBook/ModalListBook';
+import ModalTypeOrder from './ModalTypeOrder/ModalTypeOrder';
 export default function Customer() {
   const [selectedCustomer, setSelectedCustomer] = useState(null); 
   const [selectedProduct, setSelectedProduct] = useState(null); 
@@ -21,12 +26,14 @@ export default function Customer() {
   const [data, setData] = useState(null);
   const [selectOrder, setSelectOrder] = useState(null);
   const [selectDT, setSelectDT] = useState(null);
-  const getData = (name)=>{
+  const [numPage, setNumpage] = useState(null)
+  const getData = (name, page)=>{
     setIsPending(true);
-    newRequest.get(`/user/search/2?name=${name}`, {
+    newRequest.get(`/user/search/2?name=${name}&page=${page}`, {
     }).then(
       (res) => {
-        setData(res.data)
+        setData(res.data.users)
+        setNumpage(res.data.numPage)
         setIsPending(false);
         setError(false)
       }
@@ -36,7 +43,7 @@ export default function Customer() {
     })
   }
   useEffect(()=>{
-    getData('');
+    getData('', 1);
   }, [])
   const handleclick = (name) =>{
     getData(name)
@@ -46,29 +53,46 @@ export default function Customer() {
       handleclick(name);
     }
   };
+  const submit = (id) => {
+
+    confirmAlert({
+      title: 'Xác nhận xoá',
+      message: `Bạn có chắc muốn xoá cửa hàng này không?`,
+      buttons: [
+        {
+          label: 'Có',
+          onClick: () => handleDeleteClick(id)
+        },
+        {
+          label: 'Không',
+          onClick: () => console.log('Click Không')
+        }
+      ]
+    });
+  };
   const handleDeleteClick = (id) => {
-    const confirmed = window.confirm('Bạn có muốn xoá cửa hàng này không ?');
-  
-    if (confirmed) {
         newRequest.delete(`/user/delete/${id}`, {
           withCredentials: true
         })
         .then((res) => {
           console.log(res.data);
-          getData('')
+          toast.success('Xoá thành công!', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000, 
+        });
+          getData('', 1)
         })
         .catch((error) => {
           setError(error.response.data);
           console.log(error)
           setIsPending(false);
         });
-    }
   };
   
   return (
     <div className={styles.container}>
         <div className={styles.customer}>
-          <NavbarAdmin />
+          <NavbarAdmin getData={getData}/>
           <div className={styles.content}>
             <div className={styles.list}>
               <div className={styles.table1}>
@@ -81,7 +105,7 @@ export default function Customer() {
                     <th>Phone</th>
                     <th>Delete</th>
                     <th>Xem</th>
-                    <th>Update</th>
+                    <th>Chỉnh sửa</th>
                     <th>Sản phẩm</th>
                     <th>Đơn hàng</th>
                     <th>Doanh thu</th>
@@ -97,10 +121,10 @@ export default function Customer() {
                         <DetailStore store={selectedCustomer} show={true} handleClose={() => setSelectedCustomer(null)} />
                       )}
                       {selectedProduct && (
-                        <Example showExmaple={true} showCloseExample={()=>setSelectedProduct(null)} id = {selectedProduct.id} isOrder={false}/>
+                        <ModalListBook id = {selectedProduct.id} showExmaple={true} showCloseExample={()=>{setSelectedProduct(null)}} category={''} />
                       )}
                       {selectOrder && (
-                        <Example showExmaple={true} showCloseExample={()=>setSelectOrder(null)} id = {selectOrder.id} isOrder={true} isVoucher={false}/>
+                        <ModalTypeOrder modalShow={true} setModalShow={()=>{setSelectOrder(null)}} id = {selectOrder}/>
                       )}
                       {selectDT && (
                         <DoanhThu showExmaple={true} showCloseExample={()=>setSelectDT(null)} id = {selectDT.id} />
@@ -113,7 +137,7 @@ export default function Customer() {
                       <td>0{customer.phone}</td>
                       <td>
                         <button>
-                        <FontAwesomeIcon icon={faTrash} className={styles.user_icon} onClick={()=>{handleDeleteClick(customer.id)}} />
+                        <FontAwesomeIcon icon={faTrash} className={styles.user_icon} onClick={()=>{submit(customer.id)}} />
                         </button>
                       </td>
                       <td>
@@ -158,7 +182,11 @@ export default function Customer() {
                 )}
                 {error && (<div className={styles.error}>{error}</div>)}
               </div>
-
+              <div className={styles.num_page}>
+                    {numPage && !isPending && numPage > 1 && [...Array(numPage)].map((_, index) => (
+                        <span key={index + 1} onClick={()=>{getData('',index+1)}}>{index + 1}</span>
+                    ))}
+                </div>
             </div>
           </div>
         </div>
