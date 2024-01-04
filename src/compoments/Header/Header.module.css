@@ -151,13 +151,84 @@
 .name{
     font-weight: 600;
 }
-.infor{
-    position: relative;
-    display: flex;
-    flex-direction: column; 
-    gap: 20px;
-    background-color: white;
-    padding: 20px 10px;
-    top: 75px;
-    right: 50px;
+.notifi{
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+  width: 400px;
+  background: #ffffff;
+  position: absolute;
+  top: 50px;
+  right: 0;
+}
+.noti{
+  position: relative;
+  display: grid;
+  cursor: pointer;
+  justify-items: center;
+}
+
+.notification {
+  width: auto;
+  padding: 2px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+}
+
+.notification:hover {
+  width: 100%;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  background-color: #BEDDDD;
+}
+
+.notification .span {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.infomative {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  margin: 5px;
+}
+
+.seed {
+  width: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-weight: 550;
+}
+
+.mes {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.Img {
+  width: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Img img {
+  height: 60px;
+  width: 60px;
+  border-radius: 50px;
 }
