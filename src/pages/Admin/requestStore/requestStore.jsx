@@ -11,6 +11,8 @@ import moment from 'moment';
 import DetailStoreRequest from './detailStore/DetailStoreRequest';
 import ModalCancel from './cancelRequestStore/CancelRequestStore';
 import NavbarAdmin from '../NavbarAdmin/NavbarAdmin';
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
 export default function RequestStore() {
     const [error, setError] = useState(null);
     const [isPending, setIsPending] = useState(true);
@@ -19,6 +21,22 @@ export default function RequestStore() {
     const [detailStore, setDetailStore] = useState(null)
     const [customer1, setCustomer] = useState(null)
     const [show, setShow] = useState(null)
+    const submit1 = (item) => {
+      confirmAlert({
+        title: 'Xác nhận xoá',
+        message: `Bạn có chắc muốn xác nhận không?`,
+        buttons: [
+          {
+            label: 'Có',
+            onClick: () => handleConfirm(item)
+          },
+          {
+            label: 'Không',
+            onClick: () => console.log('Click Không')
+          }
+        ]
+      });
+    };
     const getData = ()=>{
         setIsPending(true);
         newRequest.get(`/user/listRequest`, {
@@ -34,7 +52,7 @@ export default function RequestStore() {
           setIsPending(false)
         })
     }
-    const handelConfirm = async (id) =>{
+    const handleConfirm = async (id) =>{
       setIsPending(true);
       newRequest.post(`/user/confirm/${id}`, {
       }).then(
@@ -42,11 +60,11 @@ export default function RequestStore() {
           console.log(res.data)
           setIsPending(false);
           setError(false)
-          getData()
           toast.success("Xác nhận thành công!", {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 2000, 
           });
+          getData()
         }
       ).catch((error)=>{
         setError(error.response.data)
@@ -59,7 +77,7 @@ export default function RequestStore() {
   return (
     <div className={styles.container}>
     <div className={styles.customer}>
-      <NavbarAdmin />
+      <NavbarAdmin isNoSearch={true}/>
           <div className={styles.content}>
         <div className={styles.list}>
         <div className={styles.table1}>
@@ -95,7 +113,7 @@ export default function RequestStore() {
                 </td>
                 <td>
                     <button>
-                    <FontAwesomeIcon icon={faCheck} className={styles.user_icon} onClick={()=>handelConfirm(customer.customer_id)} />
+                    <FontAwesomeIcon icon={faCheck} className={styles.user_icon} onClick={()=>submit1(customer.customer_id)} />
                     </button>
                 </td>
                 <td>

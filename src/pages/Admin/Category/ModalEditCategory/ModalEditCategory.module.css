@@ -1,0 +1,54 @@
+.container{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 50px;
+}
+.left{
+    height: 100%;
+}
+.right{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.right input {
+    width: 100%;
+    outline: none;
+    border: 1px solid gray;
+    padding: 5px 8px;
+    border-radius: 10px;
+}
+.right textarea{
+    outline: none;
+    border-radius: 10px;
+    border: 1px solid gray;
+    padding: 5px 8px;
+    overflow-y: auto;
+}
+.img_img{
+    height:30px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+.file_img{
+    margin-top: 20px;
+}
+.img_img1{
+    height: 100px;
+  }
+  .cancel{
+    position: absolute;
+    left: 70px;
+    top: -10px;
+    cursor: pointer;
+  }
+  .img_img2{
+    position: relative;
+  }
+  .cancel1{
+    position: absolute;
+    left: 0px;
+    top: -10px;
+    cursor: pointer;
+  }
