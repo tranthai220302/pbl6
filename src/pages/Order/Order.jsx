@@ -75,7 +75,7 @@ export default function Order() {
               localStorage.removeItem('books');
               localStorage.removeItem('quantity');
               localStorage.removeItem('priceTotal');
-              navigate('/profile')
+              navigate('/success')
           } catch (error) {
               toast.error(error.response.data, {
                   position: toast.POSITION.TOP_RIGHT,
