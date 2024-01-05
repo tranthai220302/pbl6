@@ -63,7 +63,7 @@ button:hover {
     padding: 0 20px 20px 20px;
 }
 
-td, th {
+.cart td, .cart th {
     text-align: left !important;
 }
 

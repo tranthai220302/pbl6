@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+
 import styles from './Header.module.css'
 import { useNavigate } from "react-router-dom";
 import logo from '../../assets/img/logo.png';
@@ -6,13 +6,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCartShopping, faBell, faSearch, faBook, faHouse} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import newRequest from '../../ults/NewRequest';
+import React, { useContext, useEffect, useState } from 'react';
+import { ref, child, onValue } from 'firebase/database';
+import { isEqual } from 'lodash';
+import addNotification from '../react-push-notification/dist';
+import { database } from '../Notification/firebase';
+import { ChatContext } from '../Notification/NotificationProvider';
 export default function Header({setOpenChat}) {
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
   const [userData, setUserData] = useState();
-  // const [openchat, setOpenchay] = useState(false);
+  const [latestUserData, setLatestUserData] = useState([]);
   const navigate = useNavigate();
-  const currentUser = localStorage.getItem("currentUser")
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"))
   
   
   const handleLogout = () => {
@@ -29,6 +35,50 @@ export default function Header({setOpenChat}) {
       console.log(error)
     });
   };
+  const [showNotification, setShowNotification] = useState(false);
+
+  const handleNotificationClick = () => {
+    setShowNotification(!showNotification);
+  };
+  const { writeUserData } = useContext(ChatContext);
+  useEffect(() => {
+    if (currentUser?.id !== '') {
+      const dbRef = ref(database);
+      const usersRef = child(dbRef, `user/${currentUser?.id}`);
+      const unsubscribe = onValue(usersRef, (snapshot) => {
+        if (snapshot.exists()) {
+          const allData = snapshot.val();
+          const newNotifications = Object.keys(allData).filter(
+            (key) => !latestUserData || !isEqual(allData[key], latestUserData[key])
+          );
+
+          if (newNotifications.length > 0) {
+            setLatestUserData(allData);            
+            console.log("newNotifications",newNotifications)
+            Noti(allData[newNotifications]);
+          }
+        } else {
+          setLatestUserData([]);
+        }
+      });
+
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [currentUser?.id,latestUserData]);
+  
+  
+  const Noti = (notif) => {
+      addNotification({
+        title: notif?.username, 
+        subtitle: 'thông báo từ falth',
+        message: notif?.mes,
+        theme: 'darkblue',
+        native: true,
+      });
+  };
+  
 
   return (
     <div className={styles.container}>
@@ -66,12 +116,65 @@ export default function Header({setOpenChat}) {
                     Danh mục
                   </Link>
                 </li>
-                <li className={styles.item}>
-                  <Link>
-                    <FontAwesomeIcon icon={faBell}/>
-                    Thông báo
-                  </Link>
-                </li>
+                <li className={`${styles.item} ${styles.noti}`} onClick={handleNotificationClick}>
+        <Link>
+          <FontAwesomeIcon icon={faBell} />
+          Thông báo
+        </Link>
+        {/* {showNotification && (
+          <div className={styles.notifi}>
+                    {latestUserData && Object.keys(latestUserData).map((key) => {
+                        const notification = latestUserData[key];
+                        return (
+                            <div
+                                key={key}
+                                className={styles.notification}
+                              
+                            >
+                                <div className={styles.Img}>
+                                    <img src={notification.img} alt="" />
+                                </div>
+                                <div className={styles.infomative}>
+                                    <span className={styles.span}>Thông báo từ {notification.name}</span>
+                                    <span className={styles.mes}>{notification.mes}</span>
+                                </div>
+                            </div>
+                        );
+                    })}
+          </div>
+        )} */}
+
+        {showNotification && (
+          <div className={styles.notifi} style={{ maxHeight: '500px', overflowY: 'auto', overflowX: 'hidden' }}>
+            {latestUserData &&
+              Object.keys(latestUserData).map((key) => {
+                const notification = latestUserData[key];
+                return (
+                  <div key={key} className={styles.notification}>
+                    <div className={styles.Img}>
+                      <img src={notification.img} alt="" />
+                    </div>
+                    <div className={styles.infomative}>
+                      <span className={styles.span}>Thông báo từ {notification.name}</span>
+                      <div
+                        className={styles.mes}
+                        style={{
+                          display: 'block',
+                          maxHeight: '1.2em', // Adjust the height based on your design
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {notification.mes}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        )}
+      </li>
                 <li className={styles.item}>
                   <Link to='/cart'>
                     <FontAwesomeIcon icon={faCartShopping}/>
@@ -98,6 +201,7 @@ export default function Header({setOpenChat}) {
                 </li>
               </ul>
             </div>
+
         </div>
       )}
       {/* {open && (
