@@ -21,6 +21,7 @@ import {
     getBokByArrId,
     getBookFlashSaleByStoreService,
     cancelBookFSService,
+    getBookNoFlashSaleByStoreService,
 } 
 from "../Models/Services/BookService.js"
 import createError from "../ultis/createError.js"
@@ -185,7 +186,16 @@ export const getBookFlashSale = async(req, res, next) =>{
 }
 export const getBookFlashSaleByStore = async(req, res, next) =>{
     try {
-        const book = await getBookFlashSaleByStoreService(req.params.id, req.body.date)
+        const book = await getBookFlashSaleByStoreService(req.params.id, req.body.date, req.body.isFlashSale)
+        if(book instanceof Error) return next(book);
+        return res.status(200).send(book)
+    } catch (error) {
+        next(error)
+    }
+}
+export const getBookNoFlashSaleByStore = async(req, res, next) =>{
+    try {
+        const book = await getBookNoFlashSaleByStoreService(req.params.id)
         if(book instanceof Error) return next(book);
         return res.status(200).send(book)
     } catch (error) {
