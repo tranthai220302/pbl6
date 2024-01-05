@@ -15,6 +15,7 @@ export default function HomeAdmin() {
     const [number, setNumber] = useState({});
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true)
+    const [year, setYear] = useState(2024)
     const date = new Date();
     const [month, setMonth] = useState(date.getMonth() + 1)
     useEffect(()=>{
@@ -98,7 +99,9 @@ export default function HomeAdmin() {
               )}
             <div className={styles.charts}>
               <div className={styles.admin}>
-                <input type="text" name="" id="" placeholder='Nhập tháng' onKeyPress={(e) =>{handleSearch(e)}} className={styles.input_month}/>
+                <div>
+                <input type="text" name="" id="" placeholder='Nhập mm/yyyy' onKeyPress={(e) =>{handleSearch(e)}} className={styles.input_month}/>
+                </div>
                 <GraphAdmin month={month} />  
               </div>
             </div>

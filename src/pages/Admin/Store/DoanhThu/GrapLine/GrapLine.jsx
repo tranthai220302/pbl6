@@ -45,7 +45,7 @@ const GraphLine = ({id, month}) => {
             curve: 'straight'
           },
           title: {
-            text: 'Đơn hàng trong tuần',
+            text: 'Thống kê trong tháng',
             align: 'left'
           },
           grid: {

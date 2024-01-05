@@ -58,6 +58,7 @@ export default function Home({openChat, setOpenChat}) {
     }).then(
       (res) => {
         setDatafsale(res.data)
+        console.log(data)
         setIsLoadingFS(false);
         setError(false)
         console.log(res.data)

@@ -17,6 +17,11 @@ export default function Collab() {
     const [selectedFile1, setSelectedFile1] = useState(null);
     const [selectedImageUrl1, setSelectedImageUrl1] = useState(null);
     const [isPending, setIsPending] = useState(false);
+    const [clickShipper, setClickShipper] = useState(false);
+    const [d, setD] = useState({
+        drivingLience: "",
+        numMobike: "",
+    })
     const [body, setBody] = useState({
         nameStore : '',
         descStore : '',
@@ -28,6 +33,14 @@ export default function Collab() {
         const name = e.target.name;
         const value = e.target.value;
         setBody((prev)=>({
+            ...prev,
+            [name] : value
+        }))
+    }
+    const changeInput1 = (e)=>{
+        const name = e.target.name;
+        const value = e.target.value;
+        setD((prev)=>({
             ...prev,
             [name] : value
         }))
@@ -58,6 +71,33 @@ export default function Collab() {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 2000, 
             });
+            setIsPending(false)
+            setStoreFormVisibility(false);
+        }).catch((error)=>{
+            toast.error(error.response.data, {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 2000, 
+            });
+            console.log(error)
+            setIsPending(false)
+        })
+    }
+    const registerShipper = async() =>{
+        setIsPending(true)
+        const img1 = await imagesUrl(selectedFile);
+        setD((prev)=>({
+            ...prev,
+            img : img1,
+        }))
+        console.log(body)
+        newRequest.post('/user/registerShipper', body)
+        .then((res)=>{
+            console.log(res.data)
+            toast.success('Chúng tôi sẽ thông báo qua email của bạn!', {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 2000, 
+            });
+            console.log(res.data)
             setIsPending(false)
             setStoreFormVisibility(false);
         }).catch((error)=>{
@@ -155,10 +195,53 @@ export default function Collab() {
                         <span>Đây là điều khoản nè</span>
                     </tr>
                     <tr className={styles.btn}>
-                        <button>Đăng ký shipper</button>
+                        <button onClick={()=>setClickShipper(true)}>Đăng ký shipper</button>
                     </tr>
                 </td>
             </table>
+            {clickShipper && (
+                <div className={styles.overlay}>
+                    <div className={styles.registerStoreForm}>
+                        <div className= {styles.btnClose_space}>
+                            <FontAwesomeIcon className={styles.btnClose_icon} icon={faXmark} onClick={()=>{setClickShipper(false)}}/>
+                        </div>
+                        <h3>Đăng ký trở thành người bán hàng</h3>
+                        <label htmlFor="">Bằng lái xe </label>
+                        <input type="text" name="drivingLience" id="" onChange={(e)=>{changeInput1(e)}}/>
+                        <label htmlFor="">Biển số xe </label>
+                        <input type="text" name="numMobike" id="" defaultValue={currentUser.address} onChange={(e)=>{changeInput1(e)}}/>
+                        <div style={{display : 'flex', justifyContent : 'space-around', marginTop : '20px', marginBottom: '20px'}}>
+                        <div className={styles.file_img}>
+                        <label htmlFor="fileInput">
+                            Ảnh bằng lái xe
+                            <img src="https://www.freeiconspng.com/uploads/no-image-icon-13.png" alt="Choose file" className={styles.img_img} />
+                        </label>
+                        <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange} />
+                        </div>
+                        </div>
+                        <div style={{display : 'flex', gap : '20px', marginBottom : '10px'}}>
+                        {selectedImageUrl && (
+                            <div className={styles.img_local}>
+                                <div className={styles.img_img2}>
+                                <div className={styles.cancel} onClick={()=>{handleCancle()}}><img src="https://w7.pngwing.com/pngs/580/263/png-transparent-abort-delete-cancel-icon-cross-no-access-denied-thumbnail.png" alt="" height={12} /></div>
+                                    <img
+                                    src={selectedImageUrl || 'https://www.freeiconspng.com/uploads/no-image-icon-13.png'}
+                                    alt="Choose file"
+                                    className={styles.img_img1}
+                                    />
+                                </div>
+                            </div>
+                        )}
+                        </div>
+                        <button onClick={()=>{registerShipper()}}>
+                            Đăng ký
+                        </button>
+                        {isPending && (
+                            <img src='https://i.gifer.com/origin/8c/8cd3f1898255c045143e1da97fbabf10_w200.gif' className={styles.img_load} />
+                        )}
+                    </div>
+                </div>
+            )}
             {/* Hiển thị form edit khi trạng thái là true */}
             {isStoreFormVisible && (
                 <div className={styles.overlay}>

@@ -79,6 +79,10 @@ export default function ViewStore() {
         setSelectedLi(index);
         
     };
+    const handleBookClick = (id, event) => {
+        event.preventDefault();
+        navigate(`/productinformation?id=${id}`);
+      };
     return (
         <div className={styles.ViewStore}>
             <div className={styles.Store_In}>
@@ -183,7 +187,7 @@ export default function ViewStore() {
                     <div>Không có sách</div>
                 )}
                 {bookData && !error && !isLoading && bookData.length > 0  && bookData.map((item)=>(
-                    <div className={`${styles.hotproduct_item} ${styles.product}`} key={item.id}>
+                    <div className={`${styles.hotproduct_item} ${styles.product}`} key={item.id} onClick={(e) => handleBookClick(item.id, e)}>
                     <img src={item.Images[0].filename} alt='' />
                     <span>{item.name}</span>
                     {item.percentDiscount > 0 ? (
