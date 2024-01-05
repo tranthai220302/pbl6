@@ -202,6 +202,6 @@ db.cart.belongsTo(db.order);
 
 /*User vs RequestShipper*/
 db.user.hasOne(db.shipperRequest, { as: "DetailShipper", foreignKey: 'customer_id' });
-db.shipperRequest.belongsTo(db.user, { as: "userShipper", foreignKey: 'customer_id' });
+db.shipperRequest.belongsTo(db.user, { as: "userShipper", foreignKey: 'customer_id', onDelete: 'CASCADE',onUpdate: 'NO ACTION' });
 
 export default db;

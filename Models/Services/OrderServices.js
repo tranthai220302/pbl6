@@ -549,7 +549,7 @@ export const revenuaAdminByDateSerVice = async(date, month, year) =>{
                         Sequelize.literal(`
                         DAY(createdAt) = ${date} AND
                         MONTH(createdAt) = ${month} AND
-                        YEAR(createdAt) = ${year}
+                        YEAR(createdAt) = ${2023}
                         `),
                         { priceAdmi: { [Op.not]: null } } 
                     ]

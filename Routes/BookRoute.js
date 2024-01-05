@@ -13,6 +13,7 @@ import {
     getBookFlashSale, 
     getBookFlashSaleByStore, 
     getBookIsOrderByStore, 
+    getBookNoFlashSaleByStore, 
     getBooks, 
     getBooksByArr, 
     getLanguages, 
@@ -45,4 +46,5 @@ routerBook.get('/list/nhaXB', getNhaXB)
 routerBook.get('/list/languages', getLanguages)
 routerBook.get('/list/author', getAuthorSearch)
 routerBook.post('/bookFlas/:id', verifyjson, getBookFlashSaleByStore)
+routerBook.get('/bookNoFlas/:id', verifyjson, getBookNoFlashSaleByStore)
 export default routerBook;
