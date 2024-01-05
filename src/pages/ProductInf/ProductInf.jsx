@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from './ProductInf.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faMessage, faStore, faComments, faImage, faTrash} from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faMessage, faStore, faComments, faImage, faTrash, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
 import newRequest from '../../ults/NewRequest'
 import { useLocation } from 'react-router-dom';
 import { Link, useNavigate} from 'react-router-dom'
@@ -13,6 +13,7 @@ import Chat from '../Chat/Chat';
 import uploadImg from '../../ults/upload';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Report1 from './Report/Report';
 export default function ProductInf({setOpenChat}) {
     const [isPending, setIsPending] = useState(false)
     const [book, setBook] = useState();
@@ -32,6 +33,8 @@ export default function ProductInf({setOpenChat}) {
     const [isLoading, setIsLoading] = useState(false);
     const [errCmt, setErrCmt] = useState(null)
     const [infor, setInfor] = useState(null)
+    const [isReport, setIsReport] = useState(false)
+    const [showReport, setShowReport] = useState(false);
     const handleRating = (value) => {
         setRating(value);
     };
@@ -173,6 +176,11 @@ export default function ProductInf({setOpenChat}) {
         <div>
             {
                 book && (<div className={styles.ProductInf}>
+                    {
+                        showReport && (
+                            <Report1 show={showReport} handleClose={()=>{setShowReport(false)}} id = {id} />
+                        )
+                    }
                     <div className={styles.product_essential}>
                         <div className={styles.product_essential_media}>
                             <div className={styles.product_view_img}>
@@ -187,7 +195,18 @@ export default function ProductInf({setOpenChat}) {
                             </div>
                         </div>
                         <div className={styles.product_essential_detail}>
-                            <h1 className={styles.name_product}>{book.name}</h1>
+                            <div className={styles.name_product} style={{display :'flex', justifyContent : 'space-between', position : 'relative'}}>
+                                <h1>{book.name}</h1>
+                                <FontAwesomeIcon icon={faInfoCircle} style={{height: '20px', color : 'gray', cursor : 'pointer'}} onClick={()=>{setIsReport(true)}}/>
+                                {
+                                    isReport && (
+                                        <div style={{position : 'absolute', right : '0', boxShadow : 'rgba(0, 0, 0, 0.24) 0px 3px 8px', border : '1px solid gray', padding : '5px', top : '20px', cursor : 'pointer'}} onClick={()=>{
+                                            setIsReport(false);
+                                            setShowReport(true)
+                                        }}>Báo cáo</div>
+                                    )
+                                }
+                            </div>
                             <div className={styles.product_view_sa}>
                                 <div className={styles.line}>
                                     <div className={`${styles.product_view_sa_supplier} ${styles.col1}`}>
@@ -262,7 +281,9 @@ export default function ProductInf({setOpenChat}) {
                                     <FontAwesomeIcon icon={faMessage}/>
                                     <span >Chat</span>
                                 </button>
-                                <button onClick={(e) => handleViewStoreClick(e)}>
+                                <button onClick={() => {
+                                    navigate(`/viewstore/${idStore.id}`)
+                                }}>
                                     <FontAwesomeIcon icon={faStore}/>
                                     <span>Xem Store</span>
                                 </button>

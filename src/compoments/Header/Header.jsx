@@ -14,8 +14,6 @@ export default function Header({setOpenChat}) {
   const [latestUserData, setLatestUserData] = useState([]);
   const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("currentUser"))
-  
-  
   const handleLogout = () => {
     newRequest.post(`/auth/logout`, {
       withCredentials: true
@@ -35,7 +33,10 @@ export default function Header({setOpenChat}) {
   const handleNotificationClick = () => {
     setShowNotification(!showNotification);
   };
-  
+
+  const handleSearch = (name) =>{
+    navigate('/booklist')
+  }
 
   return (
     <div className={styles.container}>
@@ -53,9 +54,17 @@ export default function Header({setOpenChat}) {
                 <img className={styles.logo} src={logo} alt="logo" />
               </Link>
               <div className={styles.search}>
-                <input className={styles.input_search} type="text" placeholder='Tìm kiếm sản phẩm' />
+                <input className={styles.input_search} type="text" placeholder='Tìm kiếm sản phẩm'   
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    setName(e.target.value);
+                    handleSearch('')
+                  }
+                }}
+                  defaultValue={name}
+                />
                 <button className={styles.btn_search}>
-                  <FontAwesomeIcon icon={faSearch}/>
+                  <FontAwesomeIcon icon={faSearch} />
                 </button>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   createBrowserRouter,
   RouterProvider,
@@ -45,24 +45,25 @@ import FlashSale from './pages/Admin/FlashSale/FlashSale';
 import Category from './pages/Admin/Category/Category';
 import AddCategory from './pages/Admin/Category/AddCategory/AddCategory';
 import AddCustomer from './pages/Admin/Customer/AddCustomer/AddCustomer';
-import { ChatContextProvider } from './compoments/Notification/NotificationProvider';
+import Shipper from './pages/Admin/Shipper/Shipper';
+import RegisShipper from './pages/Admin/Shipper/RegisShipper/RegisShipper';
+import ProfileAdmin from './pages/Admin/Profile/ProfileAdmin';
 const queryClient = new QueryClient()
 
 const App = () => {
   const [openChat, setOpenChat] = useState(false)
+  const [name, setName] = useState('');
   const Layout = () =>{
     const isAdminPage = useLocation().pathname.includes('/admin');
     const isStorePage = useLocation().pathname.includes('/store');
     const isShipperPage = useLocation().pathname.includes('/shipper');
     const isLoginPage = useLocation().pathname.includes('/login');
     const isRegisterPage = useLocation().pathname.includes('/register');
-    console.log(openChat)
-
     return (
       <QuantityProvider>
           <QueryClientProvider client={queryClient}>
           <div className="app">
-            {!isAdminPage && !isLoginPage && !isRegisterPage && !isStorePage && !isShipperPage && (<Header setOpenChat={setOpenChat} />)}
+            {!isAdminPage && !isLoginPage && !isRegisterPage && !isStorePage && (<Header setOpenChat={setOpenChat} setName = {setName} name = {name}/>)}
             {isAdminPage && <SliderMenu />}
             <Outlet />
             {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
@@ -95,7 +96,7 @@ const App = () => {
         },
         {
           path: '/booklist',
-          element: <BookList/>
+          element: <BookList name = {name}/>
         },
         {
           path: '/productinformation',
@@ -184,6 +185,18 @@ const App = () => {
         {
           path : '/admin/voucher',
           element: <Voucher />
+        },
+        {
+          path : '/admin/shipper',
+          element: <Shipper />
+        },
+        {
+          path : '/admin/requestShipper',
+          element: <RegisShipper />
+        },
+        {
+          path : '/admin/profile',
+          element: <ProfileAdmin />
         },
         {
           path: '/shipper/home',

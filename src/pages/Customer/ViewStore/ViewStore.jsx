@@ -44,7 +44,7 @@ export default function ViewStore() {
     }
     const getBooksByQuery = (page) =>{
         setIsLoading(true);
-        newRequest.get(`/book/search?idStore=${id}&page=${page}&category=${category}&priceMin=${price_min}&priceMax=${price_max}&author=${author}&languages=${languages}&nhaXB=${nhaXB}`, {
+        newRequest.get(`/book/search?idStore=${id}&page=${page}&num=12&category=${category}&priceMin=${price_min}&priceMax=${price_max}&author=${author}&languages=${languages}&nhaXB=${nhaXB}`, {
         }).then(
           (res) => {
             setBookData(res.data.booksByQuery)
@@ -143,23 +143,6 @@ export default function ViewStore() {
                     </table>
                 </div>
                 </div>
-                <ul className={styles.category1}>
-                    {/* <li 
-                        className={selectedLi === null ? styles.defaultLi : styles.selectedLi} 
-                        onClick={() => handleLiClick(null)}
-                    >
-                        Tất cả sản phẩm
-                    </li> */}
-                    {cate && cate.map((item, index) => (
-                        <li 
-                            key={index} 
-                            className={selectedLi === index ? styles.selectedLi : styles.defaultLi} 
-                            onClick={() => handleLiClick(index)}
-                        >
-                            {item.name}
-                        </li>
-                    ))}
-                </ul>
 
             </div>
             <div className={styles.Store_Voucher}>

@@ -16,10 +16,10 @@ export default function Voucher() {
   const [name, setName] = useState(null)
   const getData = (name)=>{
     setIsPending(true);
-    newRequest.get(`/user/search/2?name=${name}`, {
+    newRequest.get(`/user/search/2?name=${name}&page=1`, {
     }).then(
       (res) => {
-        setData(res.data)
+        setData(res.data.users)
         setIsPending(false);
         setError(false)
       }
@@ -39,7 +39,7 @@ export default function Voucher() {
   return (
     <div className={styles.container}>
       <div className={styles.customer}>
-        <NavbarAdmin />
+        <NavbarAdmin isNoSearch={true}/>
       <div className={styles.content}>
       <div className={styles.list}>
       <div className={styles.table1}>
