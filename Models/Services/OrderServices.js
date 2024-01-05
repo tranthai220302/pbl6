@@ -541,7 +541,8 @@ export const revenueByAdminService = async(month) =>{
 }
 export const revenuaAdminByDateSerVice = async(date, month, year) =>{
     try {
-        if(month < 13 && month > 1){
+        if(month < 13 && month >= 1){
+            console.log(month)
             let revenuaAdmin = await db.order.sum('priceAdmi',{
                 where : {
                     [Op.and] : [
@@ -549,7 +550,7 @@ export const revenuaAdminByDateSerVice = async(date, month, year) =>{
                         Sequelize.literal(`
                         DAY(createdAt) = ${date} AND
                         MONTH(createdAt) = ${month} AND
-                        YEAR(createdAt) = ${2023}
+                        YEAR(createdAt) = ${2024}
                         `),
                         { priceAdmi: { [Op.not]: null } } 
                     ]
@@ -612,8 +613,7 @@ export const revenuaMonthByAdminService = async (month) =>{
                 for(let i = 1; i <= numDate; i++){
                     const totalByDate = await revenuaAdminByDateSerVice(i, month, date.getFullYear());
                     data.push(totalByDate.doanhthu);
-                    const dateT = new Date(date.getFullYear(), month-1, i)
-                    console.log(dateT)
+                    const dateT = new Date(date.getFullYear(), month, i)
                     dateTitle.push(dateT)
                 }
                 return {
