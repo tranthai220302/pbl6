@@ -285,7 +285,7 @@ export const getShippers = async(req, res, next) =>{
 
 export const getDetailShipper = async(req, res, next) =>{
     try {
-        if(req.idRole != 4) return next(createError(400, 'Bạn cần phải đăng nhập!'))
+        if(req.idRole !== 3 && req.idRole !== 4) return next(createError(400, 'Bạn cần phải đăng nhập!'))
         const shipper = await getDetailShipperService(req.params.id);
         if(shipper instanceof Error) return next(shipper);
         res.status(200).send(shipper);

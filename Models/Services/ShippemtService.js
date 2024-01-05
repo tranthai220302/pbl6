@@ -312,6 +312,8 @@ export const totalPriceShipperService = async (shipper_id, month) => {
         },
             attributes: ['OrderId'] // Chỉ lấy trường orderId
         })
+
+        const orders = shipmentIds.length;
         
         // Lấy ra một mảng các orderId từ danh sách shipmentIds
         const orderIds = shipmentIds.map(shipment => shipment.OrderId)
@@ -332,64 +334,43 @@ export const totalPriceShipperService = async (shipper_id, month) => {
         satistical.map((item)=>{
             total += item.priceShip
         })
-        return total;
+        return {
+            total,
+            orders
+        };
     } catch (error) {
         return error;
     }
 }
 
-export const drawPrecentSatiscalService = async(month) =>{
+export const PriceShipperService = async (shipper_id) => {
     try {
-        const satisticalShipper = [];
-        const category = []
-        const shipper = await db.user.findAll({
+        const shipmentIds = await db.shippemt.findAll({
+            where: {
+                shipperId: shipper_id // Thay shipperId bằng giá trị cần tìm kiếm
+        },
+            attributes: ['OrderId'] // Chỉ lấy trường orderId
+        })
+        
+        // Lấy ra một mảng các orderId từ danh sách shipmentIds
+        const orderIds = shipmentIds.map(shipment => shipment.OrderId)
+        
+        // Tìm danh sách các order từ danh sách orderIds từ bảng order
+        const satistical = await db.order.findAll({
             where : {
-                RoleId : 3
-            },
+                [Op.and] : [
+                    {id: orderIds},
+                    {isPayment : 1}
+                ]
+            }
         })
-        console.log(shipper)
-        for (const item of shipper) {
-            const satistical = await totalPriceShipperService(item.id, month);
-            if(satistical instanceof Error) return satistical;
-            satisticalShipper.push(satistical);
-            category.push(item.lastName + item.firstName)
-        }
-        return {
-            shipper : satisticalShipper,
-            category
-        }
-    } catch (error) {
-        return error;   
-    }
-}
 
-export const satistical7ShipperHighService = async(month) =>{
-    try {
-        const shipper = await db.user.findAll({
-            where : {RoleId : 3}
+        // Tính tổng giá trị của priceShip từ tất cả các đơn hàng tìm được
+        let total = 0;
+        satistical.map((item)=>{
+            total += item.priceShip
         })
-        const shipperArray = []
-        for (const item of shipper) {
-            const satistical = await totalPriceShipperService(item.id, month);
-            if(satistical instanceof Error) return satistical;
-            shipperArray.push({ shipperId: item.id, satistical: satistical, month, shipper: item });
-          }
-        const topShippers = shipperArray
-            .sort((a, b) => b.satistical - a.satistical) 
-            .slice(0, 10);
-        const category = [];
-        const data = [];
-        const shipperA = [];
-        topShippers.map((item)=>{
-            category.push(item.shipper.firstName + item.shipper.lastName);
-            data.push(item.satistical);
-            shipperA.push(item.shipper)
-        })
-        return {
-            category,
-            data,
-            shipperA
-        }
+        return total;
     } catch (error) {
         return error;
     }
@@ -429,29 +410,41 @@ export const revenueDateByShipperService = async (date, month, year, shipper_id)
         return error;
     }
 }
-export const revenueShipperByMonthService = async(shipper_id, month) =>{
+
+export const revenueShipperByMonthService = async (shipper_id, targetMonth) => {
     try {
-        const date = new Date()
-        const currentDate = new Date(date.getFullYear(), month, 0);
+        const date = new Date();
+        const currentMonth = date.getMonth() + 1; // Lấy tháng hiện tại
+        const currentYear = date.getFullYear();
+
+        // Tính toán tháng cần xem trong phạm vi 12 tháng gần nhất
+        const monthsAgo = currentMonth - targetMonth;
+        const targetYear = monthsAgo >= 0 ? currentYear : currentYear - 1;
+        const monthToView = monthsAgo >= 0 ? targetMonth : 12 + monthsAgo;
+
+        const currentDate = new Date(targetYear, monthToView, 0);
         const numDate = currentDate.getDate();
+
         const data = [];
-        const dateTitle = []
-        if(month > 0 && month  < 13){
-            for(let i = 1; i <= numDate; i++){
-                const totalByDate = await revenueDateByShipperService(i, month, date.getFullYear(), shipper_id);
+        const dateTitle = [];
+
+        if (monthToView > 0 && monthToView < 13) {
+            for (let i = 1; i <= numDate; i++) {
+                const totalByDate = await revenueDateByShipperService(i, targetMonth, targetYear, shipper_id);
                 data.push(totalByDate);
-                dateTitle.push(i)
+                dateTitle.push(i);
             }
             return {
                 data,
                 dateTitle
-            }
+            };
         }
-        return createError(400, 'Tháng không chính xác!')
+        return createError(400, 'Tháng không chính xác!');
     } catch (error) {
         return error;
     }
-}
+};
+
 
 export const getNumOrderByDateByShipperService = async (date, month, year, shipper_id) =>{
     try {
@@ -536,30 +529,5 @@ export const getNumOrderFailedByShipperService = async (shipper_id, month) =>{
         return orders.length;
     } catch (error) {
         return error;
-    }
-}
-
-export const getNumOrderFailedByShippersService = async(month) =>{
-    try {
-        const Shippers = [];
-        const category = []
-        const shipper = await db.user.findAll({
-            where : {
-                RoleId : 3
-            },
-        })
-        console.log(shipper)
-        for (const item of shipper) {
-            const numberOrder = await getNumOrderFailedByShipperService(item.id, month);
-            if(numberOrder instanceof Error) return numberOrder;
-            Shippers.push(numberOrder);
-            category.push(item.lastName + item.firstName)
-        }
-        return {
-            shipper : Shippers,
-            category
-        }
-    } catch (error) {
-        return error;   
     }
 }

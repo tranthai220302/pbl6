@@ -8,10 +8,11 @@ import {
     getOrders,
     getOrdersComplete,
     revenueShipperByMonth,
-    drawPrecentSatiscal,
-    satistical7ShipperHigh,
+    totalPriceShipper,
     getNumOrderBy7Date,
-    numberOrderFailedByShipper
+    numberOrderFailedByShipper,
+    priceShipper,
+
 } from '../Controllers/ShippemtController.js';
 import { verifyjson } from '../middleware/jwt.js';
 
@@ -23,9 +24,9 @@ routerShippemt.get('/',verifyjson, getOrders)
 routerShippemt.get('/get-orders',verifyjson, getOrdersByShipper)
 routerShippemt.get('/delivering',verifyjson, getOrdersDelivering)
 routerShippemt.get('/complete', verifyjson, getOrdersComplete)
-routerShippemt.post('/revenueShipper/:id', verifyjson, revenueShipperByMonth)
-routerShippemt.get('/drawShipper/:month', verifyjson, drawPrecentSatiscal)
-routerShippemt.get('/satisticalShipper/:month', verifyjson, satistical7ShipperHigh)
-routerShippemt.get('/numOrder7date/:id', verifyjson, getNumOrderBy7Date)
+routerShippemt.post('/revenueShipper/:month', verifyjson, revenueShipperByMonth)
+routerShippemt.get('/drawShipper/:month', verifyjson, totalPriceShipper)
+routerShippemt.get('/numOrder7date/', verifyjson, getNumOrderBy7Date)
 routerShippemt.get('/numberOrderFailed/:month', verifyjson, numberOrderFailedByShipper)
+routerShippemt.get('/priceShip', verifyjson, priceShipper)
 export default routerShippemt;
