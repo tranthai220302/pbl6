@@ -20,6 +20,12 @@ export default function Header({setOpenChat, name, setName}) {
     })
     .then((res) => {
       localStorage.removeItem('currentUser');
+      localStorage.removeItem('arrQuantity');
+      localStorage.removeItem('arrIdBook');
+      localStorage.removeItem('address');
+      localStorage.removeItem('books');
+      localStorage.removeItem('quantity');
+      localStorage.removeItem('priceTotal');
       console.log(res.data)
       setUserData(null);
       navigate('/')
