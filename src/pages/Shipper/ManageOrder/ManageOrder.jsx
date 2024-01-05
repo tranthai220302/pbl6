@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './ManageOrder.module.css';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenSquare, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-
+import newRequest from '../../../ults/NewRequest';
 export default function MyProfile() {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  console.log(currentUser)
   const dummyData = [
     { time: '09:00', location: 'Hanoi', price: '1000000', shopName: 'ABC Shop', status: 'Completed' },
     { time: '10:30', location: 'Ho Chi Minh City', price: '750000', shopName: 'XYZ Shop', status: 'Pending' },
@@ -14,6 +15,23 @@ export default function MyProfile() {
     { time: '16:20', location: 'Nha Trang', price: '900000', shopName: 'JKL Shop', status: 'Pending' },
   ];
   const [openEdit, setOpenEdit] = useState(false);
+  const [DataOrder, setDataOrder] = useState([]);
+  const GetOrder = () => {
+    newRequest.get(`/shippemt/get-orders`, {
+      withCredentials: true,
+    }).then(
+      (res) => {
+        console.log(res.data);
+        setDataOrder(res.data)
+      }
+    ).catch((error) => {
+      console.error(error);
+    });
+  };
+
+  useEffect(()=>{
+    GetOrder();
+  },[])
   return (
     <div className={styles.MyProfile}>
       {currentUser ? (
@@ -34,13 +52,13 @@ export default function MyProfile() {
                   <th>Trạng thái</th>
                   <th>Xem chi tiết</th>
                 </tr>
-                {dummyData.map((data, index) => (
+                {DataOrder.map((data, index) => (
                   <tr key={index}>
-                    <td>{data.time}</td>
-                    <td>{data.location}</td>
-                    <td>{data.price}</td>
-                    <td>{data.shopName}</td>
-                    <td>{data.status}</td>
+                    <td>{data.updatedAt}</td>
+                    <td>{data.Order.addressCustomer}</td>
+                    <td>{data.Order.total_price}</td>
+                    <td>{data.Order.store.DetailStore.nameStore}</td>
+                    <td>{data.Order.State.status}</td>
                     <td><FontAwesomeIcon icon={faPenSquare} onClick={()=>setOpenEdit(true)}/></td>
                   </tr>
                 ))}
