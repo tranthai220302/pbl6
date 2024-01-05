@@ -11,7 +11,7 @@ const ShipperRequest = (sequelize) => sequelize.define('ShipperRequest', {
     numMobike : {
         type : DataTypes.STRING,
     },
-    avatar : {
+    image_drivingLience : {
         type : DataTypes.STRING,
     },
     isConfirm : {

@@ -12,6 +12,7 @@ import {
     getNumOrderBy7Date,
     numberOrderFailedByShipper,
     priceShipper,
+    updateShipper,
 
 } from '../Controllers/ShippemtController.js';
 import { verifyjson } from '../middleware/jwt.js';
@@ -29,4 +30,5 @@ routerShippemt.get('/drawShipper/:month', verifyjson, totalPriceShipper)
 routerShippemt.get('/numOrder7date/', verifyjson, getNumOrderBy7Date)
 routerShippemt.get('/numberOrderFailed/:month', verifyjson, numberOrderFailedByShipper)
 routerShippemt.get('/priceShip', verifyjson, priceShipper)
+routerShippemt.put('/edit',verifyjson, updateShipper)
 export default routerShippemt;

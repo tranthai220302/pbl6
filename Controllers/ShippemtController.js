@@ -10,7 +10,8 @@ import {
     revenueShipperByMonthService,
     getNumOrderBy7DateService,
     getNumOrderFailedByShipperService,
-    PriceShipperService
+    PriceShipperService,
+    updateShipperService
 }
 from "../Models/Services/ShippemtService.js";
 import createError from "../ultis/createError.js";
@@ -161,6 +162,20 @@ export const priceShipper = async(req, res, next) =>{
         const topShippers = await PriceShipperService(shipper_id);
         if(topShippers instanceof Error) return next(topShippers);
         res.status(200).send(topShippers)
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const updateShipper = async(req, res, next) =>{
+    try {
+        const data1 = req.body;
+        const data2 = req.body;
+        const id = req.id;
+        if(!id)return next(createError(400, 'Bạn cần phải đăng nhập!'))
+        const shipper = await updateShipperService(data1, data2, id);
+        if(shipper instanceof Error) return next(shipper)
+        return res.status(200).send(shipper)
     } catch (error) {
         next(error)
     }

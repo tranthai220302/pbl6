@@ -531,3 +531,35 @@ export const getNumOrderFailedByShipperService = async (shipper_id, month) =>{
         return error;
     }
 }
+
+
+export const updateShipperService = async (data1, data2, id) =>{
+    try {
+        const user = await db.user.findOne({
+            where : {
+                [Op.or] : [
+                    {username: data1.username},
+                    {email: data1.email}
+                ]
+            }
+        })
+        if(user) return createError(400, "Tài khoản hoặc Email đã tồn tại!")
+
+        const shipperUpdate = await db.user.update(data1, {
+            where: {id}
+        })
+
+        const shipperUpdate2 = await db.shipperRequest.update(data2, {
+            where: {customer_id: id}
+        })
+
+        if(!shipperUpdate || shipperUpdate[0] == 0) return createError(400, 'Update không thành công!')
+        
+        return {
+            shipperUpdate,
+            shipperUpdate2
+        };  
+    } catch (error) {
+        return error;
+    }
+}
