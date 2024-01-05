@@ -33,7 +33,7 @@ function ModalDetailShipper({show, handleClose, store, isShipper}) {
                         <h4>Bằng lái xe</h4>
                         <img src="https://www.satflare.com/XClose.png" height={30} alt="" style={{cursor : 'pointer'}} onClick={()=>{setOpen(false)}}/>
                     </div>
-                    <img src={store.avatar ? store.avatar : "https://giaypheplaixe.edu.vn/wp-content/uploads/2019/02/giay-phep-lai-xe-a1.jpg"} height={300} width={400} alt="" />
+                    <img src={store.image_drivingLience ? store.image_drivingLience : "https://giaypheplaixe.edu.vn/wp-content/uploads/2019/02/giay-phep-lai-xe-a1.jpg"} height={300} width={400} alt="" />
                 </div>
             )}
         <div className={styles.avatar}>
