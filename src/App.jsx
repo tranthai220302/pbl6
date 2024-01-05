@@ -39,11 +39,14 @@ import { QuantityProvider } from './Context/QuantityProvider';
 import CartOrder from './pages/Cart/CartOrder/CartOrder';
 import ThankOrder from './pages/ThankOrder/ThankOrder';
 import StoreManage from './compoments/Store/StoreManage/StoreManage';
+import StoreFlashsale from './compoments/Store/FlashSale/FlashSale';
 import Homeshipper from './pages/Shipper/Homeshipper/Homeshipper'
 import FlashSale from './pages/Admin/FlashSale/FlashSale';
 import Category from './pages/Admin/Category/Category';
 import AddCategory from './pages/Admin/Category/AddCategory/AddCategory';
 import AddCustomer from './pages/Admin/Customer/AddCustomer/AddCustomer';
+import { ChatContextProvider } from './compoments/Notification/NotificationProvider';
+import { Notifications } from './compoments/react-push-notification/dist';
 const queryClient = new QueryClient()
 
 const App = () => {
@@ -54,7 +57,9 @@ const App = () => {
     const isLoginPage = useLocation().pathname.includes('/login');
     const isRegisterPage = useLocation().pathname.includes('/register');
     console.log(openChat)
+
     return (
+      <ChatContextProvider>
       <QuantityProvider>
           <QueryClientProvider client={queryClient}>
           <div className="app">
@@ -63,9 +68,11 @@ const App = () => {
             <Outlet />
             {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
             <ToastContainer />
+            <Notifications />
           </div>
         </QueryClientProvider>
       </QuantityProvider>
+      </ChatContextProvider>
     )
   }
   const router = createBrowserRouter([
@@ -128,6 +135,10 @@ const App = () => {
         {
           path: '/store/storemanage',
           element: <StoreManage/>
+        },
+        {
+          path: '/store/flashsale',
+          element: <StoreFlashsale/>
         },
         {
           path: '/admin/login',

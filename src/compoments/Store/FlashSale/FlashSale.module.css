@@ -1,0 +1,76 @@
+.FlashSale {
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 4px;
+    width: 72%;
+    margin: 20px 0;
+    height: fit-content;
+}
+
+.FlashSale_Title {
+    background-color: #BEDDDD;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px 0 5px 20px;
+    vertical-align: middle;
+    border-radius: 4px 4px 0 0;
+}
+
+.FlashSale_childTitle {
+    border-bottom: #BEDDDD 1px dashed;
+}
+
+.FlashSale_childTitle ul {
+    list-style-type: none;
+    display: flex;
+    padding: 0;
+    margin: 10px 20px;
+}
+
+.FlashSale_childTitle li {
+    margin-right: 30px;
+    padding: 5px 10px;
+    border: #BEDDDD 1px solid;
+    border-radius: 4px;
+}
+
+.FlashSale_childTitle li:hover {
+    cursor: pointer;
+    background-color: green;
+}
+
+.FlashSale_Content {
+    margin: 10px 20px;
+}
+
+.selectedTab {
+    background-color: green;
+    /* Thêm các thuộc tính CSS khác nếu cần thiết */
+}
+
+.FlashSale_Content table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .FlashSale_Content th, .FlashSale_Content td, .FlashSale_Content tr {
+    border: 1px solid #BEDDDD;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .FlashSale_Content th {
+    background-color: #BEDDDD;
+  }
+
+  .regis_FlashSale {
+    margin-top: 20px;
+  }
+
+  .regis_FlashSale input {
+    margin-left: 20px;
+  }
+
+  .FlashSale_Register button {
+    margin-top: 20px;
+  }

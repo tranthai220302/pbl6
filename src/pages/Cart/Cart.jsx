@@ -257,7 +257,7 @@ export default function Cart() {
                     </table>
                   </div>
                   <div className={styles.btn}>
-                    <button onClick={()=>handleOrder()}>Xác nhận đặt hàng</button>
+                    <button onClick={()=>handleOrder()}>Đặt hàng</button>
                   </div>
                 </div>
               </div>

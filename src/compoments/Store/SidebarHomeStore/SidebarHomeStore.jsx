@@ -84,7 +84,7 @@ export default function SideBar({setSubMenu,setOpen,managebook,setManageBook,man
                             <p onClick={() => {setOpen(1);setSubMenu("Mã giảm giá của cửa hàng")}}>Mã giảm giá của cửa hàng</p>
                         </div>
                     )}
-                    <li>
+                    <li onClick={() => {setOpen(2)}}>
                         <FontAwesomeIcon icon={faBolt}/>
                         <span>Quản lý FlashSale</span>
                     </li>

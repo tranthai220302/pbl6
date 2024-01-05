@@ -5,6 +5,7 @@ import SideBar from '../../../compoments/Store/SidebarHomeStore/SidebarHomeStore
 import BodyHome from '../../../compoments/Store/BodyHomeStore/BodyHomeStore'
 import MyProfile from '../../../compoments/MyProfile/MyProfile'
 import StoreManage from '../../../compoments/Store/StoreManage/StoreManage'
+import StoreFlashsale from '../../../compoments/Store/FlashSale/FlashSale'
 
 export default function HomeStore() {
 
@@ -30,6 +31,7 @@ export default function HomeStore() {
                 <SideBar setOpen = {setOpen}  setSubMenu={setSubMenu} managebook={managebook} setManageBook={setManageBook} managestore={managestore} setManageStore={setManageStore} manageorder={manageorder} setManageOrder={setManageOrder} analysis={analysis} setAnalysis={setAnalysis} setAll = {setAll} setStateId1={setStateId1} setStateId6={setStateId6} setStateId7={setStateId7} all={all} StateId1={StateId1} StateId6={StateId6} StateId7={StateId7}/>
                 {open === 0 && (<BodyHome managebook = {managebook} manageorder = {manageorder} managestore = {managestore} analysis={analysis} all={all} StateId1={StateId1} StateId6={StateId6} StateId7={StateId7}/>)}
                 {open === 1 && (<StoreManage Submenu={Submenu} SetSubmenu={setSubMenu}/> )}
+                {open === 2 && (<StoreFlashsale /> )}
             </div>
         </div>
     )

@@ -66,12 +66,6 @@ export default function Register() {
             <span>Đăng ký</span>
           </button>
         </div>
-        <div className={styles.btn}>
-          <button >
-            <FontAwesomeIcon icon={faEnvelope} />
-            <span>Đăng ký bằng email</span>
-          </button>
-        </div>
         <Link to="/">
           <button className={styles.cancel}>
             <span>Hủy bỏ</span>
