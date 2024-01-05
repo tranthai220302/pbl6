@@ -2,7 +2,6 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "./",
   "dependencies": {
     "@firebase/app": "^0.9.25",
     "@firebase/database": "^1.0.2",
