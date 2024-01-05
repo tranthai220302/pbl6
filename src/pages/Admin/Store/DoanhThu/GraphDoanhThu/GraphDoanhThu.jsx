@@ -12,6 +12,7 @@ const GraphDoanhThu = ({id}) => {
     newRequest.get(`/order/numOrder7date/${id}`, {
     }).then(
       (res) => {
+        console.log(res.data.data)
         setData(res.data.data)
         setCategory(res.data.dateTitle)
         setIsPending(false);

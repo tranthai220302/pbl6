@@ -10,7 +10,6 @@ import Example from '../../../compoments/ModalFull/ModalFull';
 import { faTrash, faPenToSquare, faCircleInfo, faSearch, faBell, faBook, faTruckFast, faChartSimple} from '@fortawesome/free-solid-svg-icons';
 import DoanhThu from '../../../pages/Admin/Store/DoanhThu/DoanhThu';
 import NavbarAdmin from '../../../pages/Admin/NavbarAdmin/NavbarAdmin';
-import GraphDoanhThu from '../../../pages/Admin/Store/DoanhThu/GraphDoanhThu/GraphDoanhThu';
 import GraphLine from '../../../pages/Admin/Store/DoanhThu/GrapLine/GrapLine';
 import ReactApexChart from 'react-apexcharts';
 import { parseJSON } from 'date-fns';
@@ -29,6 +28,15 @@ export default function BodyHomeStore({managebook,manageorder,managestore,analys
     const [category, setCategory] = useState(null)
     const [datalength,setDatalength] = useState(null)
     const [selectProduct, setSelectProduct] = useState(null);
+    const date = new Date();
+    const [month, setMonth] = useState(date.getMonth()+1);
+
+    const handle = (e) =>{
+      if(e.key === 'Enter'){
+          setMonth(e.target.value)
+      }
+  }
+  console.log("cu",currentUser)
     const [selectProductUpdate, setSelectProductUpdate] = useState(null)
 
       const getData = () =>{
@@ -466,12 +474,16 @@ export default function BodyHomeStore({managebook,manageorder,managestore,analys
             </div>
           )}
           {analysis && (
+            // <div>
+            //   <span>Tổng số đơn hàng đã được đặt : {datalength} đơn hàng</span><br></br>
+            //   <span>Biểu đồ tỉ lệ đơn hàng đã thanh toán</span>
+            //   <div>{}</div>
+            //   <ReactApexChart options={chartData.options} series={chartData.series} type="pie" height={350} />  
+            //  </div> 
             <div>
-              <span>Tổng số đơn hàng đã được đặt : {datalength} đơn hàng</span><br></br>
-              <span>Biểu đồ tỉ lệ đơn hàng đã thanh toán</span>
-              <div>{}</div>
-              <ReactApexChart options={chartData.options} series={chartData.series} type="pie" height={350} />  
-             </div>  
+                        <input type="text" placeholder='Nhập tháng ...' className={styles.search} onKeyPress={(e) => {handle(e)}}/>
+                        <GraphLine id={userdetail?.id} month={month} />
+            </div> 
                     
             )}
                 
