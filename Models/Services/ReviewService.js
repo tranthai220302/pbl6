@@ -65,6 +65,9 @@ export const getReviewsByBookService = async(id, page, reviewsPerPage = 2) =>{
                         model: db.user,
                         as: 'review1',
                         attributes: { exclude: ['password'] }
+                    },
+                    {
+                        model : db.feedBack
                     }
                 ],
                 where: { book_id: id },
@@ -82,6 +85,9 @@ export const getReviewsByBookService = async(id, page, reviewsPerPage = 2) =>{
                         model: db.user,
                         as: 'review1',
                         attributes: { exclude: ['password'] }
+                    },
+                    {
+                        model : db.feedBack
                     }
                 ],
                 where: { book_id: id },
@@ -176,6 +182,9 @@ export const getBookByReview5StarService = async()=>
                 {
                     model : db.book,
                     as: 'review2'
+                },
+                {
+                    model : db.feedBack
                 }
             ]
           });
