@@ -7,11 +7,6 @@ import { faUser, faCartShopping, faBell, faSearch, faBook, faHouse} from '@forta
 import { Link } from 'react-router-dom';
 import newRequest from '../../ults/NewRequest';
 import React, { useContext, useEffect, useState } from 'react';
-import { ref, child, onValue } from 'firebase/database';
-import { isEqual } from 'lodash';
-import addNotification from '../react-push-notification/dist';
-import { database } from '../Notification/firebase';
-import { ChatContext } from '../Notification/NotificationProvider';
 export default function Header({setOpenChat}) {
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
@@ -39,44 +34,6 @@ export default function Header({setOpenChat}) {
 
   const handleNotificationClick = () => {
     setShowNotification(!showNotification);
-  };
-  const { writeUserData } = useContext(ChatContext);
-  useEffect(() => {
-    if (currentUser?.id !== '') {
-      const dbRef = ref(database);
-      const usersRef = child(dbRef, `user/${currentUser?.id}`);
-      const unsubscribe = onValue(usersRef, (snapshot) => {
-        if (snapshot.exists()) {
-          const allData = snapshot.val();
-          const newNotifications = Object.keys(allData).filter(
-            (key) => !latestUserData || !isEqual(allData[key], latestUserData[key])
-          );
-
-          if (newNotifications.length > 0) {
-            setLatestUserData(allData);            
-            console.log("newNotifications",newNotifications)
-            Noti(allData[newNotifications]);
-          }
-        } else {
-          setLatestUserData([]);
-        }
-      });
-
-      return () => {
-        unsubscribe();
-      };
-    }
-  }, [currentUser?.id,latestUserData]);
-  
-  
-  const Noti = (notif) => {
-      addNotification({
-        title: notif?.username, 
-        subtitle: 'thông báo từ falth',
-        message: notif?.mes,
-        theme: 'darkblue',
-        native: true,
-      });
   };
   
 

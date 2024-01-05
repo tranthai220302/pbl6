@@ -7,6 +7,9 @@ import newRequest from '../../../ults/NewRequest';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash, faReply, faMessage, faClose, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
+import moment from 'moment';
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
 const notify = (er, message) => toast[er](message, {
   position: "top-right",
   autoClose: 5000,
@@ -183,7 +186,7 @@ const Add = ({ setOpenedit, id, getDataVoucher }) => {
   const [formData, setFormData] = useState({
     name: '',
     discountValue: '',
-    discountType: '',
+    discountType: 'amount',
     expiryDate: '',
     quantity: '',
     codition: '',
@@ -213,11 +216,14 @@ const Add = ({ setOpenedit, id, getDataVoucher }) => {
     }).then(
       (res) => {
         console.log(res.data);
-        getDataVoucher();
         setOpenedit(false);
+        getDataVoucher();
+        
+        notify("success","Thêm thành công");
       }
     ).catch((error) => {
       console.error(error);
+      notify("error",error.response?.data);
     });
   };
 
@@ -231,12 +237,10 @@ const Add = ({ setOpenedit, id, getDataVoucher }) => {
           </div>
         <label htmlFor="name">Tên mã giảm giá: </label>
         <input type="text" name="name" value={formData.name} onChange={handleChange} />
-        <label htmlFor="discountValue">Số tiền được giảm: </label>
-        <input type="text" name="discountValue" value={formData.discountValue} onChange={handleChange} />
         <label htmlFor="discountType">Kiểu: </label>
-        <select name="discountType" value={formData.discountType} onChange={handleChange}>
+        <select name="discountType"   value={formData.discountType} onChange={handleChange}>
           <option value="amount">Amount</option>
-          <option value="percentage">Percentage</option>
+          <option value="percent">Percentage</option>
         </select>
         {formData.discountType === 'amount' ? (
               <div style={{display: 'contents'}}>
@@ -412,8 +416,13 @@ const Delete = ({ setOpenedit, item, getDataVoucher }) => {
 
   return (
     <div className={styles.overlay}>
-      <button onClick={() => UpdatFeedBack()}>Oke</button>
-      <button onClick={() => setOpenedit(false)}>Hủy</button>
+      <div className={styles.form_nof}>
+        <span>Bạn có chắc chắn muốn xóa không?</span>
+        <div className={styles.btn}>
+          <button onClick={() => UpdatFeedBack()}>Oke</button>
+          <button onClick={() => setOpenedit(false)}>Hủy</button>
+        </div>
+      </div>
     </div>
   );
 };
@@ -623,7 +632,7 @@ export default function StoreManage({ Submenu, SetSubmenu }) {
                       <td>{item.discountValue}</td>
                       <td>{item.codition}</td>
                       <td>{item.quantity}</td>
-                      <td>{item.expiryDate}</td>
+                      <td>{moment(item.expiryDate).format('LLLL')}</td>
                       <td className={styles.icon} onClick={()=>handledit(item)}><FontAwesomeIcon icon={faPenToSquare} /></td>
                       <td className={styles.icon} onClick={()=> handdelete(item)}><FontAwesomeIcon icon={faTrash} /></td>
                     </tr>
