@@ -535,16 +535,7 @@ export const getNumOrderFailedByShipperService = async (shipper_id, month) =>{
 
 export const updateShipperService = async (data1, data2, id) =>{
     try {
-        const user = await db.user.findOne({
-            where : {
-                [Op.or] : [
-                    {username: data1.username},
-                    {email: data1.email}
-                ]
-            }
-        })
-        if(user) return createError(400, "Tài khoản hoặc Email đã tồn tại!")
-
+        
         const shipperUpdate = await db.user.update(data1, {
             where: {id}
         })
