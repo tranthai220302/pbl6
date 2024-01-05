@@ -5,7 +5,7 @@ import styles from './BookList.module.css'
 import { useLocation } from 'react-router-dom';
 import Chat from '../Chat/Chat';
 
-export default function BookList() {
+export default function BookList({name}) {
     
   const [price_min, setPrice_min] = useState('');
   const [price_max, setPrice_max] = useState('');
@@ -15,7 +15,6 @@ export default function BookList() {
   const location = useLocation(); 
   const receivedCategory = new URLSearchParams(location.search).get('category');
   const [category, setCategory] = useState(receivedCategory ? receivedCategory : "");
-
 
   return (
     <div>
@@ -41,6 +40,7 @@ export default function BookList() {
         author={author}
         languages={languages}
         nhaXB={nhaXB}
+        name = {name}
       />
     </div>
     <Chat />

@@ -38,6 +38,154 @@
     color: gray;
     text-decoration: line-through;
 }
+.num_page {
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+  
+.num_page span {
+margin: 0 5px;
+padding: 5px 10px;
+border: 1px solid #ccc;
+cursor: pointer;
+
+}   
+  
+.num_page span:hover {
+background-color: #f0f0f0;
+}
+
+.book_item button {
+    background-color: #4EA58B;
+    border-radius: 24px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 10px auto;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.book_item button:hover {
+    background-color: green;
+}
+
+.product a {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    color: black;
+}
+.product {
+    display: flex;
+    flex-direction: column; /* Hiển thị các phần tử theo chiều dọc */
+    margin-right: 20px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.product img {
+    height: 190px;
+    width: 100%;
+}
+
+.old_price {
+    font-size: 14px;
+    color: gray;
+    text-decoration: line-through;
+}
+
+.percentDiscount {
+    background-color: #B31C1C;
+    color: white;
+    margin-left: 10px;
+    padding: 0 10px;
+    border-radius: 4px;
+}
+
+.product button {
+    border-radius: 24px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 10px auto;
+    font-weight: 500;
+}
+
+.current_price {
+    background-color: white;
+    color: white;
+    margin-left: 10px;
+    padding: 0 10px;
+    border-radius: 4px;
+}
+.num_page {
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+  
+.num_page span {
+margin: 0 5px;
+padding: 5px 10px;
+border: 1px solid #ccc;
+cursor: pointer;
+
+}   
+  
+.num_page span:hover {
+background-color: #f0f0f0;
+}
+.bo{
+    display: flex;
+    gap: 10px;
+}
+.background {
+    width: 75%;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+.booklist {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.line {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.book_item {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    margin-bottom: 20px;
+}
+
+.book_item img {
+    height: 190px;
+    width: 100%;
+
+}
+
+.old_price {
+    font-size: 14px;
+    color: gray;
+    text-decoration: line-through;
+}
 
 .book_item button {
     background-color: #4EA58B;
