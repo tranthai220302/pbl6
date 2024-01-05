@@ -240,13 +240,6 @@ export default function Cart() {
                     <input type="radio" id="2" name="thanhtoan" />
                     <label htmlFor="2">Thanh toán online</label>
                   </form>
-                  <div className={styles.voucher}>
-                    <span>Voucher</span>
-                    <div className={styles.voucher_content}>
-                      <input type="text" placeholder="Nhập mã giảm giá" />
-                      <button>Nhập</button>
-                    </div>
-                  </div>
                   <div className={styles.total}>
                     <span>Thành tiền</span>
                     <table>

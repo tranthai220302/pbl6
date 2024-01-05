@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import styles from './HeaderShipper.module.css'
 import { Link } from 'react-router-dom'
 import logo from '../../../assets/img/logo.png';
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCartShopping, faBell, faSearch, faBook} from '@fortawesome/free-solid-svg-icons';
-
+import newRequest from '../../../ults/NewRequest';
 export default function HeaderShipper({ setOpen }) {
     const [isLoggedIn, setLoggedIn] = useState(true);
     const currentUser = localStorage.getItem("currentUser");
@@ -12,9 +13,19 @@ export default function HeaderShipper({ setOpen }) {
     const handleLogin = () => {
         setLoggedIn(true);
     };
-
+    const navigate = useNavigate();
     const handleLogout = () => {
-        localStorage.removeItem('currentUser');
+        newRequest.post(`/auth/logout`, {
+            withCredentials: true
+          })
+          .then((res) => {
+            localStorage.removeItem('currentUser');
+            setUserData(null);
+            navigate('/')
+          })
+          .catch((error) => {
+            console.log(error)
+          });
         setUserData(null)
     };
     return (

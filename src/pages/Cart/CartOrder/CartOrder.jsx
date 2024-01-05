@@ -28,6 +28,7 @@ export default function CartOrder() {
     const [isOffline, setIsOffline] = useState(null)
     const [addressValue, setAddressValue] = useState(currentUser.address)
     const [isLoadingOrder, setIsLoadingOrder] = useState(false);
+    const [addCus, setAddCus] = useState(currentUser.address)
     const navigate = useNavigate()
     const getBook = async (arrIdBook) =>{
         if(Array.isArray(arrIdBook)){
@@ -59,7 +60,7 @@ export default function CartOrder() {
         for(let i = 0; i < book.length; i++){
             await newRequest.post(`/order/detailOrder/${book[i].Book.id}`,{
                 id : arrIdBook,
-                addressCus : "105 Tôn Đản, Đà Nẵng",
+                addressCus : addCus,
                 total:book[i].Book.price * (1 - book[i].Book.percentDiscount)*arrQuantity[i]
             }).then((res)=>{
                 data.push({
@@ -193,9 +194,10 @@ export default function CartOrder() {
                     <td><input type="text" placeholder='Nhập địa chỉ' defaultValue={currentUser.address}
                       style={{
                         border: 'none',
-                        outline : 'none'
+                        outline : 'none',
+                        width: '500px'
                       }}
-                      onChange={(e)=>{setAddressValue(e.target.value)}}
+                      onChange={(e)=>{setAddCus(e.target.value)}}
                     />
                     </td>
                   </tr>
