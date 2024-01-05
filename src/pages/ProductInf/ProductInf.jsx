@@ -35,6 +35,9 @@ export default function ProductInf({setOpenChat}) {
     const [infor, setInfor] = useState(null)
     const [isReport, setIsReport] = useState(false)
     const [showReport, setShowReport] = useState(false);
+    const [isLoadingBook, setIsLoadingBook] = useState(false)
+    const [s, setS] = useState(null)
+    console.log(idStore)
     const handleRating = (value) => {
         setRating(value);
     };
@@ -69,12 +72,17 @@ export default function ProductInf({setOpenChat}) {
       };
     const fetchData = async () => {
         try {
-          const response = await newRequest.get(`/book/item/${id}`);
-          console.log('API response:', response.data);
-          setIdstore(response.data.User)
-          console.log(response.data)
-          setBook(response.data);
-          setSelectedImage(response.data.Images && response.data.Images[0]);
+            setIsLoadingBook(true)
+            newRequest.get(`/book/item/${id}`).then((response)=>{
+                setIdstore(response.data.User)
+                console.log(response.data)
+                setBook(response.data);
+                setSelectedImage(response.data.Images && response.data.Images[0]);
+                setIsLoadingBook(false)
+            }).catch((error)=>{
+                setIsLoadingBook(false)
+                console.log(error)
+            })
         } catch (error) {
           console.error('Error fetching book details:', error);
         }
@@ -174,8 +182,11 @@ export default function ProductInf({setOpenChat}) {
     const storedUserData = JSON.parse(localStorage.getItem('currentUser'));
     return(
         <div>
+            {isLoadingBook && (
+                <img src="https://assets-v2.lottiefiles.com/a/95503f40-1153-11ee-b240-1b376106fc67/nwUqj0Krki.gif" alt="" height={300} width={300} style={{display: 'flex', justifyContent : 'center', margin : 'auto', marginTop : '10%', marginBottom : '10%'}}/>
+            )}
             {
-                book && (<div className={styles.ProductInf}>
+                book && !isLoadingBook && (<div className={styles.ProductInf}>
                     {
                         showReport && (
                             <Report1 show={showReport} handleClose={()=>{setShowReport(false)}} id = {id} />
@@ -485,7 +496,8 @@ export default function ProductInf({setOpenChat}) {
                             <td>
                                 <div className={styles.reviewContainer}>
                                     {review && review.reviews && review.reviews.map((item)=>(
-                                        <div className={styles.cmt_show}>
+                                        <div>
+                                    <div className={styles.cmt_show}>
                                         {isReviewImg && (
                                             <div className={styles.modalContainer} onClick={() => { setIsReviewImg(false); }}>
                                             <div className={styles.img_modal}>
@@ -533,6 +545,23 @@ export default function ProductInf({setOpenChat}) {
                                                     <FontAwesomeIcon icon={faTrash} style={{height : '15px'}}/>
                                                 </div>
                                             )}
+                                        </div>
+                                        {idStore && item.FeedBack &&(
+                                            <div className={styles.cmt_show} style={{borderBottom: '#4ea58b75 dashed 1px', marginTop : "-40px"}} >
+                                                <div className={styles.cmt_show} style={{marginLeft : "20%"}}>
+                                                <div className={styles.cmt_avt}>
+                                                    <img src={idStore.DetailStore.avatar} alt="" />
+                                                </div>
+                                                <div className={styles.cmt_show_content}>
+                                                        <h6>{idStore.DetailStore.nameStore}</h6>
+                                                        <span className={styles.cmt_time}>{moment(item.FeedBack.createdAt).format("DD-MM-YYYY")}</span>
+                                                        <div className={styles.comment1}>
+                                                        <span>{item.FeedBack.desc}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                         </div>
                                     ))} 
                                     {errReview && (

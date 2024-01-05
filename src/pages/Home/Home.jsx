@@ -14,6 +14,8 @@ export default function Home({openChat, setOpenChat}) {
   const [data, setData] = useState([]);
   const [datacat, setDatacat] = useState([]);
   const [datafsale, setDatafsale] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingFS, setIsLoadingFS] = useState(false);
   const { value } = useParams();
   const getData = ()=>{
     setIsPending(true);
@@ -36,33 +38,33 @@ export default function Home({openChat, setOpenChat}) {
 
 
   const getCategory = async()=>{
-    setIsPending(true);
+    setIsLoading(true);
     await newRequest.get(`/category`, {
     }).then(
       (res) => {
         setDatacat(res.data)
-        setIsPending(false);
+        setIsLoading(false);
         setError(false)
       }
     ).catch((error)=>{
       setError(error.response.data)
-      setIsPending(false)
+      setIsLoading(false)
     })
   }
 
   const getFlashSale = async ()=>{
-    setIsPending(true);
+    setIsLoadingFS(true);
     await newRequest.get(`/book/flashSale?time=9h-11h`, {
     }).then(
       (res) => {
         setDatafsale(res.data)
-        setIsPending(false);
+        setIsLoadingFS(false);
         setError(false)
         console.log(res.data)
       }
     ).catch((error)=>{
       setError(error.response.data)
-      setIsPending(false)
+      setIsLoadingFS(false)
     })
   }
   useEffect(()=>{
@@ -107,7 +109,10 @@ export default function Home({openChat, setOpenChat}) {
         </div>
         <div className={styles.flashsale_content}>
           {/* Hiện 5 sản phẩm có lượt sale cao nhất */}
-          {datafsale && top5percentDiscount.map((value) => (
+          {isLoadingFS && (
+                <img src="https://assets-v2.lottiefiles.com/a/95503f40-1153-11ee-b240-1b376106fc67/nwUqj0Krki.gif" alt="" height={100} width={100} style={{display: 'flex', justifyContent : 'center', margin : 'auto'}}/>
+          )}
+          {datafsale && !isLoadingFS && top5percentDiscount.map((value) => (
             <div onClick={(e) => handleBookClick(value.id, e)} className={`${styles.flashsale_item} ${styles.product}`}>
               {/* Lấy 1 ảnh đầu tiên */}
               <img src={value.Images[0].filename} alt='' />
@@ -130,7 +135,10 @@ export default function Home({openChat, setOpenChat}) {
           <span onClick={()=>setOpenChat(true)}>DANH MỤC SẢN PHẨM</span>
         </div>
         <div className={styles.danhmuc_content}>
-          {datacat && datacat.map((value) => (
+          {isLoading && (
+                  <img src="https://assets-v2.lottiefiles.com/a/95503f40-1153-11ee-b240-1b376106fc67/nwUqj0Krki.gif" alt="" height={100} width={100} style={{display: 'flex', justifyContent : 'center', margin : 'auto'}}/>
+          )}
+          {datacat && !isLoading && datacat.map((value) => (
             <div className={styles.danhmuc_item} onClick={()=>Navigate(value.name)}>
               <img src={value.img} alt="" />
               <span>{value.name}</span>
@@ -144,7 +152,10 @@ export default function Home({openChat, setOpenChat}) {
         </div>
         <div className={styles.hotproduct_content}>
           <div className={styles.hotproduct_content_line}>
-            {top5Products.map((item) => (
+            {isPending && (
+                <img src="https://assets-v2.lottiefiles.com/a/95503f40-1153-11ee-b240-1b376106fc67/nwUqj0Krki.gif" alt="" height={100} width={100} style={{display: 'flex', justifyContent : 'center', margin : 'auto'}}/>
+            )}
+            {!isPending && top5Products.map((item) => (
               <div onClick={(e) => handleBookClick(item.id, e)} className={`${styles.hotproduct_item} ${styles.product}`} key={item.id}>
                 <img src={item.Images[0].filename} alt='' />
                 <span>{item.name}</span>

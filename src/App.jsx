@@ -48,8 +48,6 @@ import AddCustomer from './pages/Admin/Customer/AddCustomer/AddCustomer';
 import Shipper from './pages/Admin/Shipper/Shipper';
 import RegisShipper from './pages/Admin/Shipper/RegisShipper/RegisShipper';
 import ProfileAdmin from './pages/Admin/Profile/ProfileAdmin';
-import { ChatContextProvider } from './compoments/Notification/NotificationProvider';
-import { Notifications } from './compoments/react-push-notification/dist';
 const queryClient = new QueryClient()
 
 const App = () => {
@@ -62,7 +60,6 @@ const App = () => {
     const isLoginPage = useLocation().pathname.includes('/login');
     const isRegisterPage = useLocation().pathname.includes('/register');
     return (
-      <ChatContextProvider>
       <QuantityProvider>
           <QueryClientProvider client={queryClient}>
           <div className="app">
@@ -71,11 +68,9 @@ const App = () => {
             <Outlet />
             {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
             <ToastContainer />
-            <Notifications />
           </div>
         </QueryClientProvider>
       </QuantityProvider>
-      </ChatContextProvider>
     )
   }
   const router = createBrowserRouter([
@@ -90,6 +85,10 @@ const App = () => {
         {
           path: '/home/more',
           element : <HomeDetail/>
+        },
+        {
+          path : 'success',
+          element :<ThankOrder />
         },
         {
           path : '/login',
@@ -118,10 +117,6 @@ const App = () => {
         {
           path : '/orderCart',
           element :<CartOrder />
-        },
-        {
-          path : '/thankOrder',
-          element :<ThankOrder />
         },
         {
           path: '/profile',
