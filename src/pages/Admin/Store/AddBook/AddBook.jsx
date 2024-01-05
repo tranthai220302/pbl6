@@ -88,7 +88,7 @@ function AddBook({id,  getData}) {
       newRequest
         .post(`/book/create/${id}`, bookPost)
         .then((res) => {
-          getData('');
+          getData(1);
           toast.success('Thêm sách thành công!', {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 2000,
