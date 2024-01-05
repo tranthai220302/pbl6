@@ -6,7 +6,17 @@ import Tabs from 'react-bootstrap/Tabs';
 import newRequest from '../../../ults/NewRequest';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash, faReply, faMessage, faClose, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-
+import { toast } from 'react-toastify';
+const notify = (er, message) => toast[er](message, {
+  position: "top-right",
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: "light",
+});
 const EditStore = ({ item, setOpenedit, getDataVoucher }) => {
   console.log(item.DetailStore)
   const [formData, setFormData] = useState({
@@ -66,10 +76,11 @@ const EditStore = ({ item, setOpenedit, getDataVoucher }) => {
   return (
     <div className={styles.overlay}>
       <div className={styles.editForm}>
-      <div className={styles.FormTitle}>
+          <div className={styles.FormTitle}>
             <h3>Thay đổi thông tin cửa hàng</h3>
             <FontAwesomeIcon className={styles.CloseForm} icon={faClose} onClick={() => setOpenedit(false)} />
-          </div>        <label htmlFor="name">Tên cửa hàng: </label>
+          </div>        
+        <label htmlFor="name">Tên cửa hàng: </label>
         <input type="text" name="name" value={formData.name} onChange={handleChange} />
         <label htmlFor="logo">Avatar cửa hàng: </label>
         {/* Hidden file input */}
@@ -86,7 +97,7 @@ const EditStore = ({ item, setOpenedit, getDataVoucher }) => {
         </div>
 
         <label htmlFor="description">Mô tả cửa hàng: </label>
-<input type="text" name="description" value={formData.description} onChange={handleChange} />
+        <input type="text" name="description" value={formData.description} onChange={handleChange} />
         <label htmlFor="address">Địa chỉ: </label>
         <input type="text" name="address" value={formData.address} onChange={handleChange} />
         <button onClick={updateVoucherItem} className={styles.button}>
@@ -249,7 +260,7 @@ const Add = ({ setOpenedit, id, getDataVoucher }) => {
     </div>
   );
 };
-const Feedback = ({ setOpenedit, item, getDataVoucher }) => {
+const Feedback = ({ setOpenedit, item, getDataStar }) => {
 
   const handleChange = (e) => {
     setReply(e.target.value)
@@ -263,10 +274,8 @@ const Feedback = ({ setOpenedit, item, getDataVoucher }) => {
     else {
       api = "/feedBack/create/"
     }
-
-    const apiEndpoint = `${api}${item.id}`;
+    const apiEndpoint = `${api}${item.FeedBack.id}`;
     const requestMethod = item.FeedBack? 'put' : 'post';
-
     newRequest[requestMethod](apiEndpoint, {
       "desc": reply
 }, {
@@ -274,10 +283,13 @@ const Feedback = ({ setOpenedit, item, getDataVoucher }) => {
     }).then(
       (res) => {
         console.log(res.data);
+        getDataStar();
         setOpenedit(false);
+        notify("success","Thêm thành công");
       }
     ).catch((error) => {
       console.error(error);
+      notify("error","Thất bại");
     });
 
   };
@@ -633,7 +645,7 @@ export default function StoreManage({ Submenu, SetSubmenu }) {
       {openedit === "edit" && <Edit item={idvoucher} setOpenedit={setOpenedit} getDataVoucher={getDataVoucher} />}
       {openedit === "add" && <Add setOpenedit={setOpenedit} id={currentUser.id} />}
       {openedit === "editstore" && <EditStore item={data} setOpenedit={setOpenedit} />}
-      {openedit === "feedback" && <Feedback item={datareview} setOpenedit={setOpenedit} />}
+      {openedit === "feedback" && <Feedback item={datareview} setOpenedit={setOpenedit} getDataStar={getDataStar}/>}
       {openedit === "delete" && <Delete item={idvoucher} setOpenedit={setOpenedit} getDataVoucher={getDataVoucher} />}
     </div >
   );

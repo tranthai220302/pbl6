@@ -54,6 +54,7 @@ const App = () => {
   const Layout = () =>{
     const isAdminPage = useLocation().pathname.includes('/admin');
     const isStorePage = useLocation().pathname.includes('/store');
+    const isShipperPage = useLocation().pathname.includes('/shipper');
     const isLoginPage = useLocation().pathname.includes('/login');
     const isRegisterPage = useLocation().pathname.includes('/register');
     console.log(openChat)
@@ -63,7 +64,7 @@ const App = () => {
       <QuantityProvider>
           <QueryClientProvider client={queryClient}>
           <div className="app">
-            {!isAdminPage && !isLoginPage && !isRegisterPage && !isStorePage && (<Header setOpenChat={setOpenChat} />)}
+            {!isAdminPage && !isLoginPage && !isRegisterPage && !isStorePage && !isShipperPage && (<Header setOpenChat={setOpenChat} />)}
             {isAdminPage && <SliderMenu />}
             <Outlet />
             {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
