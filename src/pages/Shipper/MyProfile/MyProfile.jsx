@@ -1,66 +1,121 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './MyProfile.module.css';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenSquare, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
+import newRequest from '../../../ults/NewRequest';
+
+// ... (your other imports)
+
+// ... (your other imports)
 
 export default function MyProfile() {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const [openEdit, setOpenEdit] = useState(false);
+  const [data, setData] = useState([]);
 
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    email: '',
-    phone: '',
     address: '',
+    phone: '',
+    avata:'',
+    age: '',
+    drivingLicense: '',
+    numMotorbike: '',
   });
+
+  const GetOrder = () => {
+    newRequest.get(`/user/detailShipper/${currentUser.id}`, {
+      withCredentials: true,
+    }).then(
+      (res) => {
+        console.log(res.data[0].userShipper);
+        setFormData({
+          ...formData,
+          firstName: res?.data[0]?.userShipper?.firstName,
+          lastName: res?.data[0]?.userShipper?.lastName,
+          address: res?.data[0]?.userShipper?.address,
+          phone: res?.data[0]?.userShipper?.phone,
+          avata: res?.data[0]?.userShipper?.avata,
+          age: res?.data[0]?.userShipper?.age,
+          drivingLicense: res?.data[0]?.drivingLience,
+          numMotorbike: res?.data[0]?.numMobike,
+        });
+        setData(res?.data[0]);
+      }
+    ).catch((error) => {
+      console.error(error);
+    });
+  };
+  
+
+  useEffect(() => {
+    GetOrder();
+  }, []);
 
   const updateProfile = async () => {
     try {
-      const response = await axios.put(`/api/updateProfile/${currentUser.id}`, formData);
+      const formDataObject = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        address: formData.address,
+        phone: formData.phone,
+        age: formData.age,
+        drivingLience: formData.drivingLicense,
+        numMobike: formData.numMotorbike,
+      };
+      
+  
+      const response = await newRequest.put(`/shippemt/edit`, formDataObject, {
+        withCredentials: true,
+      });
+  
       console.log(response.data);
       toast.success('Thông tin đã được cập nhật thành công!');
       setOpenEdit(false);
+      GetOrder();
     } catch (error) {
       console.error('Có lỗi khi cập nhật thông tin:', error.message);
       toast.error('Đã xảy ra lỗi khi cập nhật thông tin.');
     }
   };
+  
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const EditStore = ({ setOpenedit }) => {
-    const [formData, setFormData] = useState({
-      name: '',
-      logo: null,
-      description: '',
-      address: '',
-    });
-  
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    };
-  
     return (
       <div className={styles.overlay}>
         <div className={styles.editForm}>
           <h3>Thay đổi thông tin người giao hàng</h3>
           <label htmlFor="firstName">First Name: </label>
-          <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} placeholder={currentUser.firstName} />
+          <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} />
+          
           <label htmlFor="lastName">Last Name: </label>
-          <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder={currentUser.lastName} />
-          <label htmlFor="email">Email: </label>
-          <input type="text" name="email" value={formData.email} onChange={handleChange} placeholder={currentUser.email} />
-          <label htmlFor="phone">Số điện thoại: </label>
-          <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder={currentUser.phone}/>
+          <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} />
+
           <label htmlFor="address">Địa chỉ: </label>
-          <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder={currentUser.address} />
-          <button onClick={updateProfile} className={styles.button} >
+          <input type="text" name="address" value={formData.address} onChange={handleChange} />
+
+          <label htmlFor="phone">Số điện thoại: </label>
+          <input type="text" name="phone" value={formData.phone} onChange={handleChange} />
+
+          <label htmlFor="age">Tuổi: </label>
+          <input type="text" name="age" value={formData.age} onChange={handleChange} />
+
+          <label htmlFor="drivingLicense">Bằng lái: </label>
+          <input type="text" name="drivingLicense" value={formData.drivingLicense} onChange={handleChange} />
+
+          <label htmlFor="numMotorbike">Số xe máy: </label>
+          <input type="text" name="numMotorbike" value={formData.numMotorbike} onChange={handleChange} />
+
+          <button onClick={updateProfile} className={styles.button}>
             Lưu thay đổi
           </button>
           <button className={styles.btn_cancel} onClick={() => setOpenedit(false)}>
@@ -87,23 +142,32 @@ export default function MyProfile() {
               </colgroup>
               <tr>
                 <th>Tên đăng nhập</th>
-                <td>{currentUser.username}</td>
+                <td>{data.userShipper?.username}</td>
               </tr>
               <tr>
                 <th>Họ và tên</th>
-                <td>{currentUser.firstName + ' ' + currentUser.lastName}</td>
-              </tr>
-              <tr>
-                <th>Email</th>
-                <td>{currentUser.email}</td>
-              </tr>
-              <tr>
-                <th>Số điện thoại</th>
-                <td>{currentUser.phone}</td>
+                <td>{data.userShipper?.firstName + ' ' + data.userShipper?.lastName}</td>
               </tr>
               <tr>
                 <th>Địa chỉ</th>
-                <td>{currentUser.address}</td>
+                <td>{data.userShipper?.address}</td>
+              </tr>
+              <tr>
+                <th>Số điện thoại</th>
+                <td>{data.userShipper?.phone}</td>
+              </tr>
+              <tr>
+                <th>Tuổi</th>
+                <td>{data.userShipper?.age}</td>
+              </tr>
+              <tr>
+                <th>Bằng lái</th>
+                <td>{data.drivingLience}</td>
+              </tr>
+              <tr>
+                <th>Số xe máy</th>
+                <td>{data.numMobike
+}</td>
               </tr>
             </table>
           </div>
@@ -118,3 +182,4 @@ export default function MyProfile() {
     </div>
   );
 }
+
