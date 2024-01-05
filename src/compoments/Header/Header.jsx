@@ -7,8 +7,7 @@ import { faUser, faCartShopping, faBell, faSearch, faBook, faHouse} from '@forta
 import { Link } from 'react-router-dom';
 import newRequest from '../../ults/NewRequest';
 import React, { useContext, useEffect, useState } from 'react';
-import { isEqual } from 'lodash';
-export default function Header({setOpenChat, setName, name}) {
+export default function Header({setOpenChat}) {
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
   const [userData, setUserData] = useState();
@@ -34,7 +33,7 @@ export default function Header({setOpenChat, setName, name}) {
   const handleNotificationClick = () => {
     setShowNotification(!showNotification);
   };
- 
+
   const handleSearch = (name) =>{
     navigate('/booklist')
   }
