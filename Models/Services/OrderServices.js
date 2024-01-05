@@ -90,7 +90,6 @@ export const createOrderPaymentOnlieService = async (total, quantity, addressCus
                     ]
                 }
             })
-            if(delete_FreeShip === 0) return createError(400, 'Order không thành công!')
         }
         if(!order) return createError(400, 'Order không thành công!');
         return order;
@@ -110,7 +109,6 @@ export const createOrderByManyBookService = async(bookId, customer_id, quantity,
                     ]
                 }
             })
-            if(delete_FreeShip === 0) return createError(400, 'Order không thành công!')
         }
         const arrOrder = [];
         for(let i = 0; i < bookId.length; i++){

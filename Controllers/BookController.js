@@ -176,7 +176,7 @@ export const getBookBoughtHigh = async(req, res, next) =>{
 export const getBookFlashSale = async(req, res, next) =>{
     try {
         const date = new Date();
-        const book = await getBookFlashSaleService("9h-10h", date);
+        const book = await getBookFlashSaleService("9h-11h", date);
         if(book instanceof Error) return next(book);
         return res.status(200).send(book)
     } catch (error) {
