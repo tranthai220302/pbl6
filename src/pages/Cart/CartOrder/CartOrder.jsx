@@ -134,6 +134,12 @@ export default function CartOrder() {
             autoClose: 2000, 
           });
           setIsLoadingOrder(false)
+          localStorage.removeItem('arrQuantity');
+          localStorage.removeItem('arrIdBook');
+          localStorage.removeItem('address');
+          localStorage.removeItem('books');
+          localStorage.removeItem('quantity');
+          localStorage.removeItem('priceTotal');
           navigate('/orderSuccess/thankOrder')
       }).catch((error)=>{
         toast.error(error.response.data, {

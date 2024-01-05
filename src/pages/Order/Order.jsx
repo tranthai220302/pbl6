@@ -44,6 +44,12 @@ export default function Order() {
                 idVoucher
             });
             window.location.href = res.data;
+            localStorage.removeItem('arrQuantity');
+            localStorage.removeItem('arrIdBook');
+            localStorage.removeItem('address');
+            localStorage.removeItem('books');
+            localStorage.removeItem('quantity');
+            localStorage.removeItem('priceTotal');
         }
         if(isOffline){
           setIsPendingOrder(true);
@@ -63,6 +69,12 @@ export default function Order() {
                   });
               setIsPendingOrder(false);
               setErrorOrder(false);
+              localStorage.removeItem('arrQuantity');
+              localStorage.removeItem('arrIdBook');
+              localStorage.removeItem('address');
+              localStorage.removeItem('books');
+              localStorage.removeItem('quantity');
+              localStorage.removeItem('priceTotal');
               navigate('/orderSuccess/thankOrder')
           } catch (error) {
               toast.error(error.response.data, {
