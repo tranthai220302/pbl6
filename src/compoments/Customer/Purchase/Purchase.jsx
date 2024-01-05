@@ -5,12 +5,48 @@ import { faMessage, faStore, faTableList, faTicket, faLink, faKey} from '@fortaw
 import newRequest from '../../../ults/NewRequest'
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import { confirmAlert } from 'react-confirm-alert'; 
+import { toast } from 'react-toastify';
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
 export default function Purchase() {
     const [selectedFilter, setSelectedFilter] = useState('all');
+    const [isPendingDelete, setIsPendingDelete] = useState(false);
     const [isPending, setIsPending] = useState(false);
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
     const [idState, setIdState] = useState(1);
+    const submit = (id) => {
+        confirmAlert({
+          title: 'Xác nhận xoá',
+          message: `Bạn có chắc muốn xoá đơn hàng này không?`,
+          buttons: [
+            {
+              label: 'Có',
+              onClick: () => handleDelte(id)
+            },
+            {
+              label: 'Không',
+              onClick: () => console.log('Click Không')
+            }
+          ]
+        });
+      };
+    const handleDelte = (id) =>{
+        setIsPendingDelete(true);
+        newRequest.delete(`/order/delete/${id}`).then((res)=>{
+            toast.success('Xoá thành công!', {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 2000, 
+            });
+            fetchPurchases(0);
+        }).catch((error)=>{
+            toast.error(error.response.data, {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 2000, 
+            });
+            setIsPendingDelete(false)
+        })
+    }
     const handleFilterChange = (id) => {
         setIdState(id);
         fetchPurchases(id)
@@ -84,7 +120,7 @@ export default function Purchase() {
                 )}
             </div>
             <div className={styles.Purchase_Product}>
-                {filteredPurchases && filteredPurchases.map((purchase, index) => (
+                {filteredPurchases && !isPending && !error && filteredPurchases.map((purchase, index) => (
                     <div className={styles.Purchase_Product_Item}>
                         <table>
                             <colgroup>
@@ -130,15 +166,18 @@ export default function Purchase() {
                             </td>
                             {
                                 idState == 1 &&(
-                                    <td style={{cursor: 'pointer', color : 'red', fontSize : '13px'}}>Huỷ Đơn</td>
+                                    <td style={{cursor: 'pointer', color : 'red', fontSize : '13px'}}  onClick={()=>{submit(purchase.id)}}>Huỷ Đơn</td>
                                 )
                             }
                             {
                                 idState == 2 &&(
-                                    <td style={{cursor: 'pointer', color : 'red', fontSize : '13px'}}>Huỷ Đơn</td>
+                                    <td style={{cursor: 'pointer', color : 'red', fontSize : '13px'}} onClick={()=>{submit(purchase.id)}}>Huỷ Đơn</td>
                                 )
                             }
                         </table>
+                        {error && (
+                            <div>Không có đơn hàng</div>
+                        )}
                     </div>
                 ))}
             </div>
