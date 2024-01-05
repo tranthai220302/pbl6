@@ -71,7 +71,6 @@ export const getOdrderByStore = async (req, res, next) =>{
 }
 export const deleteOrder = async(req, res, next) =>{
     try {
-        if(req.idRole !== 2 && req.idRole !== 4) return createError(400, 'Bạn không có quyền này!')
         const delete_order = await deleteOrderService(req.params.id);
         if(delete_order instanceof Error) next(delete_order);
         res.status(200).send(delete_order)
@@ -104,7 +103,7 @@ export const drawPrecentSatiscal = async(req, res, next) =>{
 
 export const revenueStoreByMonth = async(req, res, next) =>{
     try {
-        if(req.idRole !== 4) return createError(400, 'Bạn không có quyền này!');
+        if(req.idRole !== 4 && req.idRole !== 2) return createError(400, 'Bạn không có quyền này!');
         const doanhhthu = await revenueStoreByMonthService(req.params.id, req.body.month);
         if(doanhhthu instanceof Error) return next(doanhhthu);
         res.status(200).send(doanhhthu)

@@ -499,13 +499,14 @@ export const getBookBoughtHighService = async() =>{
     }
 }
 export const getBookFlashSaleService = async(time, date) =>{
+    console.log(date)
     try {
         if(!time) return createError(400, 'Không tìm thấy thời gian Flash Sale')
         const book = await db.book.findAll({
             where : {
                 [Op.and] : [
                     {isFlashSale : 1},
-                    {timeFlashSale : time},
+                    {timeFlashSale : "9h-11h"},
                     Sequelize.literal(`DATE(dateFlashSale) = '${date.toISOString().split('T')[0]}'`)
                 ]
             },
