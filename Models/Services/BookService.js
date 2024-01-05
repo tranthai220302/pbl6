@@ -271,8 +271,10 @@ export const getBookByQueryService = async(filter, category, author, page, bookP
                     [Op.and] : [filter]
                 },
             });
+            console.log(bookPerPage)
             console.log(count.length)
-            const numpage = Math.ceil(count.length/16)
+            console.log(count.length)
+            const numpage = Math.ceil(count.length/bookPerPage)
             if (!booksByQuery || booksByQuery.length === 0) {
                 return createError(400, "Không tìm thấy sách!");
             }

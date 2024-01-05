@@ -7,7 +7,7 @@ const configdb = {
     DB: process.env.db,
     dialect: process.env.dialect,
     pool: {
-        max: 5,
+        max: 3,
         min: 0,
         acquire: 30000,
         idle: 10000

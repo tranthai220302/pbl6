@@ -60,7 +60,7 @@ cron.schedule('0 0 * * *', async () => {
       where: {
           dateFlashSale: { [Op.lt]: currentDate }
       }
-  });
+  }); 
   console.log('Đã cập nhật sách đã hết hạn FlashSale.');
 });
 // await db.sequelize.sync({

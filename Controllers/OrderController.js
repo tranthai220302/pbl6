@@ -214,7 +214,7 @@ export const createPaymentUrl = async(req, res, next) =>{
         }else{
             amount = amount1
         }
-        let returnUrl = `http://localhost:8080/api/order/vnpay_return`;
+        let returnUrl = `https://www.harumi.store/api/order/vnpay_return`;
         let orderId = moment(date).format('DDHHmmss');
         console.log(amount)
         let bankCode =  "";  
@@ -319,7 +319,7 @@ export const vpnayReturn = async(req, res, next) =>{
                 data?.BookId,
                 data?.customer_id,
                 data?.quantity,
-                data?.addressCustomer,
+                data?.addressCus,
                 data?.priceShip,
                 data?.priceFreeShip,
                 data?.priceFreeVoucher,
@@ -331,7 +331,7 @@ export const vpnayReturn = async(req, res, next) =>{
              order = await createOrderPaymentOnlieService(
                 data?.total,
                 data?.quantity,
-                data?.addressCustomer,
+                data?.addressCus,
                 data?.BookId,
                 data?.customer_id,
                 data?.priceShip,
@@ -342,7 +342,7 @@ export const vpnayReturn = async(req, res, next) =>{
         }
         if(!order) return next(createError(400, 'Order không thành công!'))
         if(order instanceof Error) return next(order);
-        res.render('success', {code: vnp_Params['vnp_ResponseCode']})
+        res.redirect('https://www.harumi.website/orderSuccess/thankOrder');
     } catch (error) {
         next(error);
     }
