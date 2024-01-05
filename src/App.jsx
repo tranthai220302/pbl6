@@ -87,7 +87,7 @@ const App = () => {
           element : <HomeDetail/>
         },
         {
-          path : '/success',
+          path : 'success',
           element :<ThankOrder />
         },
         {
