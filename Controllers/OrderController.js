@@ -274,7 +274,7 @@ export const createPaymentUrl = async(req, res, next) =>{
                 idCart : req.body.idCart
             };
         }
-        console.log(req.body.idBook)
+        console.log(data)
         vnp_Params['vnp_SecureHash'] = signed;
         vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
         res.status(200).send(vnpUrl)
@@ -313,13 +313,14 @@ export const vpnayReturn = async(req, res, next) =>{
         let signData = querystring.stringify(vnp_Params, { encode: false });   
         let hmac = crypto.createHmac("sha512", secretKey);
         let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
-        let order = null;   
+        let order = null; 
+        console.log(data)  
         if(data.idCart){
             order = await createOrderByManyBookService(
                 data?.BookId,
                 data?.customer_id,
                 data?.quantity,
-                data?.addressCus,
+                data?.addressCustomer,
                 data?.priceShip,
                 data?.priceFreeShip,
                 data?.priceFreeVoucher,
@@ -331,7 +332,7 @@ export const vpnayReturn = async(req, res, next) =>{
              order = await createOrderPaymentOnlieService(
                 data?.total,
                 data?.quantity,
-                data?.addressCus,
+                data?.addressCustomer,
                 data?.BookId,
                 data?.customer_id,
                 data?.priceShip,
