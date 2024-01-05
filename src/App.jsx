@@ -87,6 +87,10 @@ const App = () => {
           element : <HomeDetail/>
         },
         {
+          path : '/success',
+          element :<ThankOrder />
+        },
+        {
           path : '/login',
           element: <Login/>
         },
@@ -113,10 +117,6 @@ const App = () => {
         {
           path : '/orderCart',
           element :<CartOrder />
-        },
-        {
-          path : '/orderSuccess/thankOrder',
-          element :<ThankOrder />
         },
         {
           path: '/profile',
