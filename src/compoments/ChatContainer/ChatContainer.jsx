@@ -28,7 +28,7 @@ export default function ChatContainer({ currentChat, userChat, setOpenChat, isCh
 
   useEffect(() => {
     if (user) {
-      const newSocket = io("http://localhost:8080");
+      const newSocket = io("https://www.harumi.store/");
       newSocket.emit("add-user", user.id);
       setSocket(newSocket);
     }

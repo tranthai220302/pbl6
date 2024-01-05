@@ -15,6 +15,7 @@ import GraphLine from '../../../pages/Admin/Store/DoanhThu/GrapLine/GrapLine';
 import ReactApexChart from 'react-apexcharts';
 import { parseJSON } from 'date-fns';
 import AddBook from '../../../pages/Admin/Store/AddBook/AddBook';
+import Chat from '../../../pages/Chat/Chat';
 
 export default function BodyHomeStore({managebook,manageorder,managestore,analysis,setAll,all,StateId1,StateId6,StateId7}) {
     const [error, setError] = useState(null);
@@ -615,7 +616,7 @@ export default function BodyHomeStore({managebook,manageorder,managestore,analys
             
             )}
             
-            
+            <Chat />
         </div>
     )
 }

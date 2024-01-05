@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import { confirmAlert } from 'react-confirm-alert'; 
 import 'react-confirm-alert/src/react-confirm-alert.css'; 
+import Chat from '../../../pages/Chat/Chat';
 const notify = (er, message) => toast[er](message, {
   position: "top-right",
   autoClose: 5000,
@@ -656,6 +657,7 @@ export default function StoreManage({ Submenu, SetSubmenu }) {
       {openedit === "editstore" && <EditStore item={data} setOpenedit={setOpenedit} />}
       {openedit === "feedback" && <Feedback item={datareview} setOpenedit={setOpenedit} getDataStar={getDataStar}/>}
       {openedit === "delete" && <Delete item={idvoucher} setOpenedit={setOpenedit} getDataVoucher={getDataVoucher} />}
+      <Chat />
     </div >
   );
 }

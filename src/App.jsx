@@ -115,7 +115,7 @@ const App = () => {
           element :<CartOrder />
         },
         {
-          path : '/order/thankOrder',
+          path : '/orderSuccess/thankOrder',
           element :<ThankOrder />
         },
         {
