@@ -166,7 +166,7 @@ export const sendRequireShipper = async(req, res, next) =>{
         const filter = {
             ...(req.body.drivingLience && {drivingLience : req.body.drivingLience}),
             ...(req.body.numMobike && {numMobike : req.body.numMobike}),
-            ...(req.body.img && {avatar : req.body.img}),
+            ...(req.body.img && {image_drivingLience : req.body.img}),
             ...(req.id && {customer_id : req.id}),
             isConfirm : false
         }
