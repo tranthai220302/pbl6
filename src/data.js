@@ -26,9 +26,9 @@ export const itemsCustomer = [
         navigate : '/admin/customer'
     },
     {
-        name : "Tìm kiếm",
-        navigate : '/admin/customer'
-    },
+        name : 'Thêm khách hàng',
+        navigate : '/admin/adCustomer'
+    }
 ];
 export const itemsShipper = [
     "Danh sách",
@@ -41,3 +41,15 @@ export const itemsVoucher = [
         navigate : '/admin/voucher'
     },
 ];
+export const itemFlashSale = [
+    {
+        name : "Cửa hàng đăng ký FlashSale",
+        navigate : '/admin/flashSale'
+    }
+]
+export const itemCategory = [
+    {
+        name : "Danh sách thể loại",
+        navigate : '/admin/category'
+    },
+]

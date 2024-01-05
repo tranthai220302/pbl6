@@ -6,7 +6,7 @@ import { render } from '@testing-library/react';
 import { useEffect } from 'react';
 import newRequest from '../../ults/NewRequest';
 import { Link } from 'react-router-dom';
-
+import { itemFlashSale } from '../../data';
 export default function SideBar({ category, setCategory, price_min, setPrice_min, price_max, setPrice_max, author, setAuthor, languages, setLanguage, nhaXB, setNhaXB }) {
     const [datacate, setDatacate] = useState([]);
     const [dataAuth, setDataAuthor] = useState([]);

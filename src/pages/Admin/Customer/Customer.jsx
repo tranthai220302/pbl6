@@ -11,6 +11,9 @@ import ModalUpdate from '../../../compoments/ModalUpdate/ModalUpdate';
 import newRequest from '../../../ults/NewRequest';
 import { Navbar } from 'react-bootstrap';
 import NavbarAdmin from '../NavbarAdmin/NavbarAdmin';
+import { confirmAlert } from 'react-confirm-alert'; 
+import { toast } from 'react-toastify';
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
 export default function Customer() {
   const [selectedCustomer, setSelectedCustomer] = useState(null); 
   const [selectedCustomerUpdate, setSelectedCustomerUpdate] = useState(null); 
@@ -18,12 +21,14 @@ export default function Customer() {
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(true);
   const [data, setData] = useState(null);
-  const getData = (name)=>{
+  const [numPage, setNumpage] = useState(null)
+  const getData = (name, page)=>{
     setIsPending(true);
-    newRequest.get(`/user/search/1?name=${name}`, {
+    newRequest.get(`/user/search/1?name=${name}&page=${page}`, {
     }).then(
       (res) => {
-        setData(res.data)
+        setData(res.data.users)
+        setNumpage(res.data.numPage);
         setIsPending(false);
         setError(false)
       }
@@ -33,25 +38,43 @@ export default function Customer() {
     })
   }
   useEffect(()=>{
-    getData('');
+    getData('', 1);
   }, [])
   const handleclick = (name) =>{
-    getData(name)
+    getData(name, 1)
   }
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       handleclick(name);
     }
   };
+  const submit = (id) => {
+
+    confirmAlert({
+      title: 'Xác nhận xoá',
+      message: `Bạn có chắc muốn xoá người dùng này không?`,
+      buttons: [
+        {
+          label: 'Có',
+          onClick: () => handleDeleteClick(id)
+        },
+        {
+          label: 'Không',
+          onClick: () => console.log('Click Không')
+        }
+      ]
+    });
+  };
   const handleDeleteClick = (id) => {
-    const confirmed = window.confirm('Bạn có muốn xoá người dùng này không ?');
-  
-    if (confirmed) {
         newRequest.delete(`/user/delete/${id}`, {
           withCredentials: true
         })
         .then((res) => {
           console.log(res.data);
+          toast.success('Xoá thành công!', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000, 
+        });
           getData('')
         })
         .catch((error) => {
@@ -59,13 +82,12 @@ export default function Customer() {
           console.log(error)
           setIsPending(false);
         });
-    }
   };
   
   return (
     <div className={styles.container}>
         <div className={styles.customer}>
-          <NavbarAdmin />
+          <NavbarAdmin getData={getData}/>
           <div className={styles.content}>
             <div className={styles.list}>
               <div className={styles.table1}>
@@ -82,7 +104,7 @@ export default function Customer() {
                   </tr>
                 </thead>
                 <tbody>
-                  {!error && data && data.map((customer) => (
+                  {!error && !isPending && data && data.map((customer) => (
                     <tr key={customer.id}>
                       {selectedCustomerUpdate && (
                         <ModalUpdate customer={selectedCustomerUpdate} showUpdate={true} handleCloseUpdate={() => setSelectedCustomerUpdate(null)} getData={getData} />
@@ -91,14 +113,14 @@ export default function Customer() {
                         <ModalCustomer customer={selectedCustomer} show={true} handleClose={() => setSelectedCustomer(null)} />
                       )}
                       <td>
-                        <img src="https://saigonpavillon.com.vn/wp-content/uploads/2022/10/avatar-cute-nam-6.jpg" alt="Avatar" width="50" height="50" />
+                        <img src={customer.avatar} alt="Avatar" width="50" height="50" />
                       </td>
                       <td>{customer.firstName} {customer.lastName}</td>
                       <td>{customer.address}</td>
                       <td>0{customer.phone}</td>
                       <td>
                         <button>
-                        <FontAwesomeIcon icon={faTrash} className={styles.user_icon} onClick={()=>{handleDeleteClick(customer.id)}} />
+                        <FontAwesomeIcon icon={faTrash} className={styles.user_icon} onClick={()=>{submit(customer.id)}} />
                         </button>
                       </td>
                       <td>
@@ -123,7 +145,11 @@ export default function Customer() {
                 )}
                 {error && (<div className={styles.error}>{error}</div>)}
               </div>
-
+              <div className={styles.num_page}>
+                    {numPage && !isPending && numPage > 1 && [...Array(numPage)].map((_, index) => (
+                        <span key={index + 1} onClick={()=>{getData('',index+1)}}>{index + 1}</span>
+                    ))}
+                </div>
             </div>
             <div className={styles.draw}>
               <div className={styles.draw_line}>

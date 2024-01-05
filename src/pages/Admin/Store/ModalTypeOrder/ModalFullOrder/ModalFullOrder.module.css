@@ -1,0 +1,369 @@
+.ViewStore {
+    background-color: #DFF4F6;
+    padding: 0 calc(100vw/15);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+.Store_In{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background-color: white;
+    border-radius: 4px;
+    padding: 20px 20px 0 20px;
+}
+.category1{
+    display: flex;
+    list-style: none;
+    margin-top: 10px;
+    justify-content: space-around;
+    margin-bottom: 0px;
+    width: 100%;
+
+}
+.category1 li {
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 5px; /* Khoảng cách giữa các li */
+}
+
+.category1 li::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 2px;
+    background-color: red;
+    transform: scaleX(0);
+    transform-origin: 100% 50%;
+    transition: transform 0.3s ease;
+}
+
+.category1 li:hover::after,
+.category1 li.selectedLi::after {
+    transform: scaleX(1);
+}
+
+.avt_store img {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.Store_Voucher{
+    background-color: white;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.Store_Inf {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.Store_Content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.Store_name {
+    font-weight: bold;
+    font-size: 16px;
+    margin-left: 10px;
+    text-transform: uppercase;
+}
+
+.Store button {
+    width: 100px;
+    padding: 4px 6px;
+    font-size: small;
+    margin-left: 10px;
+
+}
+.home_item .title {
+    background-color: #BEDDDD;
+    height: 50px;
+    font-size: 30px;
+    font-weight: bold;
+    padding-left: 20px;
+    vertical-align: middle;
+    border-radius: 4px 4px 0 0;
+}
+
+.home_item .title span {
+    display: flex;
+}
+.Store button span{
+    text-transform: none;
+    padding-left: 6px;
+}
+
+.Store_Des {
+    border-left: solid 1px #4EA58B;
+}
+
+.Store_Des td {
+    padding-left: 20px;
+}
+
+.Store_Des_Icon {
+    color: #4EA58B;
+    margin-right: 10px;
+}
+.content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 20px;
+    gap: 40px;
+    width: 100%;
+    background-color: white;
+}
+
+.productContainer {
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+  }
+
+.product {
+    display: flex;
+    flex-direction: column; /* Hiển thị các phần tử theo chiều dọc */
+    margin-right: 20px;
+    cursor: pointer;
+    align-items: center;
+    border : 1px solid gray;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 10px 5px 0 5px;
+    border-radius: 10px;
+}
+.dm{
+    height: 30px;
+    width: 30px;
+}
+
+.old_price {
+    font-size: 14px;
+    color: gray;
+    text-decoration: line-through;
+}
+
+.percentDiscount {
+    background-color: #B31C1C;
+    color: white;
+    margin-left: 10px;
+    padding: 0 10px;
+    border-radius: 4px;
+}
+
+.product button {
+    border-radius: 24px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 10px auto;
+    font-weight: 500;
+}
+
+.current_price {
+    background-color: white;
+    color: white;
+    margin-left: 10px;
+    padding: 0 10px;
+    border-radius: 4px;
+}
+.num_page {
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+  
+.num_page span {
+margin: 0 5px;
+padding: 5px 10px;
+border: 1px solid #ccc;
+cursor: pointer;
+
+}   
+  
+.num_page span:hover {
+background-color: #f0f0f0;
+}
+.bo{
+    display: flex;
+    gap: 10px;
+}
+.background {
+    width: 90%;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    margin: auto;
+    position: relative;
+}
+.booklist {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.line {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.book_item {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    margin-bottom: 20px;
+}
+
+.book_item img {
+    height: 190px;
+    width: 100%;
+
+}
+
+.old_price {
+    font-size: 14px;
+    color: gray;
+    text-decoration: line-through;
+}
+
+.book_item button {
+    background-color: #4EA58B;
+    border-radius: 24px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 10px auto;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.book_item button:hover {
+    background-color: green;
+}
+
+.product a {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    color: black;
+}
+.navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+} 
+
+.navbar_main_img {
+    margin-top: 20px;
+    width: 100%;
+    /* height: 340px; */
+    justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.navbar_child_img {
+    display: flex;
+    flex-direction: row; /* Hiển thị các phần tử theo chiều ngang */
+    align-items: center;
+    width: 100%; 
+    justify-content: space-between;
+    /* margin-top: 10px; */
+}
+
+.navbar_child_img img{
+    height: 200px;
+    width: calc(100%/4);
+    border: 2px solid #DFF4F6;
+    /* margin: 5px; */
+    /* width: calc(100%/3); */
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: row; /* Hiển thị các phần tử theo chiều ngang */
+    align-items: center;
+    width: 100%; 
+    justify-content: space-between;
+    height: 120px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.menu .menu_item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    cursor: pointer;
+}
+
+.menu .menu_item img {
+    height: 60px;
+    width: 60px;
+}
+
+.home_item {
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.home_item .title {
+    background-color: #BEDDDD;
+    height: 50px;
+    font-size: 30px;
+    font-weight: bold;
+    padding-left: 20px;
+    vertical-align: middle;
+    border-radius: 4px 4px 0 0;
+}
+
+.home_item .title span {
+    display: flex;
+}
+.editBlock{
+    position: absolute;
+    z-index: 999;
+    width: 150px;
+}
+.editBlock ul{
+    list-style: none;
+    background-color: white;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border-radius: 5px;
+}
+.editBlock ul li {
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 0 5px;
+}
+.editBlock ul li:hover {
+    background-color: rgb(183, 179, 179);
+}

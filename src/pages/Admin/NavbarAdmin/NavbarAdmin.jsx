@@ -4,9 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from "react-router-dom";
 import newRequest from '../../../ults/NewRequest';
 import { faTrash, faPenToSquare, faCircleInfo,  faUser, faCartShopping, faBell, faSearch, faBook, faHouse} from '@fortawesome/free-solid-svg-icons';
-function NavbarAdmin() {
+function NavbarAdmin({flashSale, setDate, handleSearch, getData, isNoSearch}) {
     const [user, setUser] = useState(null);
     const [open, setOpen] = useState(false);
+    const [name, setName] = useState(null)
     const [userData, setUserData] = useState();
     // const [openchat, setOpenchay] = useState(false);
     const navigate = useNavigate();
@@ -37,12 +38,29 @@ function NavbarAdmin() {
       ):(
         <div className={styles.header}>
             <div className={styles.left}>
+              {flashSale ? (
+                <div className={styles.search}>
+                  <input className={styles.input_search} type="date" placeholder='Tìm kiếm' onChange={(e)=>{setDate(e.target.value)}}/>
+                  <button className={styles.btn_search} onClick={()=>{handleSearch()}}>
+                    <FontAwesomeIcon icon={faSearch} />
+                  </button>
+                </div>
+              ) : (
               <div className={styles.search}>
-                <input className={styles.input_search} type="text" placeholder='Tìm kiếm' />
-                <button className={styles.btn_search}>
-                  <FontAwesomeIcon icon={faSearch}/>
-                </button>
+                <input className={styles.input_search} type="text" placeholder='Tìm kiếm' onChange={(e) =>{setName(e.target.value)}}/>
+                {
+                  isNoSearch ? (
+                    <button className={styles.btn_search} >
+                    <FontAwesomeIcon icon={faSearch}/>
+                  </button>
+                  ) : (
+                    <button className={styles.btn_search} onClick={()=>{getData(name, 1)}}>
+                    <FontAwesomeIcon icon={faSearch}/>
+                  </button>
+                  )
+                }
               </div>
+              )}
             </div>
             <div className={styles.right}>
               <ul className={styles.list_item}>

@@ -7,13 +7,14 @@ import newRequest from '../../ults/NewRequest';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ModalCustomer from '../Modal/Modal';
 import ModalUpdate from '../ModalUpdate/ModalUpdate';
-import { faTrash, faPenToSquare, faCircleInfo, faSearch, faCheck, faXmark} from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faPenToSquare, faCircleInfo, faSearch, faCheck, faXmark, faExclamationCircle} from '@fortawesome/free-solid-svg-icons';
 import Voucher from '../../pages/Admin/Voucher/Vouher';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AddVoucher from '../../pages/Admin/Voucher/AddVoucher/AddVoucher';
 import moment from 'moment';
 import AddBook from '../../pages/Admin/Store/AddBook/AddBook';
+import ModalReport from './ModalReport/ModalReport';
 function Example({showExmaple, showCloseExample, id, isOrder, isVoucher}) {
   const [data, setData] = useState(null)
   const [isPending, setIsPending] = useState(true)
@@ -23,6 +24,7 @@ function Example({showExmaple, showCloseExample, id, isOrder, isVoucher}) {
   const [selectProductUpdate, setSelectProductUpdate] = useState(null)
   const [selectedVoucher, setSelectedVoucher] = useState(null); 
   const [nameVoucher, setNamVoucher] = useState('');
+  const [report, setReport] = useState(null);
   const getData = (name) =>{
     let url;
     if(isOrder){
@@ -42,7 +44,7 @@ function Example({showExmaple, showCloseExample, id, isOrder, isVoucher}) {
         setIsPending(false)
       });
     }else if(!isOrder && !isVoucher){
-      url = `/book/store/${id}?name=${name}`
+      url = `/report/bookReport/store/${id}`
       setIsPending(true)
       newRequest.get(url, {
         withCredentials: true
@@ -177,6 +179,9 @@ function Example({showExmaple, showCloseExample, id, isOrder, isVoucher}) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className={styles.body}>
+        {report && (
+                <ModalReport showUpdate={true} handleCloseUpdate={()=>{setReport(null)}} report = {report} getData={getData} />
+              )}
           {!isOrder && !isVoucher && (
             <div className={styles.table1}>
             <table>
@@ -184,13 +189,12 @@ function Example({showExmaple, showCloseExample, id, isOrder, isVoucher}) {
               <tr>
                 <th>Ảnh</th>
                 <th>Name</th>
-                <th>Nội dung</th>
                 <th>Giá</th>
                 <th>Số lượng</th>
                 <th>Tác giả</th>
                 <th>Thể loại</th>
-                <th>Xoá</th>
                 <th>Chỉnh sửa</th>
+                <th>Nội dung báo cáo</th>
               </tr>
             </thead>
             <tbody>
@@ -206,7 +210,6 @@ function Example({showExmaple, showCloseExample, id, isOrder, isVoucher}) {
                     <img src={product.Images[0]?.filename} alt="Avatar" width="50" height="50" />
                   </td>
                   <td>{product.name}</td>
-                  <td>{product.desc}</td>
                   <td className={styles.price}>{product.price}đ</td>
                   <td>{product.sales_number}</td>
                   <td>{product.Author?.name}</td>
@@ -214,13 +217,14 @@ function Example({showExmaple, showCloseExample, id, isOrder, isVoucher}) {
                     <span>{item.name} <br></br></span> 
                   ))}</td>
                   <td>
-                    <button>
-                    <FontAwesomeIcon  icon={faTrash} className={styles.user_icon} onClick={()=>{handleDeleteClick(product.id)}} />
+                    <button><FontAwesomeIcon icon={faCircleInfo} className={styles.user_icon} 
+                        onClick={()=>setSelectProductUpdate(product)}
+                    />
                     </button>
                   </td>
                   <td>
-                    <button><FontAwesomeIcon icon={faCircleInfo} className={styles.user_icon} 
-                        onClick={()=>setSelectProductUpdate(product)}
+                    <button><FontAwesomeIcon icon={faExclamationCircle} className={styles.user_icon} 
+                        onClick={()=>setReport(product.ReportStores)}
                     />
                     </button>
                   </td>
@@ -233,60 +237,6 @@ function Example({showExmaple, showCloseExample, id, isOrder, isVoucher}) {
             )}
             {error && (<div className={styles.error}>{error}</div>)}
           </div>
-          )}
-          {isOrder && (
-            <div className={styles.table1}>
-              <table>
-              <thead>
-                <tr>
-                  <th>Ảnh</th>
-                  <th>Tổng tiền</th>
-                  <th>Thanh toán<nav></nav></th>
-                  <th>Số lượng</th>
-                  <th>Ngày đăt hàng</th>
-                  <th>Khách hàng</th>
-                  <th>Cửa hàng</th>
-                  <th>Sản phẩm</th>
-                  <th>Trạng thái</th>
-                  <th>Xoá</th>
-                </tr>
-              </thead>
-              <tbody>
-                {!error && data && data.map((product) => (
-                  <tr key={product.id}>
-                    {selectProduct && (
-                      <ModalCustomer customer={null} show={true} handleClose={() => setSelectProduct(null)} product={selectProduct}/>
-                    )}
-                    {selectProductUpdate && (
-                      <ModalUpdate product={selectProductUpdate} showUpdate={true} handleCloseUpdate={() => setSelectProductUpdate(null)} getDataProduct={getData} />
-                    )}
-                    <td>
-                      <img src='https://booster.io/wp-content/uploads/custom-order-numbers-e1438361586475.png' alt="Avatar" width="50" height="50" />
-                    </td>
-                    <td>{product.total_price}đ</td>
-                    {product.isPayment ? (
-                      <td><FontAwesomeIcon icon={faCheck} className={styles.check_icon} /></td>
-                    ) : ( <td><FontAwesomeIcon icon={faXmark} className={styles.x_icon} /></td>)}
-                    <td className={styles.price}>{product.quantity}</td>
-                    <td>{Date(product.createdAt)}</td>
-                    <td>{product.customer?.firstName} {product.customer?.lastName}</td>
-                    <td>{product.store?.firstName} {product.store?.lastName}</td>
-                    <td>{product.Book?.name}</td>
-                    <td>{product.State?.status}</td>
-                    <td>
-                      <button>
-                      <FontAwesomeIcon icon={faTrash} className={styles.user_icon} onClick={()=>{handleDeleteClickOrder(product.id)}} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-              {isPending && (
-                <img className={styles.img_loading} src='https://i.gifer.com/ZKZg.gif' />
-              )}
-              {error && (<div className={styles.error}>{error}</div>)}
-            </div>
           )}
             {isVoucher && (
             <div className={styles.table1}>

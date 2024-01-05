@@ -41,6 +41,10 @@ import ThankOrder from './pages/ThankOrder/ThankOrder';
 import StoreManage from './compoments/Store/StoreManage/StoreManage';
 import StoreFlashsale from './compoments/Store/FlashSale/FlashSale';
 import Homeshipper from './pages/Shipper/Homeshipper/Homeshipper'
+import FlashSale from './pages/Admin/FlashSale/FlashSale';
+import Category from './pages/Admin/Category/Category';
+import AddCategory from './pages/Admin/Category/AddCategory/AddCategory';
+import AddCustomer from './pages/Admin/Customer/AddCustomer/AddCustomer';
 import { ChatContextProvider } from './compoments/Notification/NotificationProvider';
 import { Notifications } from './compoments/react-push-notification/dist';
 const queryClient = new QueryClient()
@@ -153,12 +157,28 @@ const App = () => {
           element: <Store />
         },
         {
+          path: '/admin/adCustomer',
+          element: <AddCustomer />
+        },
+        {
+          path : '/admin/flashSale',
+          element :<FlashSale />
+        },
+        {
           path : '/admin/requestStore',
           element: <RequestStore />
         },
         {
           path : '/admin/report',
           element: <ReportPage />
+        },
+        {
+          path : '/admin/category',
+          element: <Category />
+        },
+        {
+          path: '/admin/addCategory',
+          element: <AddCategory />
         },
         {
           path : '/admin/satistical',
