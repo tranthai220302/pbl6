@@ -322,7 +322,7 @@ export const totalPriceShipperService = async (shipper_id, month) => {
                 [Op.and] : [
                     {id: orderIds},
                     {isPayment : 1},
-                    Sequelize.literal(`MONTH(createdAt) = ${month}`),
+                    Sequelize.literal(`MONTH(updatedAt) = ${month}`),
                 ]
             }
         })
@@ -387,9 +387,9 @@ export const revenueDateByShipperService = async (date, month, year, shipper_id)
             where: {
                 [Op.and]: [
                     Sequelize.literal(`
-                        DAY(createdAt) = ${date} AND
-                        MONTH(createdAt) = ${month} AND
-                        YEAR(createdAt) = ${year}
+                        DAY(updatedAt) = ${date} AND
+                        MONTH(updatedAt) = ${month} AND
+                        YEAR(updatedAt) = ${year}
                     `),
                     {id: orderIds},
                     {isPayment : 1}
@@ -446,28 +446,19 @@ export const revenueShipperByMonthService = async (shipper_id, targetMonth) => {
 
 export const OrderShipperService = async (shipper_id, month) => {
     try {
-        const shipmentIds = await db.shippemt.findAll({
+        const shipments = await db.shippemt.findAll({
             where: {
-                shipperId: shipper_id // Thay shipperId bằng giá trị cần tìm kiếm
+                [Op.and] : [
+                    {shipperId: shipper_id},
+                    Sequelize.literal(`MONTH(createdAt) = ${month}`),
+                ] 
         },
             attributes: ['OrderId'] // Chỉ lấy trường orderId
         })
         
-        // Lấy ra một mảng các orderId từ danh sách shipmentIds
-        const orderIds = shipmentIds.map(shipment => shipment.OrderId)
-        
-        // Tìm danh sách các order từ danh sách orderIds từ bảng order
-        const satistical = await db.order.findAll({
-            where : {
-                [Op.and] : [
-                    {id: orderIds},
-                    Sequelize.literal(`MONTH(createdAt) = ${month}`),
-                ]
-            }
-        })
 
         // Tính tổng giá trị của priceShip từ tất cả các đơn hàng tìm được
-        return satistical.length
+        return shipments.length
     } catch (error) {
         return error;
     }
@@ -477,29 +468,22 @@ export const OrderShipperService = async (shipper_id, month) => {
 export const OrderByDateByShipperService = async (date, month, year, shipper_id) =>{
     try {
 
-        const shipmentIds = await db.shippemt.findAll({
+        const shipments = await db.shippemt.findAll({
             where: {
-                shipperId: shipper_id // Thay shipperId bằng giá trị cần tìm kiếm
+            [Op.and]: [
+                Sequelize.literal(`
+                    DAY(createdAt) = ${date} AND
+                    MONTH(createdAt) = ${month} AND
+                    YEAR(createdAt) = ${year}
+                `),
+                { shipperId: shipper_id},
+            ]
         },
             attributes: ['OrderId'] // Chỉ lấy trường orderId
         })
         
         // Lấy ra một mảng các orderId từ danh sách shipmentIds
-        const orderIds = shipmentIds.map(shipment => shipment.OrderId)
-        
-        const orders = await db.order.findAll({
-            where: {
-                [Op.and]: [
-                    Sequelize.literal(`
-                        DAY(createdAt) = ${date} AND
-                        MONTH(createdAt) = ${month} AND
-                        YEAR(createdAt) = ${year}
-                    `),
-                    { id: orderIds},
-                ]
-            }
-        });
-        return orders.length;
+        return shipments.length;
     } catch (error) {
         return error;
     }
@@ -572,7 +556,10 @@ export const OrderSuccessfullShipperService = async (shipper_id, month) => {
     try {
         const shipmentIds = await db.shippemt.findAll({
             where: {
-                shipperId: shipper_id // Thay shipperId bằng giá trị cần tìm kiếm
+                [Op.and] : [
+                    {shipperId : shipper_id},
+                    Sequelize.literal(`MONTH(createdAt) = ${month}`)
+                ]
         },
             attributes: ['OrderId'] // Chỉ lấy trường orderId
         })
@@ -589,7 +576,6 @@ export const OrderSuccessfullShipperService = async (shipper_id, month) => {
                     {id: orderIds},
                     {isPayment : 1},
                     {StateId: 4},
-                    Sequelize.literal(`MONTH(createdAt) = ${month}`),
                 ]
             }
         })
@@ -617,9 +603,9 @@ export const OrderSuccessfullDateByShipperService = async (date, month, year, sh
             where: {
                 [Op.and]: [
                     Sequelize.literal(`
-                        DAY(createdAt) = ${date} AND
-                        MONTH(createdAt) = ${month} AND
-                        YEAR(createdAt) = ${year}
+                        DAY(updatedAt) = ${date} AND
+                        MONTH(updatedAt) = ${month} AND
+                        YEAR(updatedAt) = ${year}
                     `),
                     {id: orderIds},
                     {isPayment : 1},
@@ -679,7 +665,10 @@ export const OrderFailedByShipperService = async (shipper_id, month) =>{
 
         const shipmentIds = await db.shippemt.findAll({
             where: {
-                shipperId: shipper_id // Thay shipperId bằng giá trị cần tìm kiếm
+                [Op.and] : [
+                    {shipperId : shipper_id},
+                    Sequelize.literal(`MONTH(createdAt) = ${month}`)
+                ]
         },
             attributes: ['OrderId'] // Chỉ lấy trường orderId
         })
@@ -690,9 +679,6 @@ export const OrderFailedByShipperService = async (shipper_id, month) =>{
         const orderfailed = await db.order.findAll({
             where: {
                 [Op.and]: [
-                    Sequelize.literal(`
-                        MONTH(createdAt) = ${month}
-                    `),
                     { id: orderIds},
                     { StateId: 5}
                 ]
@@ -722,9 +708,9 @@ export const OrderFailedDateByShipperService = async (date, month, year, shipper
             where: {
                 [Op.and]: [
                     Sequelize.literal(`
-                        DAY(createdAt) = ${date} AND
-                        MONTH(createdAt) = ${month} AND
-                        YEAR(createdAt) = ${year}
+                        DAY(updatedAt) = ${date} AND
+                        MONTH(updatedAt) = ${month} AND
+                        YEAR(updatedAt) = ${year}
                     `),
                     {id: orderIds},
                     {StateId: 5}
