@@ -313,8 +313,6 @@ export const totalPriceShipperService = async (shipper_id, month) => {
             attributes: ['OrderId'] // Chỉ lấy trường orderId
         })
 
-        const orders = shipmentIds.length;
-        
         // Lấy ra một mảng các orderId từ danh sách shipmentIds
         const orderIds = shipmentIds.map(shipment => shipment.OrderId)
         
@@ -334,10 +332,7 @@ export const totalPriceShipperService = async (shipper_id, month) => {
         satistical.map((item)=>{
             total += item.priceShip
         })
-        return {
-            total,
-            orders
-        };
+        return total
     } catch (error) {
         return error;
     }
@@ -405,6 +400,7 @@ export const revenueDateByShipperService = async (date, month, year, shipper_id)
         orders.map((item)=>{
             item.priceShip ? total += item.priceShip : total += 0;
         })
+
         return total;
     } catch (error) {
         return error;
@@ -428,13 +424,16 @@ export const revenueShipperByMonthService = async (shipper_id, targetMonth) => {
         const data = [];
         const dateTitle = [];
 
+
         if (monthToView > 0 && monthToView < 13) {
             for (let i = 1; i <= numDate; i++) {
                 const totalByDate = await revenueDateByShipperService(i, targetMonth, targetYear, shipper_id);
                 data.push(totalByDate);
                 dateTitle.push(i);
             }
+            const total = await totalPriceShipperService(shipper_id, targetMonth);
             return {
+                total,
                 data,
                 dateTitle
             };
@@ -445,8 +444,37 @@ export const revenueShipperByMonthService = async (shipper_id, targetMonth) => {
     }
 };
 
+export const OrderShipperService = async (shipper_id, month) => {
+    try {
+        const shipmentIds = await db.shippemt.findAll({
+            where: {
+                shipperId: shipper_id // Thay shipperId bằng giá trị cần tìm kiếm
+        },
+            attributes: ['OrderId'] // Chỉ lấy trường orderId
+        })
+        
+        // Lấy ra một mảng các orderId từ danh sách shipmentIds
+        const orderIds = shipmentIds.map(shipment => shipment.OrderId)
+        
+        // Tìm danh sách các order từ danh sách orderIds từ bảng order
+        const satistical = await db.order.findAll({
+            where : {
+                [Op.and] : [
+                    {id: orderIds},
+                    Sequelize.literal(`MONTH(createdAt) = ${month}`),
+                ]
+            }
+        })
 
-export const getNumOrderByDateByShipperService = async (date, month, year, shipper_id) =>{
+        // Tính tổng giá trị của priceShip từ tất cả các đơn hàng tìm được
+        return satistical.length
+    } catch (error) {
+        return error;
+    }
+}
+
+
+export const OrderByDateByShipperService = async (date, month, year, shipper_id) =>{
     try {
 
         const shipmentIds = await db.shippemt.findAll({
@@ -477,65 +505,50 @@ export const getNumOrderByDateByShipperService = async (date, month, year, shipp
     }
 }
 
-export const getNumOrderBy7DateService = async (shipper_id) =>{
+
+export const OrderShipperByMonthService = async (shipper_id, targetMonth) => {
     try {
-        const today = new Date();
-        const daysOfWeek = [];
-        for(let i = 0; i < 7; i++){
-            const day = new Date(today);
-            day.setDate(today.getDate() - i);
-            daysOfWeek.push(day);
-        }
-        const dateTitle = [];
+        const date = new Date();
+        const currentMonth = date.getMonth() + 1; // Lấy tháng hiện tại
+        const currentYear = date.getFullYear();
+
+        // Tính toán tháng cần xem trong phạm vi 12 tháng gần nhất
+        const monthsAgo = currentMonth - targetMonth;
+        const targetYear = monthsAgo >= 0 ? currentYear : currentYear - 1;
+        const monthToView = monthsAgo >= 0 ? targetMonth : 12 + monthsAgo;
+
+        const currentDate = new Date(targetYear, targetMonth, 0);
+        const numDate = currentDate.getDate();
+
         const data = [];
-        for(const date of daysOfWeek){
-            const dateItem = await getNumOrderByDateByShipperService(date.getDate(), date.getMonth() + 1, date.getFullYear(), shipper_id)
-            data.push(dateItem);
-            dateTitle.push(`${date.getDate()}-${date.getMonth()}`);
-        }
-        return {
-            data,
-            dateTitle
-        }
-    } catch (error) {
-        return error;
-    }
-}
+        const dateTitle = [];
 
-export const getNumOrderFailedByShipperService = async (shipper_id, month) =>{
-    try {
 
-        const shipmentIds = await db.shippemt.findAll({
-            where: {
-                shipperId: shipper_id // Thay shipperId bằng giá trị cần tìm kiếm
-        },
-            attributes: ['OrderId'] // Chỉ lấy trường orderId
-        })
-        
-        // Lấy ra một mảng các orderId từ danh sách shipmentIds
-        const orderIds = shipmentIds.map(shipment => shipment.OrderId)
-        
-        const orders = await db.order.findAll({
-            where: {
-                [Op.and]: [
-                    Sequelize.literal(`
-                        MONTH(createdAt) = ${month}
-                    `),
-                    { id: orderIds},
-                    { StateId: 5}
-                ]
+        if (monthToView > 0 && monthToView < 13) {
+            for (let i = 1; i <= numDate; i++) {
+                const totalByDate = await OrderByDateByShipperService(i, targetMonth, targetYear, shipper_id);
+                data.push(totalByDate);
+                dateTitle.push(i);
             }
-        });
-        return orders.length;
+            
+            const total = await OrderShipperService(shipper_id, targetMonth);
+            return {
+                total,
+                data,
+                dateTitle
+            };
+        }
+        return createError(400, 'Tháng không chính xác!');
     } catch (error) {
         return error;
     }
-}
+};
+
 
 
 export const updateShipperService = async (data1, data2, id) =>{
     try {
-        
+
         const shipperUpdate = await db.user.update(data1, {
             where: {id}
         })
@@ -554,3 +567,212 @@ export const updateShipperService = async (data1, data2, id) =>{
         return error;
     }
 }
+
+export const OrderSuccessfullShipperService = async (shipper_id, month) => {
+    try {
+        const shipmentIds = await db.shippemt.findAll({
+            where: {
+                shipperId: shipper_id // Thay shipperId bằng giá trị cần tìm kiếm
+        },
+            attributes: ['OrderId'] // Chỉ lấy trường orderId
+        })
+
+        const orders = shipmentIds.length;
+        
+        // Lấy ra một mảng các orderId từ danh sách shipmentIds
+        const orderIds = shipmentIds.map(shipment => shipment.OrderId)
+        
+        // Tìm danh sách các order từ danh sách orderIds từ bảng order
+        const satistical = await db.order.findAll({
+            where : {
+                [Op.and] : [
+                    {id: orderIds},
+                    {isPayment : 1},
+                    {StateId: 4},
+                    Sequelize.literal(`MONTH(createdAt) = ${month}`),
+                ]
+            }
+        })
+
+        // Tính tổng giá trị của priceShip từ tất cả các đơn hàng tìm được
+        return satistical.length
+    } catch (error) {
+        return error;
+    }
+}
+
+export const OrderSuccessfullDateByShipperService = async (date, month, year, shipper_id) =>{
+    try {
+        const shipmentIds = await db.shippemt.findAll({
+            where: {
+                shipperId: shipper_id // Thay shipperId bằng giá trị cần tìm kiếm
+        },
+            attributes: ['OrderId'] // Chỉ lấy trường orderId
+        })
+        
+        // Lấy ra một mảng các orderId từ danh sách shipmentIds
+        const orderIds = shipmentIds.map(shipment => shipment.OrderId)
+        
+        const orders = await db.order.findAll({
+            where: {
+                [Op.and]: [
+                    Sequelize.literal(`
+                        DAY(createdAt) = ${date} AND
+                        MONTH(createdAt) = ${month} AND
+                        YEAR(createdAt) = ${year}
+                    `),
+                    {id: orderIds},
+                    {isPayment : 1},
+                    {StateId: 4}
+                ]
+            }
+        });
+        const total = orders.length
+
+        return total;
+    } catch (error) {
+        return error;
+    }
+}
+
+export const OrderSuccessfullShipperByMonthService = async (shipper_id, targetMonth) => {
+    try {
+        const date = new Date();
+        const currentMonth = date.getMonth() + 1; // Lấy tháng hiện tại
+        const currentYear = date.getFullYear();
+
+        // Tính toán tháng cần xem trong phạm vi 12 tháng gần nhất
+        const monthsAgo = currentMonth - targetMonth;
+        const targetYear = monthsAgo >= 0 ? currentYear : currentYear - 1;
+        const monthToView = monthsAgo >= 0 ? targetMonth : 12 + monthsAgo;
+
+        const currentDate = new Date(targetYear, targetMonth, 0);
+        const numDate = currentDate.getDate();
+
+        const data = [];
+        const dateTitle = [];
+
+
+        if (monthToView > 0 && monthToView < 13) {
+            for (let i = 1; i <= numDate; i++) {
+                const totalByDate = await OrderSuccessfullDateByShipperService(i, targetMonth, targetYear, shipper_id);
+                data.push(totalByDate);
+                dateTitle.push(i);
+            }
+            
+            const total = await OrderSuccessfullShipperService(shipper_id, targetMonth);
+            return {
+                total,
+                data,
+                dateTitle
+            };
+        }
+        return createError(400, 'Tháng không chính xác!');
+    } catch (error) {
+        return error;
+    }
+};
+
+
+export const OrderFailedByShipperService = async (shipper_id, month) =>{
+    try {
+
+        const shipmentIds = await db.shippemt.findAll({
+            where: {
+                shipperId: shipper_id // Thay shipperId bằng giá trị cần tìm kiếm
+        },
+            attributes: ['OrderId'] // Chỉ lấy trường orderId
+        })
+        
+        // Lấy ra một mảng các orderId từ danh sách shipmentIds
+        const orderIds = shipmentIds.map(shipment => shipment.OrderId)
+        
+        const orderfailed = await db.order.findAll({
+            where: {
+                [Op.and]: [
+                    Sequelize.literal(`
+                        MONTH(createdAt) = ${month}
+                    `),
+                    { id: orderIds},
+                    { StateId: 5}
+                ]
+            }
+        });
+
+        return orderfailed.length
+    } catch (error) {
+        return error;
+    }
+}
+
+
+export const OrderFailedDateByShipperService = async (date, month, year, shipper_id) =>{
+    try {
+        const shipmentIds = await db.shippemt.findAll({
+            where: {
+                shipperId: shipper_id // Thay shipperId bằng giá trị cần tìm kiếm
+        },
+            attributes: ['OrderId'] // Chỉ lấy trường orderId
+        })
+        
+        // Lấy ra một mảng các orderId từ danh sách shipmentIds
+        const orderIds = shipmentIds.map(shipment => shipment.OrderId)
+        
+        const orders = await db.order.findAll({
+            where: {
+                [Op.and]: [
+                    Sequelize.literal(`
+                        DAY(createdAt) = ${date} AND
+                        MONTH(createdAt) = ${month} AND
+                        YEAR(createdAt) = ${year}
+                    `),
+                    {id: orderIds},
+                    {StateId: 5}
+                ]
+            }
+        });
+        const total = orders.length
+
+        return total;
+    } catch (error) {
+        return error;
+    }
+}
+
+export const OrderFailedShipperByMonthService = async (shipper_id, targetMonth) => {
+    try {
+        const date = new Date();
+        const currentMonth = date.getMonth() + 1; // Lấy tháng hiện tại
+        const currentYear = date.getFullYear();
+
+        // Tính toán tháng cần xem trong phạm vi 12 tháng gần nhất
+        const monthsAgo = currentMonth - targetMonth;
+        const targetYear = monthsAgo >= 0 ? currentYear : currentYear - 1;
+        const monthToView = monthsAgo >= 0 ? targetMonth : 12 + monthsAgo;
+
+        const currentDate = new Date(targetYear, targetMonth, 0);
+        const numDate = currentDate.getDate();
+
+        const data = [];
+        const dateTitle = [];
+
+
+        if (monthToView > 0 && monthToView < 13) {
+            for (let i = 1; i <= numDate; i++) {
+                const totalByDate = await OrderFailedDateByShipperService(i, targetMonth, targetYear, shipper_id);
+                data.push(totalByDate);
+                dateTitle.push(i);
+            }
+            
+            const total = await OrderFailedByShipperService(shipper_id, targetMonth);
+            return {
+                total,
+                data,
+                dateTitle
+            };
+        }
+        return createError(400, 'Tháng không chính xác!');
+    } catch (error) {
+        return error;
+    }
+};

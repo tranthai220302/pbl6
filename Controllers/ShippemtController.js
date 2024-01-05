@@ -8,10 +8,11 @@ import {
     getOrderCompleteService,
     totalPriceShipperService,
     revenueShipperByMonthService,
-    getNumOrderBy7DateService,
-    getNumOrderFailedByShipperService,
     PriceShipperService,
-    updateShipperService
+    updateShipperService,
+    OrderSuccessfullShipperByMonthService,
+    OrderFailedShipperByMonthService,
+    OrderShipperByMonthService
 }
 from "../Models/Services/ShippemtService.js";
 import createError from "../ultis/createError.js";
@@ -105,19 +106,6 @@ export const getOrdersComplete = async(req, res, next) =>{
 }
 
 
-export const totalPriceShipper = async(req, res, next) =>{
-    try {
-        const shipper_id = req.id;
-        if(!shipper_id) return next(createError(400, 'Bạn cần phải đăng nhập!'))
-        const topShippers = await totalPriceShipperService(shipper_id,req.params.month);
-        if(topShippers instanceof Error) return next(topShippers);
-        res.status(200).send(topShippers)
-    } catch (error) {
-        next(error)
-    }
-}
-
-
 export const revenueShipperByMonth = async(req, res, next) =>{
     try {
         const shipper_id = req.id;
@@ -130,42 +118,6 @@ export const revenueShipperByMonth = async(req, res, next) =>{
     }
 }
 
-
-export const getNumOrderBy7Date = async(req, res, next) =>{
-    try {
-        const shipper_id = req.id;
-        if(!shipper_id) return next(createError(400, 'Bạn cần phải đăng nhập!'))
-        const doanhhthu = await getNumOrderBy7DateService(shipper_id);
-        if(doanhhthu instanceof Error) return next(doanhhthu);
-        res.status(200).send(doanhhthu)
-    } catch (error) {
-        next(error)
-    }
-}
-
-export const numberOrderFailedByShipper = async(req, res, next) =>{
-    try {
-        const shipper_id = req.id;
-        if(!shipper_id) return next(createError(400, 'Bạn cần phải đăng nhập!'))
-        const Shippers = await getNumOrderFailedByShipperService(shipper_id,req.params.month);
-        if(Shippers instanceof Error) return next(Shippers);
-        res.status(200).send(Shippers)
-    } catch (error) {
-        next(error)
-    }
-}
-
-export const priceShipper = async(req, res, next) =>{
-    try {
-        const shipper_id = req.id;
-        if(!shipper_id) return next(createError(400, 'Bạn cần phải đăng nhập!'))
-        const topShippers = await PriceShipperService(shipper_id);
-        if(topShippers instanceof Error) return next(topShippers);
-        res.status(200).send(topShippers)
-    } catch (error) {
-        next(error)
-    }
-}
 
 export const updateShipper = async(req, res, next) =>{
     try {
@@ -180,3 +132,41 @@ export const updateShipper = async(req, res, next) =>{
         next(error)
     }
 }
+
+export const OrderSuccessFullShipperByMonth = async(req, res, next) =>{
+    try {
+        const shipper_id = req.id;
+        if(!shipper_id) return next(createError(400, 'Bạn cần phải đăng nhập!'))
+        const doanhhthu = await OrderSuccessfullShipperByMonthService(shipper_id, req.params.month);
+        if(doanhhthu instanceof Error) return next(doanhhthu);
+        res.status(200).send(doanhhthu)
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const OrderFailedShipperByMonth = async(req, res, next) =>{
+    try {
+        const shipper_id = req.id;
+        if(!shipper_id) return next(createError(400, 'Bạn cần phải đăng nhập!'))
+        const doanhhthu = await OrderFailedShipperByMonthService(shipper_id, req.params.month);
+        if(doanhhthu instanceof Error) return next(doanhhthu);
+        res.status(200).send(doanhhthu)
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const OrderShipperByMonth = async(req, res, next) =>{
+    try {
+        const shipper_id = req.id;
+        if(!shipper_id) return next(createError(400, 'Bạn cần phải đăng nhập!'))
+        const doanhhthu = await OrderShipperByMonthService(shipper_id, req.params.month);
+        if(doanhhthu instanceof Error) return next(doanhhthu);
+        res.status(200).send(doanhhthu)
+    } catch (error) {
+        next(error)
+    }
+}
+
+

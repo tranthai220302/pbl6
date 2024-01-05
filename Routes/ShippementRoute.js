@@ -8,11 +8,10 @@ import {
     getOrders,
     getOrdersComplete,
     revenueShipperByMonth,
-    totalPriceShipper,
-    getNumOrderBy7Date,
-    numberOrderFailedByShipper,
-    priceShipper,
     updateShipper,
+    OrderSuccessFullShipperByMonth,
+    OrderFailedShipperByMonth,
+    OrderShipperByMonth,
 
 } from '../Controllers/ShippemtController.js';
 import { verifyjson } from '../middleware/jwt.js';
@@ -26,9 +25,8 @@ routerShippemt.get('/get-orders',verifyjson, getOrdersByShipper)
 routerShippemt.get('/delivering',verifyjson, getOrdersDelivering)
 routerShippemt.get('/complete', verifyjson, getOrdersComplete)
 routerShippemt.post('/revenueShipper/:month', verifyjson, revenueShipperByMonth)
-routerShippemt.get('/drawShipper/:month', verifyjson, totalPriceShipper)
-routerShippemt.get('/numOrder7date/', verifyjson, getNumOrderBy7Date)
-routerShippemt.get('/numberOrderFailed/:month', verifyjson, numberOrderFailedByShipper)
-routerShippemt.get('/priceShip', verifyjson, priceShipper)
+routerShippemt.post('/orderSucessfull/:month', verifyjson, OrderSuccessFullShipperByMonth)
+routerShippemt.post('/orderFailed/:month', verifyjson, OrderFailedShipperByMonth)
+routerShippemt.post('/order/:month', verifyjson, OrderShipperByMonth)
 routerShippemt.put('/edit',verifyjson, updateShipper)
 export default routerShippemt;
