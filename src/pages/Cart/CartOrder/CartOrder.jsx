@@ -134,7 +134,7 @@ export default function CartOrder() {
             autoClose: 2000, 
           });
           setIsLoadingOrder(false)
-          navigate('/thankOrder')
+          navigate('/orderSuccess/thankOrder')
       }).catch((error)=>{
         toast.error(error.response.data, {
           position: toast.POSITION.TOP_RIGHT,

@@ -7,6 +7,7 @@ import newRequest from '../../../ults/NewRequest';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
 import { faPlus, faTrash, faReply, faMessage, faClose, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import Chat from '../../../pages/Chat/Chat';
 
 export default function FlashSale() {
     const notify = (er, message) => toast[er](message, {
@@ -310,6 +311,7 @@ export default function FlashSale() {
                     <Link to="/login">Đăng nhập</Link>
                 </div>
             )}
+            <Chat />
         </div>
     );
 }

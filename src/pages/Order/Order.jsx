@@ -63,7 +63,7 @@ export default function Order() {
                   });
               setIsPendingOrder(false);
               setErrorOrder(false);
-              navigate('/')
+              navigate('/orderSuccess/thankOrder')
           } catch (error) {
               toast.error(error.response.data, {
                   position: toast.POSITION.TOP_RIGHT,
