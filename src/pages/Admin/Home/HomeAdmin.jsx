@@ -39,7 +39,7 @@ export default function HomeAdmin() {
   return (
     <div className={styles.container}>
       <div className={styles.customer}>
-        <NavbarAdmin />
+        <NavbarAdmin isNoSearch={true} />
           {isLoading ? (
              <img className={styles.img_loading} src='https://i.gifer.com/ZKZg.gif' />
           ):(

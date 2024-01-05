@@ -28,7 +28,7 @@ export default function Satistical() {
   }
   return (
     <div className={styles.container}>
-      <NavbarAdmin />
+      <NavbarAdmin isNoSearch={true}/>
         <div className={styles.content}>
           <div className={styles.draw}>
             <div className={styles.pie}>

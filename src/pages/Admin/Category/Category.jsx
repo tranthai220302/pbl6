@@ -98,7 +98,7 @@ export default function Category() {
   return (
     <div className={styles.container}>
       <div className={styles.category}>
-        <NavbarAdmin />
+        <NavbarAdmin isNoSearch={true}/>
         <div className={styles.content}>
           <div style={{display : 'flex', justifyContent : 'space-between'}}>
           <h3>Danh sách thể loại</h3>
