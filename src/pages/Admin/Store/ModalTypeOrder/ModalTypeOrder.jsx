@@ -119,7 +119,7 @@ export default function ModalTypeOrder({modalShow, setModalShow, id, isDetail}){
                                     <span style={{fontWeight : '600'}}>Tổng tiền: </span>
                                 </td>
                                 <td>
-                                    <div>{id.itotal_price}</div>
+                                    <div>{id.total_price}</div>
                                 </td>
                                 </tr>
                                 <tr>

@@ -192,7 +192,7 @@ export default function FlashSale() {
         } else if (selectedTab === 'dangKy') {
             return (
                 <div className={styles.FlashSale_Register}>
-                    <h6>Flash Sale sẽ diễn ra vào 9:00 - 11:00 hàng ngày</h6>
+                    <h6>Flash Sale sẽ diễn ra vào 7:00 - 11:00 hàng ngày</h6>
                     <div className={styles.regis_FlashSale}>
                         <div>
                             <span>Đăng ký Flash Sale ngày</span>

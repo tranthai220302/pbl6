@@ -48,12 +48,20 @@ import AddCustomer from './pages/Admin/Customer/AddCustomer/AddCustomer';
 import Shipper from './pages/Admin/Shipper/Shipper';
 import RegisShipper from './pages/Admin/Shipper/RegisShipper/RegisShipper';
 import ProfileAdmin from './pages/Admin/Profile/ProfileAdmin';
+import { useNavigate } from 'react-router-dom';
 const queryClient = new QueryClient()
 
 const App = () => {
   const [openChat, setOpenChat] = useState(false)
   const [name, setName] = useState('');
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"))
   const Layout = () =>{
+    const navigate = useNavigate();
+    useEffect(()=>{
+      if(currentUser.idRole != 4 && isAdminPage){
+        navigate('/')
+      }
+    },[])
     const isAdminPage = useLocation().pathname.includes('/admin');
     const isStorePage = useLocation().pathname.includes('/store');
     const isShipperPage = useLocation().pathname.includes('/shipper');
@@ -63,7 +71,7 @@ const App = () => {
       <QuantityProvider>
           <QueryClientProvider client={queryClient}>
           <div className="app">
-            {!isAdminPage && !isLoginPage && !isRegisterPage && !isStorePage && (<Header setOpenChat={setOpenChat} setName = {setName} name = {name}/>)}
+            {!isAdminPage && !isLoginPage && !isRegisterPage && !isStorePage && !isShipperPage && (<Header setOpenChat={setOpenChat} setName = {setName} name = {name}/>)}
             {isAdminPage && <SliderMenu />}
             <Outlet />
             {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
