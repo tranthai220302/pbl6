@@ -350,9 +350,6 @@ table, th, td {
     padding: 4px 20px;
 }
 
-.cmt_show {
-    border-bottom: #4ea58b75 dashed 1px;
-}
 
 .cmt_show_content h6{
     margin-bottom: 0;
