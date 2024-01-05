@@ -54,14 +54,7 @@ const queryClient = new QueryClient()
 const App = () => {
   const [openChat, setOpenChat] = useState(false)
   const [name, setName] = useState('');
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"))
   const Layout = () =>{
-    const navigate = useNavigate();
-    useEffect(()=>{
-      if(currentUser.idRole != 4 && isAdminPage){
-        navigate('/')
-      }
-    },[])
     const isAdminPage = useLocation().pathname.includes('/admin');
     const isStorePage = useLocation().pathname.includes('/store');
     const isShipperPage = useLocation().pathname.includes('/shipper');
