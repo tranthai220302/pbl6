@@ -343,7 +343,7 @@ export const vpnayReturn = async(req, res, next) =>{
         }
         if(!order) return next(createError(400, 'Order không thành công!'))
         if(order instanceof Error) return next(order);
-        res.redirect('https://www.harumi.website/orderSuccess/thankOrder');
+        res.redirect('https://www.harumi.website');
     } catch (error) {
         next(error);
     }
