@@ -7,7 +7,7 @@ import { faUser, faCartShopping, faBell, faSearch, faBook, faHouse} from '@forta
 import { Link } from 'react-router-dom';
 import newRequest from '../../ults/NewRequest';
 import React, { useContext, useEffect, useState } from 'react';
-export default function Header({setOpenChat}) {
+export default function Header({setOpenChat, name, setName}) {
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
   const [userData, setUserData] = useState();
