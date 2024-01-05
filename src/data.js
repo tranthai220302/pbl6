@@ -22,18 +22,19 @@ export const itemsCustomer = [
         navigate : '/admin/customer'
     },
     {
-        name : "Danh sách khách hàng vip",
-        navigate : '/admin/customer'
-    },
-    {
         name : 'Thêm khách hàng',
         navigate : '/admin/adCustomer'
     }
 ];
 export const itemsShipper = [
-    "Danh sách",
-    "Danh sách shipper được đánh giá thấp",
-    "Tìm kiếm"
+    {
+        name : "Danh sách",
+        navigate : '/admin/shipper'
+    },
+    {
+        name : "Danh sách đăng ký shipper",
+        navigate : '/admin/requestShipper'
+    },
 ];
 export const itemsVoucher = [
     {

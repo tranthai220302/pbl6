@@ -53,7 +53,7 @@ function DetailStore({show, handleClose, store}) {
                 <div className={style.store}>
                 <div className={style.title}>Thông tin cửa hàng</div>
                     <div className={style.avatart}>
-                        <img src={store.DetailStore.avatar} alt="" />
+                        <img src={store.DetailStore.avatar} alt="" height={400} style={{boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"}}/>
                     </div>
                     <div className={style.nameStore}>{store.DetailStore.nameStore}</div>
                     <div className={style.descStore}>

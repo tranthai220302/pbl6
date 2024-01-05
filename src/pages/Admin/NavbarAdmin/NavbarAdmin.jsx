@@ -79,7 +79,7 @@ function NavbarAdmin({flashSale, setDate, handleSearch, getData, isNoSearch}) {
                   <div className={styles.acc_dropdown}>
                     {currentUser ? (
                       <>
-                      <Link to='/profile'>Tài khoản của tôi</Link>
+                      <Link to='/admin/profile'>Tài khoản của tôi</Link>
                       <Link onClick={handleLogout}>Đăng xuất</Link>
                       </>
                     ) : (

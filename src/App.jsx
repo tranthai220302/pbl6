@@ -44,6 +44,9 @@ import FlashSale from './pages/Admin/FlashSale/FlashSale';
 import Category from './pages/Admin/Category/Category';
 import AddCategory from './pages/Admin/Category/AddCategory/AddCategory';
 import AddCustomer from './pages/Admin/Customer/AddCustomer/AddCustomer';
+import Shipper from './pages/Admin/Shipper/Shipper';
+import RegisShipper from './pages/Admin/Shipper/RegisShipper/RegisShipper';
+import ProfileAdmin from './pages/Admin/Profile/ProfileAdmin';
 const queryClient = new QueryClient()
 
 const App = () => {
@@ -176,6 +179,18 @@ const App = () => {
         {
           path : '/admin/voucher',
           element: <Voucher />
+        },
+        {
+          path : '/admin/shipper',
+          element: <Shipper />
+        },
+        {
+          path : '/admin/requestShipper',
+          element: <RegisShipper />
+        },
+        {
+          path : '/admin/profile',
+          element: <ProfileAdmin />
         },
         {
           path: '/shipper/home',
