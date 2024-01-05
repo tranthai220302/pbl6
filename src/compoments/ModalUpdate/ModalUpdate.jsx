@@ -156,7 +156,7 @@ export default function ModalUpdate({customer, showUpdate, handleCloseUpdate, ge
             className={styles.cc}
     >
         <Modal.Header closeButton>
-          <Modal.Title>Chỉnh sửa thông tin cá nhân</Modal.Title>
+          <Modal.Title>Chỉnh sửa thông tin</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {customer && (
