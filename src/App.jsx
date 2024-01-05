@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   createBrowserRouter,
   RouterProvider,
@@ -54,19 +54,18 @@ const queryClient = new QueryClient()
 
 const App = () => {
   const [openChat, setOpenChat] = useState(false)
+  const [name, setName] = useState('');
   const Layout = () =>{
     const isAdminPage = useLocation().pathname.includes('/admin');
     const isStorePage = useLocation().pathname.includes('/store');
     const isLoginPage = useLocation().pathname.includes('/login');
     const isRegisterPage = useLocation().pathname.includes('/register');
-    console.log(openChat)
-
     return (
       <ChatContextProvider>
       <QuantityProvider>
           <QueryClientProvider client={queryClient}>
           <div className="app">
-            {!isAdminPage && !isLoginPage && !isRegisterPage && !isStorePage && (<Header setOpenChat={setOpenChat} />)}
+            {!isAdminPage && !isLoginPage && !isRegisterPage && !isStorePage && (<Header setOpenChat={setOpenChat} setName = {setName} name = {name}/>)}
             {isAdminPage && <SliderMenu />}
             <Outlet />
             {!isAdminPage && !isLoginPage && !isRegisterPage && (<Footer />)}
@@ -101,7 +100,7 @@ const App = () => {
         },
         {
           path: '/booklist',
-          element: <BookList/>
+          element: <BookList name = {name}/>
         },
         {
           path: '/productinformation',
