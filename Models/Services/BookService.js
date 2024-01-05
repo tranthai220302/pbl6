@@ -176,6 +176,7 @@ export const getBooksService = async(id) =>{
 export const getBookByQueryService = async(filter, category, author, page, bookPerPage) =>{
     try {
         if(!page){
+            console.log('cc')
             const booksByQuery = await db.book.findAll({
                 include : [
                     {
@@ -659,15 +660,55 @@ export const getStoreFlashSaleService = async(date)=>{
         return error;
     }
 }
-export const getBookFlashSaleByStoreService = async(id, date)=>{
+export const getBookFlashSaleByStoreService = async(id, date, isFlashSale)=>{
     try {
         const data = new Date(date)
+        if(!isFlashSale){
+            const book = await db.book.findAll({
+                where : {
+                    [Op.and] : [
+                        {isFlashSale : 0},
+                        Sequelize.literal(`DATE(dateFlashSale) = '${data.toISOString().split('T')[0]}'`),
+                        {store_id : id}
+                    ]
+                },
+                include : [
+                    {
+                        model : db.image
+                    }
+                ]
+            })
+            if(book.length == 0) return createError(400, 'Không có danh sách!')
+            return book;
+        }else{
+            const book = await db.book.findAll({
+                where : {
+                    [Op.and] : [
+                        {isFlashSale : 1},
+                        {store_id : id}
+                    ]
+                },
+                include : [
+                    {
+                        model : db.image
+                    }
+                ]
+            })
+            if(book.length == 0) return createError(400, 'Không có danh sách!')
+            return book;
+        }
+    } catch (error) {
+        return error;   
+    }
+}
+export const getBookNoFlashSaleByStoreService = async(id)=>{
+    try {
         const book = await db.book.findAll({
             where : {
                 [Op.and] : [
                     {isFlashSale : 0},
-                    Sequelize.literal(`DATE(dateFlashSale) = '${data.toISOString().split('T')[0]}'`),
-                    {store_id : id}
+                    {store_id : id},
+                    {timeFlashSale : 0}
                 ]
             },
             include : [
