@@ -12,6 +12,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import ModalInfoBook from '../../FlashSale/ModalInfoBook/ModalInfoBook';
 import { faTrash, faPenToSquare, faCircleInfo, faSearch, faCheck, faXmark, faBicycle, faTag, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
 import ModalUpdate from '../../../../compoments/ModalUpdate/ModalUpdate';
+import AddBook from '../../Store/AddBook/AddBook';
 export default function ModalListBook({id,showExmaple, showCloseExample, category}) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -92,6 +93,7 @@ export default function ModalListBook({id,showExmaple, showCloseExample, categor
                     <div>
                         Danh sách sản phẩm
                     </div>
+                    <AddBook id={id} getData={getData}/>
                 </div>
               </Modal.Title>
             </Modal.Header>
