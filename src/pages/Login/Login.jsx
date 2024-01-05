@@ -26,6 +26,8 @@ export default function Login() {
         navigate('/admin/home')
       }else if (data.data.RoleId == 2){
         navigate('/store/home')
+      }else if (data.data.RoleId == 3){
+        navigate('/shipper/home')
       }
     },
   });

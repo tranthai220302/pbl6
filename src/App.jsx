@@ -58,6 +58,7 @@ const App = () => {
   const Layout = () =>{
     const isAdminPage = useLocation().pathname.includes('/admin');
     const isStorePage = useLocation().pathname.includes('/store');
+    const isShipperPage = useLocation().pathname.includes('/shipper');
     const isLoginPage = useLocation().pathname.includes('/login');
     const isRegisterPage = useLocation().pathname.includes('/register');
     return (

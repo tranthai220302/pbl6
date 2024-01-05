@@ -18,7 +18,7 @@ export default function MyProfile() {
     <div className={styles.MyProfile}>
       {currentUser ? (
         <div>
-          <div className={styles.MyProfile_Title}>Thông tin cá nhân</div>
+          <div className={styles.MyProfile_Title}>Quản lý đơn hàng</div>
           <div>
             <div>
               <table className={styles.viewrating}>

@@ -3,17 +3,80 @@ import styles from './MyProfile.module.css';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenSquare, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
 
 export default function MyProfile() {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const [openEdit, setOpenEdit] = useState(false);
+
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    address: '',
+  });
+
+  const updateProfile = async () => {
+    try {
+      const response = await axios.put(`/api/updateProfile/${currentUser.id}`, formData);
+      console.log(response.data);
+      toast.success('Thông tin đã được cập nhật thành công!');
+      setOpenEdit(false);
+    } catch (error) {
+      console.error('Có lỗi khi cập nhật thông tin:', error.message);
+      toast.error('Đã xảy ra lỗi khi cập nhật thông tin.');
+    }
+  };
+
+  const EditStore = ({ setOpenedit }) => {
+    const [formData, setFormData] = useState({
+      name: '',
+      logo: null,
+      description: '',
+      address: '',
+    });
+  
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    };
+  
+    return (
+      <div className={styles.overlay}>
+        <div className={styles.editForm}>
+          <h3>Thay đổi thông tin người giao hàng</h3>
+          <label htmlFor="firstName">First Name: </label>
+          <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} placeholder={currentUser.firstName} />
+          <label htmlFor="lastName">Last Name: </label>
+          <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder={currentUser.lastName} />
+          <label htmlFor="email">Email: </label>
+          <input type="text" name="email" value={formData.email} onChange={handleChange} placeholder={currentUser.email} />
+          <label htmlFor="phone">Số điện thoại: </label>
+          <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder={currentUser.phone}/>
+          <label htmlFor="address">Địa chỉ: </label>
+          <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder={currentUser.address} />
+          <button onClick={updateProfile} className={styles.button} >
+            Lưu thay đổi
+          </button>
+          <button className={styles.btn_cancel} onClick={() => setOpenedit(false)}>
+            Hủy bỏ
+          </button>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className={styles.MyProfile}>
       {currentUser ? (
         <div>
           <div className={styles.MyProfile_Title}>
-            Thông tin cá nhân
+            <span>Thông tin cá nhân</span>
             <FontAwesomeIcon className={styles.Edit_StoreInf} icon={faPenSquare} onClick={() => setOpenEdit(true)} />
           </div>
           <div className={styles.MyProfile_Content}>
@@ -39,14 +102,6 @@ export default function MyProfile() {
                 <td>{currentUser.phone}</td>
               </tr>
               <tr>
-                <th>Giới tính</th>
-                <td>Nữ</td>
-              </tr>
-              <tr>
-                <th>Ngày sinh</th>
-                <td>02/08/2002</td>
-              </tr>
-              <tr>
                 <th>Địa chỉ</th>
                 <td>{currentUser.address}</td>
               </tr>
@@ -63,50 +118,3 @@ export default function MyProfile() {
     </div>
   );
 }
-
-const EditStore = ({ setOpenedit }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    logo: null,
-    description: '',
-    address: '',
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const updateVoucherItem = () => {
-    console.log('Updating store information:', formData);
-    setOpenedit(false);
-  };
-
-  return (
-    <div className={styles.overlay}>
-      <div className={styles.editForm}>
-        <h3>Thay đổi thông tin người giao hàng</h3>
-        <label htmlFor="name">Tên cửa hàng: </label>
-        <input type="text" name="name" value={formData.name} onChange={handleChange} />
-        <label htmlFor="name">Tên cửa hàng: </label>
-        <input type="text" name="name" value={formData.name} onChange={handleChange} />
-        <label htmlFor="name">Tên cửa hàng: </label>
-        <input type="text" name="name" value={formData.name} onChange={handleChange} />
-        <label htmlFor="name">Tên cửa hàng: </label>
-        <input type="text" name="name" value={formData.name} onChange={handleChange} />
-        <label htmlFor="name">Tên cửa hàng: </label>
-        <input type="text" name="name" value={formData.name} onChange={handleChange} />
-        {/* ... Other input fields ... */}
-        <button onClick={updateVoucherItem} className={styles.button}>
-          Lưu thay đổi
-        </button>
-        <button className={styles.btn_cancel} onClick={() => setOpenedit(false)}>
-          Hủy bỏ
-        </button>
-      </div>
-    </div>
-  );
-};

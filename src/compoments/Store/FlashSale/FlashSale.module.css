@@ -63,14 +63,139 @@
     background-color: #BEDDDD;
   }
 
-  .regis_FlashSale {
+  .regis_FlashSale, h6 {
     margin-top: 20px;
   }
 
-  .regis_FlashSale input {
+  .regis_FlashSale>div>input {
     margin-left: 20px;
   }
 
   .FlashSale_Register button {
+    margin-top: 20px;
+  }
+
+  .invalidDate {
+    color: red;
+    font-style: italic;
+  }
+
+  .Book_Selected {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 !important;
+  }
+
+  .trash:hover {
+    cursor: pointer;
+    color: green;
+  }
+
+  .btn_check {
+    background-color: #BEDDDD;
+    color: green;
+    padding: 4px;
+  }
+
+  .btn_check:hover {
+    background-color: green;
+    color: #BEDDDD;
+    cursor: pointer;
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2; /* Lớn hơn so với các phần tử khác */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .editForm {
+    background-color: white;
+    padding: 20px;
+    z-index: 3; /* Lớn hơn so với overlay */
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+  }
+
+  .editForm h3 {
+    text-align: center;
+    color: rgba(78, 165, 139, 0.863);
+  }
+  
+  .editForm input, .editForm select {
+    margin-bottom: 20px;
+  }
+
+  .editForm button {
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .btn_cancel {
+    border: 1px solid rgba(78, 165, 139, 0.863) !important;
+    background-color: rgba(78, 165, 139, 0.137) !important;
+    color: rgba(78, 165, 139, 0.863) !important;
+    margin-top: 20px;
+  }
+
+  .FormTitle {
+    position: relative;
+  }
+
+  .CloseForm {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: #000; /* Change the color as needed */
+    font-size: 20px; /* Change the font size as needed */
+  }
+
+  .book_ava {
+    height: 100px;
+  }
+
+  .Book_Name {
+    font-weight: 500;
+    font-size: large;
+  }
+
+  .book_author {
+    font-size: medium;
+    font-style: italic;
+  }
+
+  .Book_Inf {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+
+  .BookInf_col2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .current_Price {
+    color: rgba(78, 165, 139, 0.863);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+  }
+
+  .FlashSale_Inf {
+    display: flex;
+    flex-direction: column;
     margin-top: 20px;
   }
