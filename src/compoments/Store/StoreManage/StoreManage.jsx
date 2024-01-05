@@ -214,7 +214,7 @@ const Add = ({ setOpenedit, id, getDataVoucher }) => {
   return (
     <div className={styles.overlay}>
       <div className={styles.editForm}>
-      <div className={styles.FormTitle}>
+          <div className={styles.FormTitle}>
             <h3>Tạo mã giảm giá</h3>
             <FontAwesomeIcon className={styles.CloseForm} icon={faClose} onClick={() => setOpenedit(false)} />
           </div>

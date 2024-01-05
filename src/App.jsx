@@ -39,6 +39,7 @@ import { QuantityProvider } from './Context/QuantityProvider';
 import CartOrder from './pages/Cart/CartOrder/CartOrder';
 import ThankOrder from './pages/ThankOrder/ThankOrder';
 import StoreManage from './compoments/Store/StoreManage/StoreManage';
+import StoreFlashsale from './compoments/Store/FlashSale/FlashSale';
 import Homeshipper from './pages/Shipper/Homeshipper/Homeshipper'
 import { ChatContextProvider } from './compoments/Notification/NotificationProvider';
 import { Notifications } from './compoments/react-push-notification/dist';
@@ -130,6 +131,10 @@ const App = () => {
         {
           path: '/store/storemanage',
           element: <StoreManage/>
+        },
+        {
+          path: '/store/flashsale',
+          element: <StoreFlashsale/>
         },
         {
           path: '/admin/login',
