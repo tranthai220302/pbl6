@@ -341,9 +341,11 @@ export const vpnayReturn = async(req, res, next) =>{
                 data?.idVoucher
             )
         }
-        if(!order) return next(createError(400, 'Order không thành công!'))
+        console.log(order);
+        console.log(data)
+        if(!order) return res.redirect('https://harumi.onrender.com');
         if(order instanceof Error) return next(order);
-        res.redirect('https://www.harumi.website/success');
+        res.redirect('https://harumi.onrender.com/success');
     } catch (error) {
         next(error);
     }
