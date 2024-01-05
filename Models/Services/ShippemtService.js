@@ -422,7 +422,7 @@ export const revenueShipperByMonthService = async (shipper_id, targetMonth) => {
         const targetYear = monthsAgo >= 0 ? currentYear : currentYear - 1;
         const monthToView = monthsAgo >= 0 ? targetMonth : 12 + monthsAgo;
 
-        const currentDate = new Date(targetYear, monthToView, 0);
+        const currentDate = new Date(targetYear, targetMonth, 0);
         const numDate = currentDate.getDate();
 
         const data = [];
